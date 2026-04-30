@@ -73,7 +73,7 @@
             @if ($product->image_path)
                 <div>
                     <label class="field-label">Current Image</label>
-                    <img class="thumb" src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}">
+                    <img class="thumb" src="{{ route('media.show', ['path' => $product->image_path]) }}" alt="{{ $product->name }}">
                 </div>
             @endif
 

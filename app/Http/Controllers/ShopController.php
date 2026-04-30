@@ -16,7 +16,7 @@ class ShopController extends Controller
         abort_unless($product->is_active, 404);
 
         $imageUrl = $product->image_path
-            ? asset('storage/'.$product->image_path)
+            ? route('media.show', ['path' => $product->image_path])
             : 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80';
 
         return view('shop.product', [
@@ -69,7 +69,7 @@ class ShopController extends Controller
         $items = collect(array_values($cart))->map(function (array $item): array {
             $item['line_total'] = (float) $item['price'] * (int) $item['quantity'];
             $item['image_url'] = !empty($item['image_path'])
-                ? asset('storage/'.$item['image_path'])
+                ? route('media.show', ['path' => $item['image_path']])
                 : 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=720&q=80';
 
             return $item;
@@ -134,4 +134,3 @@ class ShopController extends Controller
         return 'https://wa.me/'.self::WHATSAPP_PHONE.'?text='.urlencode($message);
     }
 }
-

@@ -42,7 +42,7 @@
                             <td>{{ $products->firstItem() + $index }}</td>
                             <td>
                                 @if ($product->image_path)
-                                    <img class="thumb" src="{{ asset('storage/'.$product->image_path) }}" alt="{{ $product->name }}">
+                                    <img class="thumb" src="{{ route('media.show', ['path' => $product->image_path]) }}" alt="{{ $product->name }}">
                                 @else
                                     <img class="thumb" src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&w=320&q=80" alt="{{ $product->name }}">
                                 @endif

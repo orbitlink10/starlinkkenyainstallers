@@ -344,7 +344,7 @@
 
                             @if ($homepageContent->hero_image_path)
                                 <div class="hero-preview">
-                                    <img src="{{ asset('storage/'.$homepageContent->hero_image_path) }}" alt="Hero image preview">
+                                    <img src="{{ route('media.show', ['path' => $homepageContent->hero_image_path]) }}" alt="Hero image preview">
                                 </div>
                             @endif
                         </div>

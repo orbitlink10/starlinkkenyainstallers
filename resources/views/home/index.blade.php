@@ -8,7 +8,7 @@
         $whyChooseDescription = $homepageContent?->why_choose_description ?: 'Tailored for the Kenyan market with expert installation and dependable support.';
         $productsTitle = $homepageContent?->products_section_title ?: 'Starlink Kits in Kenya';
         $homePageContentHtml = $homePageContentHtml ?? '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya.</p>';
-        $heroImageUrl = $homepageContent?->hero_image_path ? asset('storage/'.$homepageContent->hero_image_path) : null;
+        $heroImageUrl = $homepageContent?->hero_image_path ? route('media.show', ['path' => $homepageContent->hero_image_path]) : null;
 
         $kitImages = [
             'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=960&q=80',

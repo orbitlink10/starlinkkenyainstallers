@@ -40,7 +40,7 @@
             @if ($category->photo_path)
                 <div>
                     <label class="field-label">Current Photo</label>
-                    <img class="thumb" src="{{ asset('storage/'.$category->photo_path) }}" alt="{{ $category->name }}">
+                    <img class="thumb" src="{{ route('media.show', ['path' => $category->photo_path]) }}" alt="{{ $category->name }}">
                 </div>
             @endif
 

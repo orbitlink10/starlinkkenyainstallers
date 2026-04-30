@@ -88,7 +88,7 @@
                             <td>{{ $pages->firstItem() + $index }}</td>
                             <td>
                                 @if ($page->image_path)
-                                    <img class="thumb pages-thumb" src="{{ asset('storage/'.$page->image_path) }}" alt="{{ $page->image_alt_text ?: $page->page_title }}">
+                                    <img class="thumb pages-thumb" src="{{ route('media.show', ['path' => $page->image_path]) }}" alt="{{ $page->image_alt_text ?: $page->page_title }}">
                                 @else
                                     <img class="thumb pages-thumb" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=300&q=80" alt="{{ $page->page_title }}">
                                 @endif

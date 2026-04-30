@@ -42,7 +42,7 @@
                             <td>{{ $category->slug }}</td>
                             <td>
                                 @if ($category->photo_path)
-                                    <img class="thumb" src="{{ asset('storage/'.$category->photo_path) }}" alt="{{ $category->name }}">
+                                    <img class="thumb" src="{{ route('media.show', ['path' => $category->photo_path]) }}" alt="{{ $category->name }}">
                                 @else
                                     <span>-</span>
                                 @endif
