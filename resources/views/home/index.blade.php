@@ -213,7 +213,7 @@
 
         .brand-text strong {
             display: block;
-            font-size: clamp(28px, 2.4vw, 42px);
+            font-size: clamp(24px, 1.9vw, 34px);
             font-weight: 800;
             color: var(--ink-900);
             letter-spacing: .02em;
@@ -417,11 +417,11 @@
 
         .hero h1 {
             margin: 18px 0 0;
-            font-size: clamp(48px, 5vw, 72px);
-            line-height: .98;
-            letter-spacing: -.05em;
+            font-size: clamp(40px, 4.2vw, 58px);
+            line-height: 1;
+            letter-spacing: -.045em;
             font-weight: 800;
-            max-width: 10ch;
+            max-width: 11ch;
         }
 
         .hero h1 strong {
@@ -431,9 +431,9 @@
         .hero p {
             margin: 20px 0 0;
             max-width: 30ch;
-            font-size: clamp(19px, 1.5vw, 24px);
+            font-size: clamp(17px, 1.15vw, 20px);
             color: var(--ink-500);
-            line-height: 1.55;
+            line-height: 1.6;
         }
 
         .hero-actions {
@@ -538,17 +538,17 @@
 
         .section-title {
             margin: 0;
-            font-size: clamp(34px, 3vw, 50px);
-            line-height: 1.08;
-            letter-spacing: -.04em;
+            font-size: clamp(28px, 2.3vw, 40px);
+            line-height: 1.12;
+            letter-spacing: -.035em;
         }
 
         .section-intro {
             margin: 18px 0 0;
-            font-size: clamp(18px, 1.2vw, 21px);
+            font-size: clamp(16px, 1vw, 18px);
             color: var(--ink-500);
             max-width: 62ch;
-            line-height: 1.65;
+            line-height: 1.62;
         }
 
         .products-grid {
@@ -559,27 +559,28 @@
         }
 
         .product-card {
-            border-radius: 32px;
+            border-radius: 28px;
             border: 1px solid var(--line);
             background: var(--surface);
-            padding: 18px;
+            padding: 0;
+            overflow: hidden;
             box-shadow: var(--shadow-card);
             display: flex;
             flex-direction: column;
         }
 
         .product-image {
-            height: 260px;
+            height: 300px;
             width: 100%;
             object-fit: cover;
             display: block;
-            border-radius: 26px;
+            border-radius: 0;
             background: var(--surface-soft);
         }
 
         .product-body {
-            padding: 24px 6px 8px;
-            text-align: center;
+            padding: 20px 24px 18px;
+            text-align: left;
             display: flex;
             flex: 1;
             flex-direction: column;
@@ -587,41 +588,46 @@
 
         .product-name {
             margin: 0;
-            font-size: 22px;
-            line-height: 1.24;
+            font-size: 20px;
+            line-height: 1.28;
             font-weight: 700;
             color: var(--ink-900);
         }
 
         .product-desc {
-            margin: 14px 0 0;
+            margin: 10px 0 0;
             color: var(--ink-500);
-            font-size: 16px;
-            line-height: 1.65;
-            min-height: 82px;
+            font-size: 15px;
+            line-height: 1.55;
+            min-height: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .product-bottom {
-            margin-top: auto;
+            margin-top: 18px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 14px;
-            flex-wrap: wrap;
-            padding-top: 20px;
+            gap: 12px;
+            flex-wrap: nowrap;
+            padding-top: 0;
         }
 
         .price {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--ink-900);
         }
 
         .view-btn {
-            padding: 13px 24px;
+            padding: 11px 20px;
             border-radius: 999px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
+            flex-shrink: 0;
         }
 
         .discover {
@@ -693,14 +699,14 @@
 
         .service-card h3 {
             margin: 0;
-            font-size: 28px;
-            line-height: 1.18;
+            font-size: 23px;
+            line-height: 1.24;
         }
 
         .service-card p {
             margin: 16px 0 0;
-            font-size: 18px;
-            line-height: 1.72;
+            font-size: 16px;
+            line-height: 1.66;
             color: var(--ink-500);
             flex: 1;
         }
@@ -719,8 +725,8 @@
 
         .career-title {
             margin: 0 0 22px;
-            font-size: clamp(34px, 2.7vw, 46px);
-            letter-spacing: -.04em;
+            font-size: clamp(28px, 2.15vw, 38px);
+            letter-spacing: -.035em;
         }
 
         .job-list {
@@ -753,8 +759,8 @@
 
         .job-title {
             margin: 0;
-            font-size: 24px;
-            line-height: 1.2;
+            font-size: 20px;
+            line-height: 1.24;
         }
 
         .job-desc {
@@ -870,10 +876,10 @@
 
         .article-box h2 {
             margin: 0;
-            font-size: clamp(34px, 3vw, 54px);
-            line-height: 1.08;
+            font-size: clamp(28px, 2.4vw, 42px);
+            line-height: 1.12;
             color: var(--ink-900);
-            letter-spacing: -.05em;
+            letter-spacing: -.04em;
         }
 
         .article-line {
@@ -886,16 +892,16 @@
 
         .article-box p {
             margin: 0;
-            font-size: 20px;
+            font-size: 17px;
             color: var(--ink-500);
-            line-height: 1.75;
+            line-height: 1.72;
         }
 
         .article-box h3 {
             margin: 0 0 14px;
             color: var(--ink-900);
-            font-size: 32px;
-            line-height: 1.14;
+            font-size: 24px;
+            line-height: 1.2;
             letter-spacing: -.03em;
         }
 
@@ -904,8 +910,8 @@
             margin: 0;
             padding-left: 28px;
             color: var(--ink-500);
-            font-size: 20px;
-            line-height: 1.75;
+            font-size: 17px;
+            line-height: 1.72;
         }
 
         .article-box li + li {
@@ -1050,7 +1056,7 @@
             }
 
             .brand-text strong {
-                font-size: 25px;
+                font-size: 22px;
             }
 
             .brand-text small {
@@ -1096,7 +1102,7 @@
             }
 
             .hero h1 {
-                font-size: 42px;
+                font-size: 34px;
             }
 
             .hero p,
@@ -1104,7 +1110,7 @@
             .article-box p,
             .article-box ul,
             .article-box ol {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .btn {
@@ -1133,7 +1139,16 @@
             }
 
             .product-image {
-                height: 230px;
+                height: 240px;
+            }
+
+            .product-body {
+                padding: 18px 18px 16px;
+            }
+
+            .product-bottom {
+                flex-wrap: wrap;
+                align-items: flex-start;
             }
 
             .discover-grid,

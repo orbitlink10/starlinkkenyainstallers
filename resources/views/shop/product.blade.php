@@ -60,7 +60,7 @@
         .product-image {
             width: 100%;
             height: 100%;
-            min-height: 420px;
+            min-height: 360px;
             object-fit: cover;
             border-radius: 28px;
             border: 1px solid var(--border);
@@ -69,10 +69,10 @@
 
         .product-name {
             margin: 0;
-            font-size: clamp(38px, 4vw, 56px);
-            line-height: 1.02;
+            font-size: clamp(30px, 3vw, 42px);
+            line-height: 1.08;
             color: var(--ink);
-            letter-spacing: -0.04em;
+            letter-spacing: -0.035em;
         }
 
         .meta {
@@ -97,8 +97,8 @@
         .description {
             margin-top: 18px;
             color: var(--muted);
-            font-size: 19px;
-            line-height: 1.72;
+            font-size: 17px;
+            line-height: 1.68;
         }
 
         .price-row {
@@ -111,9 +111,9 @@
 
         .price {
             margin: 0;
-            font-size: clamp(40px, 3.2vw, 52px);
+            font-size: clamp(32px, 2.55vw, 40px);
             color: var(--brand-dark);
-            letter-spacing: -0.05em;
+            letter-spacing: -0.04em;
         }
 
         .marked-price {
@@ -186,11 +186,11 @@
             }
 
             .product-name {
-                font-size: 34px;
+                font-size: 28px;
             }
 
             .price {
-                font-size: 36px;
+                font-size: 30px;
             }
         }
     </style>

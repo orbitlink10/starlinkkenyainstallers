@@ -84,7 +84,7 @@
 
         .item-name {
             margin: 0;
-            font-size: 22px;
+            font-size: 19px;
             color: var(--ink);
         }
 
@@ -115,7 +115,7 @@
 
         .summary-title {
             margin: 0;
-            font-size: 32px;
+            font-size: 26px;
             color: var(--ink);
         }
 
@@ -128,7 +128,7 @@
 
         .total {
             margin-top: 20px;
-            font-size: 42px;
+            font-size: 34px;
             color: var(--brand-dark);
             letter-spacing: -0.05em;
             font-weight: 800;

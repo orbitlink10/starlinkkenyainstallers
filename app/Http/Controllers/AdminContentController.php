@@ -124,6 +124,53 @@ class AdminContentController extends Controller
         return redirect()->route('pages.index')->with('success', 'Page updated successfully.');
     }
 
+    public function pagesBulkAction(Request $request): RedirectResponse
+    {
+        $action = trim((string) $request->input('bulk_action'));
+        $selectedPageIds = collect($request->input('selected_pages', []))
+            ->map(static fn ($id): int => (int) $id)
+            ->filter(static fn (int $id): bool => $id > 0)
+            ->values();
+
+        $query = [];
+        $search = trim((string) $request->string('search'));
+
+        if ($search !== '') {
+            $query['search'] = $search;
+        }
+
+        if ($action === '') {
+            return redirect()->route('pages.index', $query)->with('error', 'Choose a bulk action first.');
+        }
+
+        if ($selectedPageIds->isEmpty()) {
+            return redirect()->route('pages.index', $query)->with('error', 'Select at least one page first.');
+        }
+
+        if ($action !== 'delete') {
+            return redirect()->route('pages.index', $query)->with('error', 'That bulk action is not available.');
+        }
+
+        $pages = SitePage::query()
+            ->whereIn('id', $selectedPageIds)
+            ->get();
+
+        foreach ($pages as $page) {
+            if ($page->image_path && Storage::disk('public')->exists($page->image_path)) {
+                Storage::disk('public')->delete($page->image_path);
+            }
+        }
+
+        SitePage::query()->whereIn('id', $pages->pluck('id'))->delete();
+
+        $deletedCount = $pages->count();
+        $message = $deletedCount === 1
+            ? '1 page deleted successfully.'
+            : "{$deletedCount} pages deleted successfully.";
+
+        return redirect()->route('pages.index', $query)->with('success', $message);
+    }
+
     public function pagesDestroy(SitePage $page): RedirectResponse
     {
         if ($page->image_path && Storage::disk('public')->exists($page->image_path)) {

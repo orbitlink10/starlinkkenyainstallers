@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminContentController;
 use App\Http\Controllers\AdminSectionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SitePageController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/new-post', [AdminContentController::class, 'pagesCreate'])->name('pages.new-post');
     Route::post('/pages', [AdminContentController::class, 'pagesStore'])->name('pages.store');
     Route::put('/pages/{page}', [AdminContentController::class, 'pagesUpdate'])->name('pages.update');
+    Route::post('/pages/bulk-action', [AdminContentController::class, 'pagesBulkAction'])->name('pages.bulk-action');
     Route::delete('/pages/{page}', [AdminContentController::class, 'pagesDestroy'])->name('pages.destroy');
 
     Route::get('/categories', [AdminContentController::class, 'categoriesIndex'])->name('categories.index');
@@ -73,3 +75,5 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/logout.php', [AuthController::class, 'logout'])->name('logout.shortcut');
 });
+
+Route::get('/{page:slug}', [SitePageController::class, 'show'])->name('site-pages.show');
