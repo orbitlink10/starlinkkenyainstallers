@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ShopController extends Controller
@@ -31,11 +32,18 @@ class ShopController extends Controller
             ? route('media.show', ['path' => $product->image_path])
             : 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80';
 
+        [
+            'summary' => $productSummary,
+            'detailsHtml' => $productDetailsHtml,
+        ] = $this->productCopy($product);
+
         return view('shop.product', [
             'product' => $product,
             'imageUrl' => $imageUrl,
             'cartCount' => $this->cartCount($request),
             'whatsappUrl' => $this->whatsappUrlForProduct($product),
+            'productSummary' => $productSummary,
+            'productDetailsHtml' => $productDetailsHtml,
         ]);
     }
 
@@ -144,5 +152,45 @@ class ShopController extends Controller
         $message = "Hello, I want to order:\n".$lines."\nTotal: KES ".number_format($total, 2);
 
         return 'https://wa.me/'.self::WHATSAPP_PHONE.'?text='.urlencode($message);
+    }
+
+    /**
+     * @return array{summary:string, detailsHtml:?string}
+     */
+    private function productCopy(Product $product): array
+    {
+        $defaultSummary = 'Reliable Starlink hardware and accessories for seamless connectivity.';
+        $rawDescription = trim((string) $product->description);
+        $rawMetaDescription = trim((string) $product->meta_description);
+
+        if ($rawDescription === '') {
+            $summary = $rawMetaDescription !== ''
+                ? $this->plainText($rawMetaDescription)
+                : $defaultSummary;
+
+            return [
+                'summary' => $summary !== '' ? $summary : $defaultSummary,
+                'detailsHtml' => null,
+            ];
+        }
+
+        $decodedDescription = html_entity_decode($rawDescription, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $descriptionText = $this->plainText($decodedDescription);
+        $hasHtmlMarkup = $decodedDescription !== strip_tags($decodedDescription);
+        $shouldShowDetails = $hasHtmlMarkup || mb_strlen($descriptionText) > 260;
+
+        $summarySource = $rawMetaDescription !== ''
+            ? $this->plainText($rawMetaDescription)
+            : ($shouldShowDetails ? Str::limit($descriptionText, 220) : $descriptionText);
+
+        return [
+            'summary' => $summarySource !== '' ? $summarySource : $defaultSummary,
+            'detailsHtml' => $shouldShowDetails ? $decodedDescription : null,
+        ];
+    }
+
+    private function plainText(string $value): string
+    {
+        return trim(preg_replace('/\s+/u', ' ', strip_tags(html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8'))) ?? '');
     }
 }

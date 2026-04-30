@@ -101,6 +101,128 @@
             line-height: 1.68;
         }
 
+        .product-details {
+            margin-top: 30px;
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 34px 34px 38px;
+            box-shadow: 0 22px 46px rgba(14, 37, 79, 0.06);
+        }
+
+        .product-details h2 {
+            margin: 0 0 22px;
+            color: var(--ink);
+            font-size: clamp(28px, 2.4vw, 38px);
+            line-height: 1.1;
+            letter-spacing: -0.035em;
+        }
+
+        .product-copy {
+            color: var(--muted);
+        }
+
+        .product-copy > *:first-child {
+            margin-top: 0;
+        }
+
+        .product-copy > *:last-child {
+            margin-bottom: 0;
+        }
+
+        .product-copy p,
+        .product-copy ul,
+        .product-copy ol {
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .product-copy h2,
+        .product-copy h3,
+        .product-copy h4 {
+            margin: 34px 0 14px;
+            color: var(--ink);
+            line-height: 1.18;
+            letter-spacing: -0.03em;
+        }
+
+        .product-copy h2 {
+            font-size: clamp(28px, 2.1vw, 36px);
+        }
+
+        .product-copy h3 {
+            font-size: clamp(24px, 1.8vw, 30px);
+        }
+
+        .product-copy h4 {
+            font-size: clamp(20px, 1.55vw, 24px);
+        }
+
+        .product-copy ul,
+        .product-copy ol {
+            padding-left: 24px;
+        }
+
+        .product-copy li + li {
+            margin-top: 8px;
+        }
+
+        .product-copy a {
+            color: #0b4b8e;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .product-copy blockquote {
+            margin: 26px 0 0;
+            border-left: 4px solid #ff961f;
+            padding: 4px 0 4px 18px;
+            color: #27425f;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.7;
+        }
+
+        .product-copy img {
+            display: block;
+            width: 100%;
+            max-width: 920px;
+            height: auto;
+            margin-top: 26px;
+            border-radius: 24px;
+        }
+
+        .product-copy table {
+            width: 100%;
+            margin-top: 26px;
+            border-collapse: collapse;
+            border: 1px solid #e2eaf4;
+            background: #fff;
+        }
+
+        .product-copy th,
+        .product-copy td {
+            border: 1px solid #e2eaf4;
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .product-copy th {
+            background: #f7faff;
+            color: #133764;
+            font-weight: 800;
+        }
+
+        .product-copy * + p,
+        .product-copy * + ul,
+        .product-copy * + ol,
+        .product-copy * + table,
+        .product-copy * + blockquote {
+            margin-top: 22px;
+        }
+
         .price-row {
             margin-top: 24px;
             display: flex;
@@ -192,6 +314,10 @@
             .price {
                 font-size: 30px;
             }
+
+            .product-details {
+                padding: 26px 22px 30px;
+            }
         }
     </style>
 
@@ -223,9 +349,7 @@
                         @endif
                     </div>
 
-                    <p class="description">
-                        {{ $product->description ?: ($product->meta_description ?: 'Reliable Starlink hardware and accessories for seamless connectivity.') }}
-                    </p>
+                    <p class="description">{{ $productSummary }}</p>
 
                     <div class="price-row">
                         <p class="price">KES {{ number_format((float) $product->price, 2) }}</p>
@@ -257,6 +381,15 @@
                     </div>
                 </div>
             </section>
+
+            @if ($productDetailsHtml)
+                <section class="product-details">
+                    <h2>Product Details</h2>
+                    <div class="product-copy">
+                        {!! $productDetailsHtml !!}
+                    </div>
+                </section>
+            @endif
         </div>
     </main>
 @endsection
