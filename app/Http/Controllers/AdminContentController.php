@@ -39,11 +39,9 @@ class AdminContentController extends Controller
         ]);
     }
 
-    public function pagesPreview(SitePage $page): View
+    public function pagesPreview(SitePage $page): RedirectResponse
     {
-        return view('admin.pages.preview', [
-            'page' => $page,
-        ]);
+        return redirect()->route('site-pages.show', $page);
     }
 
     public function pagesEdit(SitePage $page): View

@@ -11,8 +11,8 @@
         $showingTo = $pages->lastItem() ?? 0;
     @endphp
 
-    <section class="content-card">
-        <div class="toolbar">
+    <section class="content-card pages-index-card">
+        <div class="toolbar pages-toolbar">
             <div>
                 <p class="text-[1.65rem] font-extrabold tracking-[-0.04em] text-[#10213e] sm:text-[1.8rem]">Post List</p>
                 <p class="mt-1.5 text-[0.93rem] text-[#6b7f9b]">Manage published pages, preview changes, and update content.</p>
@@ -35,7 +35,7 @@
             @endif
         </form>
 
-        <div class="toolbar border-t border-[#e6edf6]">
+        <div class="toolbar pages-toolbar border-t border-[#e6edf6]">
             <div class="flex flex-wrap items-center gap-3">
                 <select class="field-select w-[190px] max-w-full" form="pages-bulk-form" name="bulk_action" aria-label="Bulk actions">
                     <option value="">Bulk actions</option>
@@ -47,7 +47,7 @@
                 </span>
             </div>
 
-            <form class="search-form" method="GET" action="{{ route('pages.index') }}">
+            <form class="search-form pages-search-form" method="GET" action="{{ route('pages.index') }}">
                 <div class="relative w-full max-w-[280px]">
                     <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[0.88rem] text-[#7d91ad]"></i>
                     <input class="field-input w-full pl-10" type="text" name="search" value="{{ $search }}" placeholder="Search by title...">
@@ -56,8 +56,8 @@
             </form>
         </div>
 
-        <div class="table-wrap">
-            <table class="table">
+        <div class="table-wrap pages-table-wrap">
+            <table class="table pages-table">
                 <thead>
                     <tr>
                         <th class="w-[64px]">
@@ -68,7 +68,6 @@
                         <th>Image</th>
                         <th>Title</th>
                         <th>Alt Text</th>
-                        <th>Type</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -89,36 +88,33 @@
                             <td>{{ $pages->firstItem() + $index }}</td>
                             <td>
                                 @if ($page->image_path)
-                                    <img class="thumb" src="{{ asset('storage/'.$page->image_path) }}" alt="{{ $page->image_alt_text ?: $page->page_title }}">
+                                    <img class="thumb pages-thumb" src="{{ asset('storage/'.$page->image_path) }}" alt="{{ $page->image_alt_text ?: $page->page_title }}">
                                 @else
-                                    <img class="thumb" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=300&q=80" alt="{{ $page->page_title }}">
+                                    <img class="thumb pages-thumb" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=300&q=80" alt="{{ $page->page_title }}">
                                 @endif
                             </td>
                             <td>
-                                <div class="max-w-[16rem]">
+                                <div class="max-w-[15rem]">
                                     <p class="text-[0.98rem] font-extrabold tracking-[-0.02em] text-[#12284c]">{{ $page->page_title }}</p>
-                                    <p class="mt-1.5 text-[0.77rem] text-[#7387a3]">Slug: {{ $page->slug }}</p>
+                                    <p class="pages-slug">URL: /{{ $page->slug }}</p>
                                 </div>
                             </td>
-                            <td class="max-w-[15rem] text-[0.92rem]">{{ $page->image_alt_text ?: '-' }}</td>
+                            <td class="pages-alt-text max-w-[12rem]">{{ $page->image_alt_text ?: '-' }}</td>
                             <td>
-                                <span class="inline-flex rounded-full bg-[#eef5ff] px-3 py-1.5 text-[0.76rem] font-extrabold text-[#315b95]">{{ $page->type }}</span>
-                            </td>
-                            <td>
-                                <div class="action-group">
-                                    <a class="chip view" href="{{ route('pages.preview', $page) }}" target="_blank" rel="noopener"><i class="fa-solid fa-eye"></i> Preview</a>
-                                    <a class="chip edit" href="{{ route('pages.edit', $page) }}"><i class="fa-solid fa-pen-to-square"></i> Update</a>
+                                <div class="action-group pages-action-group">
+                                    <a class="chip pages-chip view" href="{{ route('site-pages.show', $page) }}" target="_blank" rel="noopener"><i class="fa-solid fa-eye"></i> Preview</a>
+                                    <a class="chip pages-chip edit" href="{{ route('pages.edit', $page) }}"><i class="fa-solid fa-pen-to-square"></i> Update</a>
                                     <form method="POST" action="{{ route('pages.destroy', $page) }}" onsubmit="return confirm('Delete this page?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="chip delete" type="submit"><i class="fa-solid fa-trash"></i> Delete</button>
+                                        <button class="chip pages-chip delete" type="submit"><i class="fa-solid fa-trash"></i> Delete</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-10 text-center text-[0.95rem] font-semibold text-[#6e809a]">No pages found.</td>
+                            <td colspan="6" class="py-10 text-center text-[0.95rem] font-semibold text-[#6e809a]">No pages found.</td>
                         </tr>
                     @endforelse
                 </tbody>

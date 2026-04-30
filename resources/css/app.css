@@ -243,6 +243,72 @@
     .published-page-content th {
         @apply bg-[#f7faff] font-extrabold text-[#15355d];
     }
+
+    .pages-index-card {
+        @apply mt-5;
+    }
+
+    .pages-toolbar {
+        @apply gap-2.5 px-5 py-4;
+    }
+
+    .pages-toolbar .btn,
+    .pages-toolbar .btn-outline {
+        @apply px-4 py-2.5 text-[0.9rem];
+    }
+
+    .pages-toolbar .field-input,
+    .pages-toolbar .field-select {
+        @apply px-3.5 py-2.5 text-[0.92rem];
+    }
+
+    .pages-search-form {
+        @apply gap-2;
+    }
+
+    .pages-table-wrap {
+        @apply px-4 pb-5;
+    }
+
+    .pages-table {
+        min-width: 100%;
+    }
+
+    .pages-table th,
+    .pages-table td {
+        @apply px-3 py-3.5 text-[0.9rem];
+    }
+
+    .pages-table thead th {
+        @apply text-[0.74rem] tracking-[0.16em];
+    }
+
+    .pages-thumb {
+        height: 5.5rem;
+        width: 7.25rem;
+    }
+
+    .pages-slug {
+        @apply mt-1 text-[0.76rem] leading-[1.35] text-[#7387a3];
+        overflow-wrap: anywhere;
+    }
+
+    .pages-alt-text {
+        @apply text-[0.9rem] leading-[1.45] text-[#40526d];
+        overflow-wrap: anywhere;
+    }
+
+    .pages-action-group {
+        @apply gap-1.5;
+    }
+
+    .pages-action-group form {
+        display: inline-flex;
+    }
+
+    .pages-chip {
+        @apply px-3 py-1.5 text-[0.82rem];
+    }
 }
 
     @media (max-width: 767px) {
@@ -263,6 +329,19 @@
     .table td {
         @apply px-4 py-4;
     }
+
+        .pages-toolbar {
+            @apply px-4 py-3.5;
+        }
+
+        .pages-table-wrap {
+            @apply px-3 pb-4;
+        }
+
+        .pages-table th,
+        .pages-table td {
+            @apply px-2.5 py-3;
+        }
 
         .published-page-content {
         @apply text-[0.94rem] leading-[1.72];
