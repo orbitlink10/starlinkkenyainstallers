@@ -323,6 +323,8 @@
 
     <main class="shop-page">
         <div class="container">
+            @include('shared.quick-links-nav')
+
             <div class="top-bar">
                 <a class="back-link" href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
                 <a class="cart-link" href="{{ route('shop.cart.index') }}"><i class="fa-solid fa-cart-shopping"></i> Cart ({{ $cartCount }})</a>

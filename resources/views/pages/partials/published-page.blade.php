@@ -338,6 +338,8 @@
 
 <main class="site-page-view">
     <div class="site-page-container">
+        @include('shared.quick-links-nav')
+
     @if ($showPreviewBadge)
         <div class="site-page-preview">
             <i class="fa-solid fa-eye"></i>
