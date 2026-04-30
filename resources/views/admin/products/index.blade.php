@@ -63,7 +63,7 @@
                             <td class="products-price">{{ number_format((float) $product->price, 2) }}</td>
                             <td>
                                 <div class="action-group products-action-group">
-                                    <a class="chip products-chip view" href="{{ route('shop.product.show', $product) }}" target="_blank" rel="noopener"><i class="fa-solid fa-eye"></i> Preview</a>
+                                    <a class="chip products-chip view" href="{{ route('shop.product.show', ['productSlug' => $product->slug ?: $product->id]) }}" target="_blank" rel="noopener"><i class="fa-solid fa-eye"></i> Preview</a>
                                     <a class="chip products-chip edit" href="{{ route('products.edit', $product) }}"><i class="fa-solid fa-pen-to-square"></i> Update</a>
                                     <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('Delete this product?');">
                                         @csrf

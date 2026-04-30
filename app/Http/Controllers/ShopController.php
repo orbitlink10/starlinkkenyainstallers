@@ -11,8 +11,20 @@ class ShopController extends Controller
 {
     private const WHATSAPP_PHONE = '254700123456';
 
-    public function show(Request $request, Product $product): View
+    public function show(Request $request, string $productSlug): View|RedirectResponse
     {
+        $product = Product::query()
+            ->where('slug', $productSlug)
+            ->when(
+                ctype_digit($productSlug),
+                fn ($query) => $query->orWhere('id', (int) $productSlug)
+            )
+            ->firstOrFail();
+
+        if ($product->slug && $productSlug !== $product->slug) {
+            return redirect()->route('shop.product.show', ['productSlug' => $product->slug]);
+        }
+
         abort_unless($product->is_active, 404);
 
         $imageUrl = $product->image_path
@@ -59,7 +71,7 @@ class ShopController extends Controller
         $request->session()->put('cart', $cart);
 
         return redirect()
-            ->route('shop.product.show', $product)
+            ->route('shop.product.show', ['productSlug' => $product->slug ?: $product->id])
             ->with('success', $product->name.' added to cart.');
     }
 

@@ -1375,7 +1375,7 @@
                                 </p>
                                 <div class="product-bottom">
                                     <span class="price">KES {{ number_format((float) $product->price, 2) }}</span>
-                                    <a class="view-btn" href="{{ route('shop.product.show', $product) }}">View</a>
+                                    <a class="view-btn" href="{{ route('shop.product.show', ['productSlug' => $product->slug ?: $product->id]) }}">View</a>
                                 </div>
                             </div>
                         </article>
