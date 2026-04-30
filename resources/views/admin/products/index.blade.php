@@ -6,12 +6,16 @@
 ])
 
 @section('admin_content')
-    <section class="content-card">
-        <div class="toolbar">
-            <strong style="font-size:34px;color:#1d3152;">Product List</strong>
-            <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-                <form class="search-form" method="GET" action="{{ route('products.index') }}">
-                    <input class="field-input" style="width:280px;" type="text" name="search" value="{{ $search }}" placeholder="Search by product name...">
+    <section class="content-card products-index-card">
+        <div class="toolbar products-toolbar">
+            <div>
+                <p class="text-[1.55rem] font-extrabold tracking-[-0.04em] text-[#10213e] sm:text-[1.72rem]">Product List</p>
+                <p class="mt-1 text-[0.9rem] text-[#6b7f9b]">Manage products, prices, and listing details.</p>
+            </div>
+
+            <div class="products-toolbar-actions">
+                <form class="search-form products-search-form" method="GET" action="{{ route('products.index') }}">
+                    <input class="field-input products-search-input" type="text" name="search" value="{{ $search }}" placeholder="Search by product name...">
                     <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
                 </form>
                 <a class="btn" href="{{ route('products.create') }}"><i class="fa-solid fa-plus"></i> Add Product</a>
@@ -22,17 +26,14 @@
             <div class="flash-success">{{ session('success') }}</div>
         @endif
 
-        <div class="table-wrap">
-            <table class="table">
+        <div class="table-wrap products-table-wrap">
+            <table class="table products-table">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Image</th>
-                        <th>Name</th>
-                        <th>Slug</th>
+                        <th>Product</th>
                         <th>Price (KES)</th>
-                        <th>Google Merchant</th>
-                        <th>Category</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -42,30 +43,38 @@
                             <td>{{ $products->firstItem() + $index }}</td>
                             <td>
                                 @if ($product->image_path)
-                                    <img class="thumb" src="{{ route('media.show', ['path' => $product->image_path]) }}" alt="{{ $product->name }}">
+                                    <img class="thumb products-thumb" src="{{ route('media.show', ['path' => $product->image_path]) }}" alt="{{ $product->name }}">
                                 @else
-                                    <img class="thumb" src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&w=320&q=80" alt="{{ $product->name }}">
+                                    <img class="thumb products-thumb" src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&w=320&q=80" alt="{{ $product->name }}">
                                 @endif
                             </td>
-                            <td>{{ $product->name }}</td>
-                            <td>{{ $product->slug ?: '-' }}</td>
-                            <td>{{ number_format((float) $product->price, 2) }}</td>
-                            <td>{{ $product->google_merchant ? 'Yes' : 'No' }}</td>
-                            <td>{{ $product->category?->name ?: '-' }}</td>
                             <td>
-                                <div class="action-group">
-                                    <a class="chip edit" href="{{ route('products.edit', $product) }}"><i class="fa-solid fa-pen-to-square"></i> Update</a>
+                                <div class="products-name-wrap">
+                                    <p class="products-name">{{ $product->name }}</p>
+                                    <p class="products-meta">Slug: {{ $product->slug ?: '-' }}</p>
+                                    <div class="products-badges">
+                                        <span class="products-badge">{{ $product->category?->name ?: 'Uncategorized' }}</span>
+                                        <span class="products-badge {{ $product->google_merchant ? 'is-enabled' : 'is-disabled' }}">
+                                            Merchant {{ $product->google_merchant ? 'On' : 'Off' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="products-price">{{ number_format((float) $product->price, 2) }}</td>
+                            <td>
+                                <div class="action-group products-action-group">
+                                    <a class="chip products-chip edit" href="{{ route('products.edit', $product) }}"><i class="fa-solid fa-pen-to-square"></i> Update</a>
                                     <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('Delete this product?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="chip delete" type="submit"><i class="fa-solid fa-trash"></i> Delete</button>
+                                        <button class="chip products-chip delete" type="submit"><i class="fa-solid fa-trash"></i> Delete</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8">No products found.</td>
+                            <td colspan="5">No products found.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -309,6 +309,98 @@
     .pages-chip {
         @apply px-3 py-1.5 text-[0.82rem];
     }
+
+    .products-index-card {
+        @apply mt-5;
+    }
+
+    .products-toolbar {
+        @apply gap-2.5 px-5 py-4;
+    }
+
+    .products-toolbar .btn {
+        @apply px-4 py-2.5 text-[0.9rem];
+    }
+
+    .products-toolbar-actions {
+        @apply flex flex-wrap items-center gap-2.5;
+    }
+
+    .products-search-form {
+        @apply gap-2;
+    }
+
+    .products-search-input {
+        width: min(100%, 15.5rem);
+        @apply px-3.5 py-2.5 text-[0.92rem];
+    }
+
+    .products-table-wrap {
+        @apply px-4 pb-5;
+    }
+
+    .products-table {
+        min-width: 100%;
+    }
+
+    .products-table th,
+    .products-table td {
+        @apply px-3 py-3 text-[0.9rem];
+    }
+
+    .products-table thead th {
+        @apply text-[0.74rem] tracking-[0.16em];
+    }
+
+    .products-thumb {
+        height: 4.8rem;
+        width: 4.8rem;
+    }
+
+    .products-name-wrap {
+        min-width: 0;
+    }
+
+    .products-name {
+        @apply text-[0.96rem] font-extrabold leading-[1.28] tracking-[-0.02em] text-[#12284c];
+    }
+
+    .products-meta {
+        @apply mt-1 text-[0.78rem] leading-[1.35] text-[#7387a3];
+        overflow-wrap: anywhere;
+    }
+
+    .products-badges {
+        @apply mt-2 flex flex-wrap gap-1.5;
+    }
+
+    .products-badge {
+        @apply inline-flex items-center rounded-full bg-[#eef5ff] px-2.5 py-1 text-[0.72rem] font-extrabold leading-none text-[#315b95];
+    }
+
+    .products-badge.is-enabled {
+        @apply bg-[#ebfff3] text-[#1f7a48];
+    }
+
+    .products-badge.is-disabled {
+        @apply bg-[#f4f7fb] text-[#72839c];
+    }
+
+    .products-price {
+        @apply whitespace-nowrap text-[0.95rem] font-extrabold text-[#16345d];
+    }
+
+    .products-action-group {
+        @apply flex-row flex-wrap gap-1.5;
+    }
+
+    .products-action-group form {
+        display: inline-flex;
+    }
+
+    .products-chip {
+        @apply px-3 py-1.5 text-[0.8rem];
+    }
 }
 
     @media (max-width: 767px) {
@@ -341,6 +433,23 @@
         .pages-table th,
         .pages-table td {
             @apply px-2.5 py-3;
+        }
+
+        .products-toolbar {
+            @apply px-4 py-3.5;
+        }
+
+        .products-search-input {
+            width: 100%;
+        }
+
+        .products-table-wrap {
+            @apply px-3 pb-4;
+        }
+
+        .products-table th,
+        .products-table td {
+            @apply px-2.5 py-2.5;
         }
 
         .published-page-content {
