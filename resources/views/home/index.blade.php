@@ -908,15 +908,39 @@
             background: radial-gradient(circle, rgba(255, 155, 47, 0.11) 0%, rgba(255, 155, 47, 0) 74%);
         }
 
+        .article-box > * {
+            position: relative;
+            z-index: 1;
+        }
+
         .article-box h1,
-        .article-box h2 {
+        .article-box h2,
+        .article-box h3 {
             margin: 0;
             position: relative;
-            padding-bottom: 24px;
-            font-size: clamp(32px, 2.7vw, 48px);
-            line-height: 1.1;
             color: var(--ink-900);
+            font-weight: 800;
+        }
+
+        .article-box h1 {
+            padding-bottom: 24px;
+            font-size: clamp(38px, 3.1vw, 56px);
+            line-height: 1.06;
+            letter-spacing: -.045em;
+        }
+
+        .article-box h2 {
+            padding-bottom: 22px;
+            font-size: clamp(30px, 2.35vw, 42px);
+            line-height: 1.12;
             letter-spacing: -.04em;
+        }
+
+        .article-box > h1:first-child,
+        .article-box > h2:first-child {
+            font-size: clamp(42px, 3.7vw, 62px);
+            line-height: 1.04;
+            max-width: 15ch;
         }
 
         .article-box h1::after,
@@ -940,12 +964,9 @@
         }
 
         .article-box h3 {
-            margin: 0;
-            position: relative;
-            padding-bottom: 20px;
-            color: var(--ink-900);
-            font-size: clamp(28px, 2.15vw, 38px);
-            line-height: 1.14;
+            padding-bottom: 18px;
+            font-size: clamp(22px, 1.75vw, 30px);
+            line-height: 1.2;
             letter-spacing: -.03em;
         }
 
@@ -956,6 +977,14 @@
             color: var(--ink-500);
             font-size: 18px;
             line-height: 1.72;
+            display: grid;
+            gap: 10px;
+        }
+
+        .article-box ul li::marker,
+        .article-box ol li::marker {
+            color: var(--orange-dark);
+            font-weight: 700;
         }
 
         .article-box hr {
@@ -966,14 +995,19 @@
 
         .article-box h1 + p,
         .article-box h2 + p,
-        .article-box h3 + p {
+        .article-box > h2:first-child + p {
             font-size: clamp(19px, 1.45vw, 23px);
             line-height: 1.72;
             color: #3f5c82;
         }
 
+        .article-box h3 + p {
+            font-size: 18px;
+            line-height: 1.72;
+        }
+
         .article-box li + li {
-            margin-top: 10px;
+            margin-top: 0;
         }
 
         .article-box * + h2,
@@ -988,9 +1022,25 @@
             margin-top: 10px;
         }
 
-        .article-box * + h2,
+        .article-box * + h1,
         .article-box * + h3 {
             margin-top: 46px;
+        }
+
+        .article-box * + h2 {
+            margin-top: 58px;
+        }
+
+        .article-box blockquote {
+            margin: 28px 0 0;
+            padding: 18px 22px;
+            border-left: 4px solid var(--orange);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255, 242, 223, 0.72) 0%, rgba(255, 255, 255, 0.96) 100%);
+            color: var(--ink-700);
+            font-size: 19px;
+            line-height: 1.65;
+            box-shadow: inset 0 0 0 1px rgba(255, 155, 47, 0.08);
         }
 
         .footer {
@@ -1482,9 +1532,9 @@
         <section class="section">
             <div class="container">
                 <div class="article-wrap">
-                    <div class="article-box">
+                    <article class="article-box">
                         {!! $homePageContentHtml !!}
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>

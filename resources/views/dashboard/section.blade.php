@@ -366,7 +366,7 @@
 
                         <div>
                             <label class="field-label" for="home_page_content">Home Page Content</label>
-                            <p class="field-help">Use H2/H3 headings and paragraphs for SEO structure. You can also use bullet lists.</p>
+                            <p class="field-help">Use H2/H3 headings and paragraphs, or paste plain text with blank lines. Numbered sections become headings and short lines after a colon become bullet lists.</p>
                             <textarea class="field-textarea js-home-editor" id="home_page_content" name="home_page_content" style="min-height:260px;">{{ old('home_page_content', $homepageContent->home_page_content) }}</textarea>
                         </div>
 
