@@ -1370,8 +1370,8 @@
                             <small>KENYA INSTALLERS</small>
                         </span>
                     </a>
-                    <form class="header-search" action="{{ route('home') }}" method="GET" role="search">
-                        <input type="search" name="q" value="{{ request('q') }}" placeholder="Search for products..." aria-label="Search for products">
+                    <form class="header-search" action="{{ route('home') }}#packages" method="GET" role="search">
+                        <input type="search" name="q" value="{{ $searchQuery ?? request('q') }}" placeholder="Search for products..." aria-label="Search for products">
                         <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                     <div class="header-actions">
@@ -1423,7 +1423,13 @@
                 <span id="kits" class="section-anchor" aria-hidden="true"></span>
                 <span id="prices" class="section-anchor" aria-hidden="true"></span>
                 <h2 class="section-title">{{ $productsTitle }}</h2>
-                <p class="section-intro">Explore our genuine Starlink hardware and accessories.</p>
+                <p class="section-intro">
+                    @if (! empty($searchQuery))
+                        Search results for "{{ $searchQuery }}".
+                    @else
+                        Explore our genuine Starlink hardware and accessories.
+                    @endif
+                </p>
                 <div class="products-grid">
                     @forelse ($products as $product)
                         <article class="product-card">
@@ -1442,8 +1448,13 @@
                     @empty
                         <article class="product-card">
                             <div class="product-body">
-                                <h3 class="product-name">No products published yet</h3>
-                                <p class="product-desc">Login to the admin dashboard and add Starlink kits.</p>
+                                @if (! empty($searchQuery))
+                                    <h3 class="product-name">No products matched your search</h3>
+                                    <p class="product-desc">Try a different product name or <a href="{{ route('home') }}#packages">browse all kits</a>.</p>
+                                @else
+                                    <h3 class="product-name">No products published yet</h3>
+                                    <p class="product-desc">Login to the admin dashboard and add Starlink kits.</p>
+                                @endif
                             </div>
                         </article>
                     @endforelse

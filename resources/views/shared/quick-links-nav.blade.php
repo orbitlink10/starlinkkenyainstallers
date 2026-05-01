@@ -1,5 +1,6 @@
 @php
     $useHashLinks = $useHashLinks ?? false;
+    $variant = $variant ?? 'pill';
     $homeUrl = route('home');
     $quickLinks = [
         [
@@ -57,6 +58,43 @@
             box-shadow: 0 10px 20px rgba(255, 155, 47, 0.12);
         }
 
+        .quick-links-nav--inline {
+            gap: 18px 34px;
+            margin: 0 0 32px;
+            padding: 0 4px 10px;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .quick-links-nav--inline .quick-links-nav__link {
+            justify-content: flex-start;
+            padding: 10px 0;
+            border-radius: 0;
+            border-bottom: 3px solid transparent;
+            color: #163860;
+            font-size: clamp(18px, 1.4vw, 22px);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .quick-links-nav--inline .quick-links-nav__link:hover,
+        .quick-links-nav--inline .quick-links-nav__link.is-active {
+            background: transparent;
+            color: #0c2749;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .quick-links-nav--inline .quick-links-nav__link.is-active {
+            border-color: #183a63;
+        }
+
+        .quick-links-nav--inline .quick-links-nav__link:hover {
+            border-color: #ff9b2f;
+        }
+
         @media (max-width: 760px) {
             .quick-links-nav {
                 flex-wrap: nowrap;
@@ -74,12 +112,22 @@
                 padding: 12px 18px;
                 font-size: 14px;
             }
+
+            .quick-links-nav--inline {
+                padding: 0 0 8px;
+                margin-bottom: 24px;
+            }
+
+            .quick-links-nav--inline .quick-links-nav__link {
+                padding: 10px 0;
+                font-size: 16px;
+            }
         }
     </style>
 @endonce
 
-<nav class="quick-links-nav" aria-label="{{ $navLabel ?? 'Quick site links' }}">
+<nav class="quick-links-nav {{ $variant === 'inline' ? 'quick-links-nav--inline' : '' }}" aria-label="{{ $navLabel ?? 'Quick site links' }}">
     @foreach ($quickLinks as $quickLink)
-        <a class="quick-links-nav__link" href="{{ $quickLink['href'] }}">{{ $quickLink['label'] }}</a>
+        <a class="quick-links-nav__link {{ $variant === 'inline' && $loop->first ? 'is-active' : '' }}" href="{{ $quickLink['href'] }}">{{ $quickLink['label'] }}</a>
     @endforeach
 </nav>

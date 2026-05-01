@@ -5,20 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\HomepageContent;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $products = Product::query()
-            ->where('is_active', true)
+        $searchQuery = trim((string) $request->string('q'));
+
+        $activeProductsQuery = Product::query()
+            ->where('is_active', true);
+
+        $products = (clone $activeProductsQuery)
+            ->when($searchQuery !== '', function (Builder $query) use ($searchQuery): Builder {
+                return $query->where(function (Builder $productQuery) use ($searchQuery): Builder {
+                    return $productQuery
+                        ->where('name', 'like', "%{$searchQuery}%")
+                        ->orWhere('slug', 'like', "%{$searchQuery}%")
+                        ->orWhere('meta_description', 'like', "%{$searchQuery}%")
+                        ->orWhere('description', 'like', "%{$searchQuery}%");
+                });
+            })
             ->orderBy('price')
             ->get();
 
         $stats = [
-            'activeProducts' => $products->count(),
+            'activeProducts' => (clone $activeProductsQuery)->count(),
             'ordersCompleted' => Order::query()->where('status', 'completed')->count(),
             'coverageCounties' => 47,
             'supportHours' => '08:00 - 20:00',
@@ -28,7 +43,7 @@ class HomeController extends Controller
         $defaultHomeContent = '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya.</p>';
         $homePageContentHtml = $this->formatHomePageContent($homepageContent?->home_page_content ?: $defaultHomeContent);
 
-        return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml'));
+        return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery'));
     }
 
     private function formatHomePageContent(?string $content): string
