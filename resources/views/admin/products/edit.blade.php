@@ -7,6 +7,8 @@
 
 @section('admin_content')
     <section class="content-card">
+        <div class="section-bar">Update Product</div>
+
         @if ($errors->any())
             <div class="flash-error">{{ $errors->first() }}</div>
         @endif
@@ -77,7 +79,7 @@
                 </div>
             @endif
 
-            <div style="display:flex;align-items:center;gap:10px;">
+            <div class="field-toggle">
                 <input id="google_merchant" name="google_merchant" type="checkbox" value="1" @checked(old('google_merchant', $product->google_merchant))>
                 <label for="google_merchant">Enable Google Merchant</label>
             </div>

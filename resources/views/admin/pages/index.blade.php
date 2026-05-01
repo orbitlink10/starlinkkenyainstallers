@@ -14,8 +14,8 @@
     <section class="content-card pages-index-card">
         <div class="toolbar pages-toolbar">
             <div>
-                <p class="text-[1.65rem] font-extrabold tracking-[-0.04em] text-[#10213e] sm:text-[1.8rem]">Post List</p>
-                <p class="mt-1.5 text-[0.93rem] text-[#6b7f9b]">Manage published pages, preview changes, and update content.</p>
+                <p class="admin-panel-title">Post List</p>
+                <p class="admin-panel-copy">Manage published pages, preview changes, and update content.</p>
             </div>
             <a class="btn" href="{{ route('pages.create') }}"><i class="fa-solid fa-plus"></i> Add Page</a>
         </div>
@@ -42,7 +42,7 @@
                     <option value="delete">Delete selected</option>
                 </select>
                 <button class="btn" form="pages-bulk-form" type="submit">Apply</button>
-                <span class="text-[0.82rem] font-semibold text-[#7287a4]">
+                <span class="text-[0.78rem] font-semibold text-[#7287a4]">
                     Showing {{ number_format($showingFrom) }}-{{ number_format($showingTo) }} of {{ number_format($pages->total()) }} pages
                 </span>
             </div>
@@ -95,7 +95,7 @@
                             </td>
                             <td>
                                 <div class="max-w-[15rem]">
-                                    <p class="text-[0.98rem] font-extrabold tracking-[-0.02em] text-[#12284c]">{{ $page->page_title }}</p>
+                                    <p class="text-[0.88rem] font-extrabold tracking-[-0.02em] text-[#12284c]">{{ $page->page_title }}</p>
                                     <p class="pages-slug">URL: /{{ $page->slug }}</p>
                                 </div>
                             </td>
@@ -114,7 +114,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="py-10 text-center text-[0.95rem] font-semibold text-[#6e809a]">No pages found.</td>
+                            <td colspan="6" class="py-8 text-center text-[0.86rem] font-semibold text-[#6e809a]">No pages found.</td>
                         </tr>
                     @endforelse
                 </tbody>

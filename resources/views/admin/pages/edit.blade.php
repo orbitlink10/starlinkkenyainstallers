@@ -54,7 +54,7 @@
                 <label class="field-label" for="image">Image</label>
                 <input class="field-file" id="image" name="image" type="file" accept=".jpg,.jpeg,.png,.webp">
                 @if ($page->image_path)
-                    <img class="thumb" style="margin-top:10px;" src="{{ route('media.show', ['path' => $page->image_path]) }}" alt="{{ $page->image_alt_text ?: $page->page_title }}">
+                    <img class="thumb inline-thumb" src="{{ route('media.show', ['path' => $page->image_path]) }}" alt="{{ $page->image_alt_text ?: $page->page_title }}">
                 @endif
             </div>
 

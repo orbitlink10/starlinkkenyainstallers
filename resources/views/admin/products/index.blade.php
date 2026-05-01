@@ -9,8 +9,8 @@
     <section class="content-card products-index-card">
         <div class="toolbar products-toolbar">
             <div>
-                <p class="text-[1.55rem] font-extrabold tracking-[-0.04em] text-[#10213e] sm:text-[1.72rem]">Product List</p>
-                <p class="mt-1 text-[0.9rem] text-[#6b7f9b]">Manage products, prices, and listing details.</p>
+                <p class="admin-panel-title">Product List</p>
+                <p class="admin-panel-copy">Manage products, prices, and listing details.</p>
             </div>
 
             <div class="products-toolbar-actions">

@@ -46,41 +46,57 @@
 }
 
 @layer components {
+    .admin-shell-title {
+        @apply text-[1.9rem] font-extrabold leading-[1.02] tracking-[-0.04em] text-[#10213e] sm:text-[2.1rem] xl:text-[2.35rem];
+    }
+
+    .admin-shell-copy {
+        @apply mt-1.5 max-w-[34rem] text-[0.9rem] leading-[1.45] text-[#647c9a] sm:text-[0.96rem];
+    }
+
+    .admin-panel-title {
+        @apply text-[1.18rem] font-extrabold tracking-[-0.03em] text-[#10213e] sm:text-[1.28rem];
+    }
+
+    .admin-panel-copy {
+        @apply mt-1 text-[0.84rem] leading-[1.45] text-[#6b7f9b];
+    }
+
     .content-card {
-        @apply mt-6 overflow-hidden rounded-[1.5rem] border border-[#e2eaf4] bg-white shadow-[0_18px_42px_rgba(16,35,62,0.07)];
+        @apply mt-5 overflow-hidden rounded-[1.3rem] border border-[#e2eaf4] bg-white shadow-[0_14px_34px_rgba(16,35,62,0.06)];
     }
 
     .section-bar {
-        @apply border-b border-[#e6edf6] bg-white px-6 py-5 text-[1.65rem] font-extrabold tracking-[-0.03em] text-[#112546];
+        @apply border-b border-[#e6edf6] bg-white px-5 py-4 text-[1.18rem] font-extrabold tracking-[-0.03em] text-[#112546] sm:text-[1.28rem];
     }
 
     .toolbar {
-        @apply flex flex-wrap items-center justify-between gap-3 px-6 py-5;
+        @apply flex flex-wrap items-center justify-between gap-2.5 px-5 py-4;
     }
 
     .search-form {
-        @apply flex flex-wrap items-center gap-3;
+        @apply flex flex-wrap items-center gap-2;
     }
 
     .field-input,
     .field-textarea,
     .field-select,
     .field-file {
-        @apply w-full rounded-[0.9rem] border border-[#d2ddea] bg-white px-4 py-3 text-[0.95rem] leading-[1.4] text-[#273a57] outline-none transition focus:border-[#7cb1ff] focus:ring-4 focus:ring-[#1a73e8]/12;
+        @apply w-full rounded-[0.8rem] border border-[#d2ddea] bg-white px-3.5 py-2.5 text-[0.9rem] leading-[1.4] text-[#273a57] outline-none transition focus:border-[#7cb1ff] focus:ring-4 focus:ring-[#1a73e8]/12;
         box-shadow: inset 0 1px 1px rgba(15, 35, 64, 0.02);
     }
 
     .field-textarea {
-        @apply min-h-32 resize-y;
+        @apply min-h-28 resize-y;
     }
 
     .field-file {
-        @apply px-[0.85rem] py-[0.7rem];
+        @apply px-3 py-2;
     }
 
     .btn,
     .btn-outline {
-        @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-[0.95rem] font-extrabold leading-none transition;
+        @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[0.88rem] font-extrabold leading-none transition;
     }
 
     .btn {
@@ -93,28 +109,36 @@
     }
 
     .form-grid {
-        @apply grid gap-[1.4rem] px-6 py-6 md:px-7 md:py-7;
+        @apply grid gap-[1.15rem] px-5 py-5 md:px-6 md:py-6;
     }
 
     .field-label {
-        @apply mb-2 block text-[0.92rem] font-extrabold tracking-[-0.01em] text-[#1f3150];
+        @apply mb-1.5 block text-[0.84rem] font-extrabold tracking-[-0.01em] text-[#1f3150];
+    }
+
+    .field-toggle {
+        @apply flex items-center gap-2.5 text-[0.88rem] font-semibold text-[#334965];
+    }
+
+    .inline-thumb {
+        @apply mt-2;
     }
 
     .table-wrap {
-        @apply overflow-x-auto px-5 pb-6;
+        @apply overflow-x-auto px-4 pb-5;
     }
 
     .table {
-        @apply min-w-[980px] w-full border-separate border-spacing-0 overflow-hidden rounded-[1.25rem] border border-[#e2eaf4] bg-white;
+        @apply min-w-[940px] w-full border-separate border-spacing-0 overflow-hidden rounded-[1.05rem] border border-[#e2eaf4] bg-white;
     }
 
     .table th,
     .table td {
-        @apply border-t border-[#e8eef6] px-4 py-4 text-left align-middle text-[0.95rem] leading-[1.5] text-[#243750];
+        @apply border-t border-[#e8eef6] px-3.5 py-3 text-left align-middle text-[0.88rem] leading-[1.45] text-[#243750];
     }
 
     .table thead th {
-        @apply border-t-0 bg-[#f7faff] text-[0.8rem] font-extrabold uppercase tracking-[0.18em] text-[#627998];
+        @apply border-t-0 bg-[#f7faff] text-[0.73rem] font-extrabold uppercase tracking-[0.18em] text-[#627998];
     }
 
     .table tbody tr:hover td {
@@ -122,15 +146,15 @@
     }
 
     .thumb {
-        @apply h-28 w-[9.5rem] max-w-full rounded-[0.85rem] border border-[#e2eaf4] bg-[#eef3fb] object-cover;
+        @apply h-24 w-[7.5rem] max-w-full rounded-[0.8rem] border border-[#e2eaf4] bg-[#eef3fb] object-cover;
     }
 
     .action-group {
-        @apply flex flex-col items-start gap-2;
+        @apply flex flex-wrap items-center gap-1.5;
     }
 
     .chip {
-        @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-transparent bg-transparent px-4 py-2 text-[0.88rem] font-bold leading-none whitespace-nowrap;
+        @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full border border-transparent bg-transparent px-3 py-1.5 text-[0.78rem] font-bold leading-none whitespace-nowrap;
     }
 
     .chip.view {
@@ -147,7 +171,7 @@
 
     .flash-success,
     .flash-error {
-        @apply mx-6 mb-4 rounded-[0.9rem] px-4 py-3 text-[0.9rem] font-bold;
+        @apply mx-5 mb-4 rounded-[0.8rem] px-3.5 py-2.5 text-[0.84rem] font-bold;
     }
 
     .flash-success {
@@ -159,7 +183,7 @@
     }
 
     .pager {
-        @apply px-6 pb-6;
+        @apply px-5 pb-5;
     }
 
     .pager nav {
@@ -245,21 +269,21 @@
     }
 
     .pages-index-card {
-        @apply mt-5;
+        @apply mt-4;
     }
 
     .pages-toolbar {
-        @apply gap-2.5 px-5 py-4;
+        @apply gap-2 px-4 py-3.5;
     }
 
     .pages-toolbar .btn,
     .pages-toolbar .btn-outline {
-        @apply px-4 py-2.5 text-[0.9rem];
+        @apply px-3.5 py-2 text-[0.84rem];
     }
 
     .pages-toolbar .field-input,
     .pages-toolbar .field-select {
-        @apply px-3.5 py-2.5 text-[0.92rem];
+        @apply px-3 py-2 text-[0.86rem];
     }
 
     .pages-search-form {
@@ -267,7 +291,7 @@
     }
 
     .pages-table-wrap {
-        @apply px-4 pb-5;
+        @apply px-3.5 pb-4;
     }
 
     .pages-table {
@@ -276,25 +300,25 @@
 
     .pages-table th,
     .pages-table td {
-        @apply px-3 py-3.5 text-[0.9rem];
+        @apply px-3 py-2.5 text-[0.84rem];
     }
 
     .pages-table thead th {
-        @apply text-[0.74rem] tracking-[0.16em];
+        @apply text-[0.7rem] tracking-[0.16em];
     }
 
     .pages-thumb {
-        height: 5.5rem;
-        width: 7.25rem;
+        height: 4.85rem;
+        width: 6.5rem;
     }
 
     .pages-slug {
-        @apply mt-1 text-[0.76rem] leading-[1.35] text-[#7387a3];
+        @apply mt-1 text-[0.72rem] leading-[1.35] text-[#7387a3];
         overflow-wrap: anywhere;
     }
 
     .pages-alt-text {
-        @apply text-[0.9rem] leading-[1.45] text-[#40526d];
+        @apply text-[0.84rem] leading-[1.4] text-[#40526d];
         overflow-wrap: anywhere;
     }
 
@@ -307,23 +331,23 @@
     }
 
     .pages-chip {
-        @apply px-3 py-1.5 text-[0.82rem];
+        @apply px-3 py-1.5 text-[0.76rem];
     }
 
     .products-index-card {
-        @apply mt-5;
+        @apply mt-4;
     }
 
     .products-toolbar {
-        @apply gap-2.5 px-5 py-4;
+        @apply gap-2 px-4 py-3.5;
     }
 
     .products-toolbar .btn {
-        @apply px-4 py-2.5 text-[0.9rem];
+        @apply px-3.5 py-2 text-[0.84rem];
     }
 
     .products-toolbar-actions {
-        @apply flex flex-wrap items-center gap-2.5;
+        @apply flex flex-wrap items-center gap-2;
     }
 
     .products-search-form {
@@ -331,12 +355,12 @@
     }
 
     .products-search-input {
-        width: min(100%, 15.5rem);
-        @apply px-3.5 py-2.5 text-[0.92rem];
+        width: min(100%, 14rem);
+        @apply px-3 py-2 text-[0.86rem];
     }
 
     .products-table-wrap {
-        @apply px-4 pb-5;
+        @apply px-3.5 pb-4;
     }
 
     .products-table {
@@ -345,16 +369,16 @@
 
     .products-table th,
     .products-table td {
-        @apply px-3 py-3 text-[0.9rem];
+        @apply px-3 py-2.5 text-[0.84rem];
     }
 
     .products-table thead th {
-        @apply text-[0.74rem] tracking-[0.16em];
+        @apply text-[0.7rem] tracking-[0.16em];
     }
 
     .products-thumb {
-        height: 4.8rem;
-        width: 4.8rem;
+        height: 4.25rem;
+        width: 4.25rem;
     }
 
     .products-name-wrap {
@@ -362,20 +386,20 @@
     }
 
     .products-name {
-        @apply text-[0.96rem] font-extrabold leading-[1.28] tracking-[-0.02em] text-[#12284c];
+        @apply text-[0.9rem] font-extrabold leading-[1.28] tracking-[-0.02em] text-[#12284c];
     }
 
     .products-meta {
-        @apply mt-1 text-[0.78rem] leading-[1.35] text-[#7387a3];
+        @apply mt-1 text-[0.72rem] leading-[1.35] text-[#7387a3];
         overflow-wrap: anywhere;
     }
 
     .products-badges {
-        @apply mt-2 flex flex-wrap gap-1.5;
+        @apply mt-1.5 flex flex-wrap gap-1.5;
     }
 
     .products-badge {
-        @apply inline-flex items-center rounded-full bg-[#eef5ff] px-2.5 py-1 text-[0.72rem] font-extrabold leading-none text-[#315b95];
+        @apply inline-flex items-center rounded-full bg-[#eef5ff] px-2.5 py-1 text-[0.68rem] font-extrabold leading-none text-[#315b95];
     }
 
     .products-badge.is-enabled {
@@ -387,7 +411,7 @@
     }
 
     .products-price {
-        @apply whitespace-nowrap text-[0.95rem] font-extrabold text-[#16345d];
+        @apply whitespace-nowrap text-[0.9rem] font-extrabold text-[#16345d];
     }
 
     .products-action-group {
@@ -399,13 +423,13 @@
     }
 
     .products-chip {
-        @apply px-3 py-1.5 text-[0.8rem];
+        @apply px-3 py-1.5 text-[0.76rem];
     }
 }
 
-    @media (max-width: 767px) {
-        .section-bar,
-        .toolbar,
+@media (max-width: 767px) {
+    .section-bar,
+    .toolbar,
     .form-grid,
     .flash-success,
     .flash-error,
@@ -419,40 +443,40 @@
 
     .table th,
     .table td {
-        @apply px-4 py-4;
+        @apply px-3 py-3;
     }
 
-        .pages-toolbar {
-            @apply px-4 py-3.5;
-        }
+    .pages-toolbar {
+        @apply px-4 py-3;
+    }
 
-        .pages-table-wrap {
-            @apply px-3 pb-4;
-        }
+    .pages-table-wrap {
+        @apply px-3 pb-4;
+    }
 
-        .pages-table th,
-        .pages-table td {
-            @apply px-2.5 py-3;
-        }
+    .pages-table th,
+    .pages-table td {
+        @apply px-2.5 py-2.5;
+    }
 
-        .products-toolbar {
-            @apply px-4 py-3.5;
-        }
+    .products-toolbar {
+        @apply px-4 py-3;
+    }
 
-        .products-search-input {
-            width: 100%;
-        }
+    .products-search-input {
+        width: 100%;
+    }
 
-        .products-table-wrap {
-            @apply px-3 pb-4;
-        }
+    .products-table-wrap {
+        @apply px-3 pb-4;
+    }
 
-        .products-table th,
-        .products-table td {
-            @apply px-2.5 py-2.5;
-        }
+    .products-table th,
+    .products-table td {
+        @apply px-2.5 py-2.5;
+    }
 
-        .published-page-content {
+    .published-page-content {
         @apply text-[0.94rem] leading-[1.72];
-        }
     }
+}

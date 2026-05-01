@@ -8,7 +8,10 @@
 @section('admin_content')
     <section class="content-card">
         <div class="toolbar">
-            <strong style="font-size:34px;color:#1d3152;">Categories List</strong>
+            <div>
+                <p class="admin-panel-title">Category List</p>
+                <p class="admin-panel-copy">Manage categories, descriptions, and cover images.</p>
+            </div>
             <a class="btn" href="{{ route('categories.create') }}"><i class="fa-solid fa-plus"></i> Create New Category</a>
         </div>
 
@@ -16,10 +19,10 @@
             <div class="flash-success">{{ session('success') }}</div>
         @endif
 
-        <div class="toolbar" style="border-bottom:none;padding-top:14px;">
+        <div class="toolbar border-t border-[#e6edf6] pt-3.5">
             <form class="search-form" method="GET" action="{{ route('categories.index') }}">
-                <input class="field-input" style="width:280px;" type="text" name="search" value="{{ $search }}" placeholder="Search by category name...">
-                <button class="btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                <input class="field-input w-[16rem] max-w-full" type="text" name="search" value="{{ $search }}" placeholder="Search by category name...">
+                <button class="btn-outline" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
             </form>
         </div>
 
