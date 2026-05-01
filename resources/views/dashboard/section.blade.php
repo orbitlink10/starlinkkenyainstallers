@@ -8,37 +8,37 @@
         }
 
         .sidebar {
-            width: 340px;
+            width: 312px;
             background: #eef1f6;
             border-right: 1px solid #dbe1eb;
-            padding: 16px 0 24px;
+            padding: 12px 0 18px;
         }
 
         .brand {
             display: block;
-            margin: 0 18px 20px;
+            margin: 0 14px 14px;
             background: #f8fafd;
             border: 1px solid #d8dfec;
-            border-radius: 24px;
-            padding: 18px 34px;
-            font-size: 22px;
-            line-height: 1.1;
+            border-radius: 16px;
+            padding: 15px 18px;
+            font-size: 18px;
+            line-height: 1.15;
             font-weight: 800;
             color: #353f4e;
-            letter-spacing: -0.8px;
+            letter-spacing: -0.5px;
             text-decoration: none;
         }
 
         .menu-block {
-            margin-bottom: 18px;
+            margin-bottom: 12px;
         }
 
         .menu-title {
-            margin: 8px 24px 8px;
-            font-size: 13px;
+            margin: 6px 16px 8px;
+            font-size: 11px;
             font-weight: 600;
             color: #8b9ab1;
-            letter-spacing: .24em;
+            letter-spacing: .18em;
             text-transform: uppercase;
         }
 
@@ -46,12 +46,12 @@
         .menu-logout {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin: 6px 0;
-            padding: 16px 22px;
-            border-radius: 0 14px 14px 0;
-            font-size: 17px;
-            line-height: 1.15;
+            gap: 12px;
+            margin: 4px 0;
+            padding: 10px 16px;
+            border-radius: 0 12px 12px 0;
+            font-size: 15px;
+            line-height: 1.2;
             font-weight: 700;
             color: #46556f;
         }
@@ -63,14 +63,14 @@
         }
 
         .menu-icon {
-            width: 44px;
-            height: 44px;
+            width: 38px;
+            height: 38px;
             display: grid;
             place-items: center;
-            border-radius: 14px;
+            border-radius: 12px;
             background: #dce3ee;
             color: #62738f;
-            font-size: 18px;
+            font-size: 15px;
             flex-shrink: 0;
         }
 
@@ -89,47 +89,48 @@
 
         .main {
             flex: 1;
-            padding: 24px 28px;
+            padding: 18px 20px;
         }
 
         .content-card {
-            border-radius: 18px;
+            border-radius: 14px;
             background: #fff;
             border: 1px solid #dce3ef;
-            padding: 24px;
+            padding: 18px;
         }
 
         .chip {
             display: inline-flex;
             align-items: center;
             border-radius: 999px;
-            padding: 8px 16px;
-            letter-spacing: .15em;
+            padding: 6px 12px;
+            letter-spacing: .14em;
             color: #3f587f;
             background: #e6edf8;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 11px;
+            font-size: 10px;
         }
 
         .page-title {
-            margin: 12px 0 0;
-            font-size: 40px;
-            letter-spacing: -1px;
+            margin: 10px 0 0;
+            font-size: 24px;
+            letter-spacing: -0.03em;
             color: #1f2a3a;
         }
 
         .subtitle {
-            margin: 8px 0 0;
+            margin: 6px 0 0;
             color: #586c89;
-            font-size: 19px;
+            font-size: 15px;
             font-weight: 500;
+            line-height: 1.45;
         }
 
         .head-actions {
-            margin-top: 16px;
+            margin-top: 12px;
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
@@ -138,16 +139,16 @@
             color: #4f607a;
             background: #f3f6fc;
             border-radius: 999px;
-            padding: 10px 16px;
-            font-size: 14px;
+            padding: 8px 12px;
+            font-size: 13px;
             font-weight: 700;
         }
 
         .table-wrap {
-            margin-top: 22px;
+            margin-top: 16px;
             overflow-x: auto;
             border: 1px solid #e1e7f1;
-            border-radius: 14px;
+            border-radius: 12px;
         }
 
         .table {
@@ -160,10 +161,10 @@
         .table th,
         .table td {
             text-align: left;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border-bottom: 1px solid #ebf0f7;
             color: #3a4d6b;
-            font-size: 14px;
+            font-size: 13px;
             white-space: nowrap;
         }
 
@@ -176,7 +177,7 @@
         .empty-note {
             margin-top: 16px;
             color: #607491;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.55;
         }
 
@@ -199,9 +200,9 @@
             border: 1px solid #bfe5cd;
             background: #ecfff2;
             color: #1f6c3d;
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 9px 11px;
+            font-size: 13px;
             font-weight: 700;
         }
 
@@ -210,30 +211,30 @@
             border: 1px solid #f4b4bd;
             background: #fff1f3;
             color: #9f2536;
-            border-radius: 12px;
-            padding: 10px 12px;
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 9px 11px;
+            font-size: 13px;
             font-weight: 700;
         }
 
         .form-grid {
-            margin-top: 18px;
+            margin-top: 16px;
             display: grid;
-            gap: 16px;
+            gap: 14px;
         }
 
         .field-label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #223552;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
         }
 
         .field-help {
-            margin: 6px 0 10px;
+            margin: 4px 0 8px;
             color: #5a6f8e;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.5;
         }
 
@@ -241,9 +242,9 @@
         .field-textarea {
             width: 100%;
             border: 1px solid #d0d8e7;
-            border-radius: 12px;
-            padding: 12px 14px;
-            font-size: 15px;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 14px;
             color: #2f4564;
             font-family: inherit;
             background: #fff;
@@ -257,7 +258,7 @@
         .file-input {
             width: 100%;
             border: 1px solid #d0d8e7;
-            border-radius: 12px;
+            border-radius: 10px;
             padding: 8px;
             background: #fff;
         }
@@ -265,7 +266,7 @@
         .hero-preview {
             margin-top: 10px;
             border: 1px solid #d7dfec;
-            border-radius: 14px;
+            border-radius: 12px;
             max-width: 640px;
             overflow: hidden;
             background: #f7f9fc;
@@ -282,9 +283,9 @@
             border: 0;
             background: #1f6ff2;
             color: #fff;
-            border-radius: 12px;
-            padding: 11px 18px;
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
         }
@@ -299,27 +300,27 @@
 
         .menu-items-list {
             display: grid;
-            gap: 14px;
+            gap: 12px;
         }
 
         .menu-item-card {
             border: 1px solid #d9e3f0;
-            border-radius: 16px;
+            border-radius: 12px;
             background: #f8fbff;
-            padding: 16px;
+            padding: 14px;
         }
 
         .menu-item-grid {
             display: grid;
-            gap: 14px;
+            gap: 12px;
             grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
         }
 
         .secondary-btn,
         .danger-btn {
-            border-radius: 12px;
-            padding: 10px 14px;
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
         }
@@ -355,6 +356,20 @@
 
             .menu-item-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .main {
+                padding: 16px;
+            }
+
+            .page-title {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 14px;
             }
         }
     </style>

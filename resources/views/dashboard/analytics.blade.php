@@ -16,15 +16,15 @@
         }
 
         .sidebar {
-            width: 340px;
+            width: 312px;
             background: #eef1f6;
             border-right: 1px solid #dbe1eb;
-            padding: 16px 0 24px;
+            padding: 12px 0 18px;
         }
 
         .main {
             flex: 1;
-            padding: 24px 28px;
+            padding: 18px 20px;
             background:
                 radial-gradient(circle at top right, rgba(69, 133, 255, 0.1), transparent 30%),
                 linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
@@ -42,27 +42,27 @@
             align-items: center;
             gap: 8px;
             border-radius: 999px;
-            padding: 10px 22px;
-            letter-spacing: .23em;
+            padding: 6px 12px;
+            letter-spacing: .18em;
             color: #31527f;
             background: #e5eefb;
             font-weight: 700;
             text-transform: uppercase;
-            font-size: 11px;
+            font-size: 10px;
         }
 
         .page-title {
-            margin: 12px 0 0;
-            font-size: 34px;
-            letter-spacing: -1px;
+            margin: 10px 0 0;
+            font-size: 22px;
+            letter-spacing: -0.03em;
             color: #172744;
         }
 
         .subtitle {
-            margin: 6px 0 0;
-            max-width: 56rem;
+            margin: 5px 0 0;
+            max-width: 52rem;
             color: #5f7391;
-            font-size: 19px;
+            font-size: 15px;
             font-weight: 500;
             line-height: 1.5;
         }
@@ -82,8 +82,8 @@
             background: #f7faff;
             color: #48617f;
             border-radius: 999px;
-            padding: 11px 16px;
-            font-size: 13px;
+            padding: 8px 12px;
+            font-size: 12px;
             font-weight: 800;
         }
 
@@ -95,8 +95,8 @@
         }
 
         .breadcrumb {
-            margin-top: 16px;
-            font-size: 13px;
+            margin-top: 12px;
+            font-size: 12px;
             color: #7a8da8;
             text-align: right;
         }
@@ -106,22 +106,22 @@
         }
 
         .stack {
-            margin-top: 22px;
+            margin-top: 16px;
             display: grid;
-            gap: 22px;
+            gap: 16px;
         }
 
         .status-panel,
         .panel,
         .summary-card {
-            border-radius: 24px;
+            border-radius: 14px;
             background: rgba(255, 255, 255, 0.96);
             border: 1px solid #dce5f1;
-            box-shadow: 0 18px 46px rgba(21, 41, 72, 0.08);
+            box-shadow: 0 12px 28px rgba(21, 41, 72, 0.06);
         }
 
         .status-panel {
-            padding: 26px 28px;
+            padding: 18px;
         }
 
         .status-row {
@@ -142,19 +142,19 @@
         }
 
         .section-title {
-            margin: 12px 0 0;
-            font-size: 28px;
+            margin: 10px 0 0;
+            font-size: 18px;
             line-height: 1.2;
             letter-spacing: -.04em;
             color: #172744;
         }
 
         .section-copy {
-            margin: 8px 0 0;
+            margin: 6px 0 0;
             max-width: 54rem;
             color: #60738f;
-            font-size: 15px;
-            line-height: 1.7;
+            font-size: 13px;
+            line-height: 1.6;
         }
 
         .badges {
@@ -169,8 +169,8 @@
             display: inline-flex;
             align-items: center;
             border-radius: 999px;
-            padding: 9px 14px;
-            font-size: 12px;
+            padding: 7px 10px;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: .08em;
             text-transform: uppercase;
@@ -190,26 +190,26 @@
 
         .summary-grid {
             display: grid;
-            gap: 18px;
+            gap: 14px;
             grid-template-columns: repeat(6, minmax(0, 1fr));
         }
 
         .summary-card {
-            padding: 22px 22px 20px;
+            padding: 16px;
         }
 
         .summary-label {
             margin: 0;
             color: #7489a5;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 900;
-            letter-spacing: .2em;
+            letter-spacing: .16em;
             text-transform: uppercase;
         }
 
         .summary-value {
-            margin: 14px 0 0;
-            font-size: 34px;
+            margin: 10px 0 0;
+            font-size: 24px;
             line-height: 1;
             letter-spacing: -.05em;
             color: #10223f;
@@ -217,38 +217,38 @@
         }
 
         .summary-copy {
-            margin: 12px 0 0;
+            margin: 8px 0 0;
             color: #60748f;
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .grid-two {
             display: grid;
-            gap: 22px;
+            gap: 16px;
             grid-template-columns: minmax(0, 1.18fr) minmax(320px, .82fr);
         }
 
         .panel {
-            padding: 24px 26px;
+            padding: 18px;
         }
 
         .trend-chart {
-            margin-top: 22px;
+            margin-top: 16px;
             display: flex;
             align-items: flex-end;
-            gap: 10px;
+            gap: 8px;
             overflow-x: auto;
             padding-bottom: 8px;
         }
 
         .trend-item {
-            min-width: 38px;
+            min-width: 32px;
             text-align: center;
         }
 
         .trend-bar-wrap {
-            height: 204px;
+            height: 164px;
             display: flex;
             align-items: flex-end;
             justify-content: center;
@@ -256,38 +256,38 @@
 
         .trend-bar {
             width: 100%;
-            border-radius: 16px 16px 6px 6px;
+            border-radius: 12px 12px 4px 4px;
             background: linear-gradient(180deg, #60a8ff 0%, #1b74e8 100%);
-            box-shadow: 0 12px 28px rgba(27, 116, 232, 0.2);
+            box-shadow: 0 8px 18px rgba(27, 116, 232, 0.18);
         }
 
         .trend-day {
-            margin-top: 10px;
-            font-size: 11px;
+            margin-top: 8px;
+            font-size: 10px;
             font-weight: 900;
-            letter-spacing: .18em;
+            letter-spacing: .14em;
             text-transform: uppercase;
             color: #7a8ca6;
         }
 
         .trend-value {
-            margin-top: 4px;
-            font-size: 12px;
+            margin-top: 3px;
+            font-size: 11px;
             color: #50657f;
         }
 
         .list-stack {
-            margin-top: 18px;
+            margin-top: 14px;
             display: grid;
-            gap: 12px;
+            gap: 10px;
         }
 
         .list-card,
         .conversion-card {
-            border-radius: 18px;
+            border-radius: 12px;
             border: 1px solid #e2e9f3;
             background: #f9fbff;
-            padding: 16px 18px;
+            padding: 13px 14px;
         }
 
         .list-topline {
@@ -299,7 +299,7 @@
 
         .list-title {
             margin: 0;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.35;
             font-weight: 800;
             color: #10223f;
@@ -307,9 +307,9 @@
 
         .list-link {
             display: inline-block;
-            margin-top: 6px;
+            margin-top: 4px;
             color: #637892;
-            font-size: 13px;
+            font-size: 12px;
             word-break: break-all;
         }
 
@@ -318,10 +318,10 @@
         }
 
         .list-metrics {
-            margin-top: 10px;
+            margin-top: 8px;
             color: #647992;
-            font-size: 13px;
-            line-height: 1.55;
+            font-size: 12px;
+            line-height: 1.5;
         }
 
         .metric-pill {
@@ -330,17 +330,17 @@
             border-radius: 999px;
             background: #e7f1ff;
             color: #1b67cc;
-            padding: 7px 11px;
-            font-size: 12px;
+            padding: 6px 9px;
+            font-size: 11px;
             font-weight: 800;
             white-space: nowrap;
         }
 
         .table-wrap {
-            margin-top: 18px;
+            margin-top: 14px;
             overflow-x: auto;
             border: 1px solid #e2e9f3;
-            border-radius: 18px;
+            border-radius: 12px;
             background: #fff;
         }
 
@@ -352,7 +352,7 @@
 
         .table th,
         .table td {
-            padding: 14px 16px;
+            padding: 10px 12px;
             text-align: left;
             border-bottom: 1px solid #edf2f8;
             vertical-align: top;
@@ -361,16 +361,16 @@
         .table th {
             background: #f7faff;
             color: #405673;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 900;
-            letter-spacing: .16em;
+            letter-spacing: .14em;
             text-transform: uppercase;
         }
 
         .table td {
             color: #425773;
-            font-size: 14px;
-            line-height: 1.55;
+            font-size: 13px;
+            line-height: 1.5;
         }
 
         .table tr:last-child td {
@@ -381,54 +381,54 @@
             display: block;
             margin-top: 4px;
             color: #7286a1;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .right-stack {
             display: grid;
-            gap: 22px;
+            gap: 16px;
         }
 
         .conversion-grid {
-            margin-top: 18px;
+            margin-top: 14px;
             display: grid;
-            gap: 12px;
+            gap: 10px;
             grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         .conversion-label {
             margin: 0;
             color: #7a8da8;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
-            letter-spacing: .18em;
+            letter-spacing: .14em;
             text-transform: uppercase;
         }
 
         .conversion-value {
-            margin: 12px 0 0;
-            font-size: 30px;
+            margin: 10px 0 0;
+            font-size: 22px;
             line-height: 1;
             color: #10223f;
             font-weight: 900;
         }
 
         .conversion-copy {
-            margin: 10px 0 0;
+            margin: 8px 0 0;
             color: #61748f;
-            font-size: 13px;
-            line-height: 1.55;
+            font-size: 12px;
+            line-height: 1.45;
         }
 
         .empty-state {
-            margin-top: 18px;
+            margin-top: 14px;
             border: 1px dashed #cfdae8;
-            border-radius: 18px;
+            border-radius: 12px;
             background: #f8fbff;
-            padding: 18px;
+            padding: 14px;
             color: #647891;
-            font-size: 14px;
-            line-height: 1.65;
+            font-size: 13px;
+            line-height: 1.55;
         }
 
         @media (max-width: 1400px) {
@@ -475,21 +475,21 @@
 
         @media (max-width: 720px) {
             .main {
-                padding: 20px;
+                padding: 16px;
             }
 
             .page-title {
-                font-size: 30px;
+                font-size: 20px;
             }
 
             .subtitle {
-                font-size: 17px;
+                font-size: 14px;
             }
 
             .panel,
             .status-panel,
             .summary-card {
-                padding: 20px;
+                padding: 16px;
             }
         }
     </style>

@@ -1,9 +1,9 @@
 @php
     $active = $activeSection ?? 'dashboard';
-    $menuLinkBase = 'menu-link group flex w-full items-center gap-3 rounded-[1.15rem] px-3 py-3 text-left text-[1rem] font-semibold leading-[1.3] transition duration-200';
+    $menuLinkBase = 'menu-link group flex w-full items-center gap-3 rounded-[0.95rem] px-2.5 py-2.5 text-left text-[0.95rem] font-semibold leading-[1.25] transition duration-200';
     $menuLinkInactive = 'text-[#365378] hover:translate-x-[2px] hover:bg-white hover:text-[#18345e] hover:shadow-[0_16px_30px_rgba(17,42,78,0.08)]';
     $menuLinkActive = 'bg-white text-[#12284c] shadow-[0_18px_34px_rgba(17,42,78,0.1)]';
-    $menuIconBase = 'menu-icon grid h-11 w-11 shrink-0 place-items-center rounded-[0.95rem] text-[0.95rem] transition duration-200';
+    $menuIconBase = 'menu-icon grid h-9 w-9 shrink-0 place-items-center rounded-[0.8rem] text-[0.85rem] transition duration-200';
     $menuIconInactive = 'bg-[#e6edf7] text-[#6f84a1] group-hover:bg-[#e1efff] group-hover:text-[#1a73e8]';
     $menuIconActive = 'bg-[#e1efff] text-[#1a73e8]';
     $primaryItems = [
@@ -33,9 +33,9 @@
     ];
 @endphp
 
-<aside class="sidebar border-b border-[#e1e9f3] bg-[linear-gradient(180deg,#f9fbff_0%,#f2f6fd_100%)] px-4 py-6 xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:border-r xl:border-b-0">
+<aside class="sidebar border-b border-[#e1e9f3] bg-[linear-gradient(180deg,#f9fbff_0%,#f2f6fd_100%)] px-3 py-4 xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:border-r xl:border-b-0">
     <a
-        class="brand block rounded-[1.5rem] border border-[#dfe8f4] bg-white px-6 py-5 text-[1.65rem] font-extrabold leading-[1.08] tracking-[-0.04em] text-[#313a46] shadow-[0_24px_48px_rgba(15,35,64,0.1)] transition duration-200 hover:-translate-y-px hover:shadow-[0_28px_56px_rgba(15,35,64,0.14)] sm:max-w-[18rem]"
+        class="brand block rounded-[1rem] border border-[#dfe8f4] bg-white px-4 py-4 text-[1.15rem] font-extrabold leading-[1.12] tracking-[-0.03em] text-[#313a46] shadow-[0_18px_32px_rgba(15,35,64,0.08)] transition duration-200 hover:-translate-y-px hover:shadow-[0_22px_38px_rgba(15,35,64,0.1)] sm:max-w-[16rem]"
         href="{{ route('home') }}"
         target="_blank"
         rel="noopener noreferrer"
@@ -52,7 +52,7 @@
     </div>
 
     <div class="menu-block mt-6">
-        <h3 class="menu-title mb-3 px-1 text-[0.84rem] font-bold uppercase tracking-[0.24em] text-[#97a8bf]">Content Management</h3>
+        <h3 class="menu-title mb-2 px-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#97a8bf]">Content Management</h3>
         @foreach ($menuItems as $item)
             <a class="{{ $menuLinkBase }} {{ $active === $item['key'] ? $menuLinkActive : $menuLinkInactive }}" href="{{ $item['route'] }}">
                 <span class="{{ $menuIconBase }} {{ $active === $item['key'] ? $menuIconActive : $menuIconInactive }}"><i class="fa-solid {{ $item['icon'] }}"></i></span>{{ $item['label'] }}
@@ -61,7 +61,7 @@
     </div>
 
     <div class="menu-block mt-6">
-        <h3 class="menu-title mb-3 px-1 text-[0.84rem] font-bold uppercase tracking-[0.24em] text-[#97a8bf]">Admin Panel</h3>
+        <h3 class="menu-title mb-2 px-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#97a8bf]">Admin Panel</h3>
         @foreach ($adminItems as $item)
             <a class="{{ $menuLinkBase }} {{ $active === $item['key'] ? $menuLinkActive : $menuLinkInactive }}" href="{{ $item['route'] }}">
                 <span class="{{ $menuIconBase }} {{ $active === $item['key'] ? $menuIconActive : $menuIconInactive }}"><i class="fa-solid {{ $item['icon'] }}"></i></span>{{ $item['label'] }}
@@ -70,15 +70,15 @@
     </div>
 
     <div class="menu-block mt-6">
-        <h3 class="menu-title mb-3 px-1 text-[0.84rem] font-bold uppercase tracking-[0.24em] text-[#97a8bf]">Account</h3>
+        <h3 class="menu-title mb-2 px-1 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-[#97a8bf]">Account</h3>
         <a class="{{ $menuLinkBase }} {{ $active === 'profile' ? $menuLinkActive : $menuLinkInactive }}" href="{{ route('admin.section', ['section' => 'profile']) }}">
             <span class="{{ $menuIconBase }} {{ $active === 'profile' ? $menuIconActive : $menuIconInactive }}"><i class="fa-solid fa-user-pen"></i></span>Profile
         </a>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button class="menu-logout group mt-2 flex w-full items-center gap-3 rounded-[1.15rem] px-3 py-3 text-left text-[1rem] font-semibold leading-[1.3] text-[#365378] transition duration-200 hover:translate-x-[2px] hover:bg-white hover:text-[#18345e] hover:shadow-[0_16px_30px_rgba(17,42,78,0.08)]" type="submit">
-                <span class="menu-icon grid h-11 w-11 shrink-0 place-items-center rounded-[0.95rem] bg-[#e6edf7] text-[0.95rem] text-[#6f84a1] transition duration-200 group-hover:bg-[#e1efff] group-hover:text-[#1a73e8]"><i class="fa-solid fa-right-from-bracket"></i></span>
+            <button class="menu-logout group mt-2 flex w-full items-center gap-3 rounded-[0.95rem] px-2.5 py-2.5 text-left text-[0.95rem] font-semibold leading-[1.25] text-[#365378] transition duration-200 hover:translate-x-[2px] hover:bg-white hover:text-[#18345e] hover:shadow-[0_12px_22px_rgba(17,42,78,0.08)]" type="submit">
+                <span class="menu-icon grid h-9 w-9 shrink-0 place-items-center rounded-[0.8rem] bg-[#e6edf7] text-[0.85rem] text-[#6f84a1] transition duration-200 group-hover:bg-[#e1efff] group-hover:text-[#1a73e8]"><i class="fa-solid fa-right-from-bracket"></i></span>
                 Logout
             </button>
         </form>
