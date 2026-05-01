@@ -300,12 +300,12 @@
 
     .site-page-body {
         position: relative;
-        max-width: 1120px;
-        margin: 38px auto 0;
+        max-width: 1000px;
+        margin: 30px auto 0;
         border: 1px solid #dde7f2;
         border-radius: 36px;
         background: rgba(255, 255, 255, 0.96);
-        padding: 42px 48px 50px 58px;
+        padding: 34px 38px 40px 46px;
         box-shadow: 0 22px 56px rgba(15, 37, 79, 0.06);
         overflow: hidden;
     }
@@ -334,8 +334,8 @@
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 22px;
+        gap: 16px;
+        margin-bottom: 16px;
     }
 
     .site-page-article-kicker {
@@ -370,18 +370,18 @@
 
     .site-page-article-title {
         margin: 0;
-        max-width: 14ch;
+        max-width: 18ch;
         color: #131d39;
-        font-size: clamp(34px, 3.4vw, 48px);
-        line-height: 1.08;
+        font-size: clamp(30px, 2.9vw, 40px);
+        line-height: 1.04;
         letter-spacing: -0.055em;
         font-weight: 500;
     }
 
     .site-page-article-image {
         display: block;
-        width: min(860px, 100%);
-        margin-top: 22px;
+        width: min(100%, 900px);
+        margin-top: 18px;
         border-radius: 24px;
         border: 1px solid #e2eaf4;
         box-shadow: 0 18px 42px rgba(15, 37, 79, 0.08);
@@ -389,8 +389,8 @@
     }
 
     .site-page-copy {
-        margin-top: 28px;
-        max-width: 860px;
+        margin-top: 20px;
+        max-width: 900px;
         color: #3a557d;
     }
 
@@ -407,7 +407,7 @@
     .site-page-copy ol {
         margin: 0;
         font-size: clamp(16px, 0.98vw, 18px);
-        line-height: 1.72;
+        line-height: 1.62;
         letter-spacing: -0.01em;
     }
 
@@ -415,23 +415,23 @@
     .site-page-copy h2,
     .site-page-copy h3 {
         position: relative;
-        margin: 34px 0 0;
-        padding-bottom: 12px;
+        margin: 26px 0 0;
+        padding-bottom: 10px;
         color: #0a224d;
         letter-spacing: -0.04em;
-        line-height: 1.18;
+        line-height: 1.14;
     }
 
     .site-page-copy h1 {
-        font-size: clamp(27px, 2vw, 34px);
+        font-size: clamp(24px, 1.7vw, 30px);
     }
 
     .site-page-copy h2 {
-        font-size: clamp(24px, 1.8vw, 30px);
+        font-size: clamp(22px, 1.5vw, 26px);
     }
 
     .site-page-copy h3 {
-        font-size: clamp(21px, 1.55vw, 25px);
+        font-size: clamp(19px, 1.3vw, 22px);
     }
 
     .site-page-copy h1::after,
@@ -457,27 +457,27 @@
     }
 
     .site-page-copy blockquote {
-        margin: 24px 0 0;
+        margin: 20px 0 0;
         border-left: 4px solid #ff961f;
         padding: 6px 0 6px 20px;
         color: #27425f;
         font-size: clamp(17px, 1.05vw, 19px);
         font-weight: 600;
-        line-height: 1.66;
+        line-height: 1.58;
     }
 
     .site-page-copy img {
         display: block;
         width: 100%;
         max-width: 980px;
-        margin-top: 24px;
+        margin-top: 20px;
         border-radius: 24px;
         height: auto;
     }
 
     .site-page-copy table {
         width: 100%;
-        margin-top: 24px;
+        margin-top: 20px;
         border-collapse: collapse;
         overflow: hidden;
         border-radius: 18px;
@@ -500,14 +500,14 @@
     }
 
     .site-page-copy hr {
-        margin: 28px 0 0;
+        margin: 24px 0 0;
         border: 0;
         border-top: 1px solid #e4ebf4;
     }
 
     .site-page-copy p + p,
     .site-page-copy li > p + p {
-        margin-top: 14px;
+        margin-top: 10px;
     }
 
     .site-page-copy h1 + p,
@@ -530,7 +530,7 @@
     .site-page-copy * + blockquote,
     .site-page-copy * + table,
     .site-page-copy * + hr {
-        margin-top: 18px;
+        margin-top: 14px;
     }
 
     @media (max-width: 1180px) {
@@ -600,26 +600,26 @@
         .site-page-copy ul,
         .site-page-copy ol {
             font-size: 15px;
-            line-height: 1.68;
+            line-height: 1.58;
         }
 
         .site-page-copy h1,
         .site-page-copy h2,
         .site-page-copy h3 {
-            margin-top: 26px;
-            padding-bottom: 12px;
+            margin-top: 22px;
+            padding-bottom: 10px;
         }
 
         .site-page-copy h1 {
-            font-size: clamp(22px, 6vw, 28px);
+            font-size: clamp(21px, 5.7vw, 25px);
         }
 
         .site-page-copy h2 {
-            font-size: clamp(21px, 5.5vw, 26px);
+            font-size: clamp(19px, 5vw, 23px);
         }
 
         .site-page-copy h3 {
-            font-size: clamp(18px, 5vw, 22px);
+            font-size: clamp(17px, 4.4vw, 20px);
         }
 
         .site-page-copy blockquote {
@@ -628,7 +628,7 @@
 
         .site-page-body {
             margin-top: 26px;
-            padding: 28px 18px 34px 26px;
+            padding: 24px 16px 28px 22px;
             border-radius: 26px;
         }
 
@@ -641,8 +641,8 @@
         .site-page-article-header {
             flex-direction: column;
             align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 18px;
+            gap: 10px;
+            margin-bottom: 14px;
         }
 
         .site-page-article-kicker {
@@ -655,17 +655,18 @@
         }
 
         .site-page-article-title {
-            font-size: clamp(28px, 7vw, 36px);
-            line-height: 1.08;
+            max-width: none;
+            font-size: clamp(24px, 6.6vw, 30px);
+            line-height: 1.05;
         }
 
         .site-page-article-image {
-            margin-top: 20px;
+            margin-top: 16px;
             border-radius: 20px;
         }
 
         .site-page-copy {
-            margin-top: 22px;
+            margin-top: 18px;
         }
     }
 </style>
@@ -720,7 +721,7 @@
             <h2 class="site-page-article-title">{{ $articleTitle }}</h2>
 
             @if ($heroImage)
-                <img class="site-page-article-image" src="{{ $heroImage }}" alt="{{ $imageAlt }}" loading="eager" decoding="async">
+                <img class="site-page-article-image" src="{{ $heroImage }}" alt="{{ $imageAlt }}" loading="eager" decoding="async" onerror="this.style.display='none';">
             @endif
 
             @if ($contentHtml !== '')
