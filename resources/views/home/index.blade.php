@@ -934,18 +934,18 @@
             font-size: clamp(30px, 2.35vw, 42px);
             line-height: 1.12;
             letter-spacing: -.04em;
-            text-align: center;
+            text-align: left;
         }
 
         .article-box > h1:first-child,
         .article-box > h2:first-child {
-            font-size: clamp(42px, 3.7vw, 62px);
-            line-height: 1.04;
-            max-width: 15ch;
+            font-size: clamp(40px, 3.5vw, 58px);
+            line-height: 1.08;
+            max-width: 20ch;
         }
 
         .article-box > h2:first-child {
-            margin-inline: auto;
+            margin-inline: 0;
         }
 
         .article-box h1::after,
@@ -962,8 +962,8 @@
         }
 
         .article-box h2::after {
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            transform: none;
         }
 
         .article-box p {
