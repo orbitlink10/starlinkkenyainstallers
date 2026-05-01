@@ -84,7 +84,7 @@
     }
 
     .site-page-container {
-        width: min(1680px, 94vw);
+        width: min(1500px, 94vw);
         margin: 24px auto 0;
     }
 
@@ -110,7 +110,7 @@
         background:
             radial-gradient(circle at top left, rgba(255, 189, 132, 0.18) 0%, rgba(255, 189, 132, 0) 24%),
             linear-gradient(125deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 246, 255, 0.96) 100%);
-        padding: 40px 42px 34px;
+        padding: 34px 36px 30px;
         box-shadow: 0 26px 72px rgba(15, 37, 79, 0.08);
     }
 
@@ -171,8 +171,8 @@
         margin: 20px 0 0;
         max-width: 11.5ch;
         color: #121f3d;
-        font-size: clamp(34px, 4vw, 52px);
-        line-height: 1.02;
+        font-size: clamp(30px, 3.3vw, 44px);
+        line-height: 1.08;
         letter-spacing: -0.055em;
         font-weight: 800;
     }
@@ -300,12 +300,12 @@
 
     .site-page-body {
         position: relative;
-        max-width: 1380px;
+        max-width: 1120px;
         margin: 38px auto 0;
         border: 1px solid #dde7f2;
         border-radius: 36px;
         background: rgba(255, 255, 255, 0.96);
-        padding: 54px 68px 64px 92px;
+        padding: 42px 48px 50px 58px;
         box-shadow: 0 22px 56px rgba(15, 37, 79, 0.06);
         overflow: hidden;
     }
@@ -334,14 +334,14 @@
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 24px;
-        margin-bottom: 30px;
+        gap: 20px;
+        margin-bottom: 22px;
     }
 
     .site-page-article-kicker {
         margin: 0;
         color: #0b4b8e;
-        font-size: clamp(24px, 1.8vw, 34px);
+        font-size: clamp(18px, 1.45vw, 24px);
         font-weight: 800;
         letter-spacing: -0.02em;
     }
@@ -370,18 +370,18 @@
 
     .site-page-article-title {
         margin: 0;
-        max-width: 17ch;
+        max-width: 14ch;
         color: #131d39;
-        font-size: clamp(44px, 4.8vw, 62px);
-        line-height: 1.05;
+        font-size: clamp(34px, 3.4vw, 48px);
+        line-height: 1.08;
         letter-spacing: -0.055em;
         font-weight: 500;
     }
 
     .site-page-article-image {
         display: block;
-        width: min(930px, 100%);
-        margin-top: 26px;
+        width: min(860px, 100%);
+        margin-top: 22px;
         border-radius: 24px;
         border: 1px solid #e2eaf4;
         box-shadow: 0 18px 42px rgba(15, 37, 79, 0.08);
@@ -389,8 +389,8 @@
     }
 
     .site-page-copy {
-        margin-top: 40px;
-        max-width: 1220px;
+        margin-top: 28px;
+        max-width: 860px;
         color: #3a557d;
     }
 
@@ -406,8 +406,8 @@
     .site-page-copy ul,
     .site-page-copy ol {
         margin: 0;
-        font-size: clamp(17px, 1.08vw, 19px);
-        line-height: 1.9;
+        font-size: clamp(16px, 0.98vw, 18px);
+        line-height: 1.72;
         letter-spacing: -0.01em;
     }
 
@@ -415,23 +415,23 @@
     .site-page-copy h2,
     .site-page-copy h3 {
         position: relative;
-        margin: 46px 0 0;
-        padding-bottom: 16px;
+        margin: 34px 0 0;
+        padding-bottom: 12px;
         color: #0a224d;
         letter-spacing: -0.04em;
-        line-height: 1.14;
+        line-height: 1.18;
     }
 
     .site-page-copy h1 {
-        font-size: clamp(31px, 2.45vw, 42px);
+        font-size: clamp(27px, 2vw, 34px);
     }
 
     .site-page-copy h2 {
-        font-size: clamp(28px, 2.1vw, 36px);
+        font-size: clamp(24px, 1.8vw, 30px);
     }
 
     .site-page-copy h3 {
-        font-size: clamp(23px, 1.8vw, 29px);
+        font-size: clamp(21px, 1.55vw, 25px);
     }
 
     .site-page-copy h1::after,
@@ -441,8 +441,8 @@
         position: absolute;
         left: 0;
         bottom: 0;
-        width: 64px;
-        height: 4px;
+        width: 54px;
+        height: 3px;
         border-radius: 999px;
         background: linear-gradient(90deg, #f28c1f 0 56%, #7fd6f3 56% 100%);
     }
@@ -453,31 +453,31 @@
     }
 
     .site-page-copy li + li {
-        margin-top: 10px;
+        margin-top: 8px;
     }
 
     .site-page-copy blockquote {
-        margin: 32px 0 0;
+        margin: 24px 0 0;
         border-left: 4px solid #ff961f;
         padding: 6px 0 6px 20px;
         color: #27425f;
-        font-size: clamp(18px, 1.2vw, 21px);
+        font-size: clamp(17px, 1.05vw, 19px);
         font-weight: 600;
-        line-height: 1.72;
+        line-height: 1.66;
     }
 
     .site-page-copy img {
         display: block;
         width: 100%;
         max-width: 980px;
-        margin-top: 32px;
+        margin-top: 24px;
         border-radius: 24px;
         height: auto;
     }
 
     .site-page-copy table {
         width: 100%;
-        margin-top: 32px;
+        margin-top: 24px;
         border-collapse: collapse;
         overflow: hidden;
         border-radius: 18px;
@@ -500,18 +500,37 @@
     }
 
     .site-page-copy hr {
-        margin: 36px 0 0;
+        margin: 28px 0 0;
         border: 0;
         border-top: 1px solid #e4ebf4;
     }
 
-    .site-page-copy * + p,
-    .site-page-copy * + ul,
-    .site-page-copy * + ol,
+    .site-page-copy p + p,
+    .site-page-copy li > p + p {
+        margin-top: 14px;
+    }
+
+    .site-page-copy h1 + p,
+    .site-page-copy h2 + p,
+    .site-page-copy h3 + p,
+    .site-page-copy h1 + ul,
+    .site-page-copy h2 + ul,
+    .site-page-copy h3 + ul,
+    .site-page-copy h1 + ol,
+    .site-page-copy h2 + ol,
+    .site-page-copy h3 + ol,
+    .site-page-copy p + ul,
+    .site-page-copy p + ol,
+    .site-page-copy ul + p,
+    .site-page-copy ol + p,
+    .site-page-copy ul + ul,
+    .site-page-copy ol + ol,
+    .site-page-copy ul + ol,
+    .site-page-copy ol + ul,
     .site-page-copy * + blockquote,
     .site-page-copy * + table,
     .site-page-copy * + hr {
-        margin-top: 28px;
+        margin-top: 18px;
     }
 
     @media (max-width: 1180px) {
@@ -553,7 +572,7 @@
 
         .site-page-title {
             margin-top: 16px;
-            font-size: clamp(30px, 8vw, 38px);
+            font-size: clamp(28px, 7vw, 34px);
         }
 
         .site-page-summary {
@@ -581,26 +600,26 @@
         .site-page-copy ul,
         .site-page-copy ol {
             font-size: 15px;
-            line-height: 1.78;
+            line-height: 1.68;
         }
 
         .site-page-copy h1,
         .site-page-copy h2,
         .site-page-copy h3 {
-            margin-top: 34px;
-            padding-bottom: 14px;
+            margin-top: 26px;
+            padding-bottom: 12px;
         }
 
         .site-page-copy h1 {
-            font-size: clamp(25px, 6.6vw, 32px);
+            font-size: clamp(22px, 6vw, 28px);
         }
 
         .site-page-copy h2 {
-            font-size: clamp(23px, 6vw, 29px);
+            font-size: clamp(21px, 5.5vw, 26px);
         }
 
         .site-page-copy h3 {
-            font-size: clamp(20px, 5.2vw, 25px);
+            font-size: clamp(18px, 5vw, 22px);
         }
 
         .site-page-copy blockquote {
@@ -609,7 +628,7 @@
 
         .site-page-body {
             margin-top: 26px;
-            padding: 30px 20px 36px 34px;
+            padding: 28px 18px 34px 26px;
             border-radius: 26px;
         }
 
@@ -622,12 +641,12 @@
         .site-page-article-header {
             flex-direction: column;
             align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 22px;
+            gap: 12px;
+            margin-bottom: 18px;
         }
 
         .site-page-article-kicker {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .site-page-article-back {
@@ -636,7 +655,7 @@
         }
 
         .site-page-article-title {
-            font-size: clamp(30px, 8vw, 42px);
+            font-size: clamp(28px, 7vw, 36px);
             line-height: 1.08;
         }
 
@@ -646,7 +665,7 @@
         }
 
         .site-page-copy {
-            margin-top: 28px;
+            margin-top: 22px;
         }
     }
 </style>
