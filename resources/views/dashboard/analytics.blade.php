@@ -191,7 +191,7 @@
         .summary-grid {
             display: grid;
             gap: 18px;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-columns: repeat(6, minmax(0, 1fr));
         }
 
         .summary-card {
@@ -524,7 +524,7 @@
                             <p class="eyebrow">Tracking Status</p>
                             <h2 class="section-title">Traffic data is updating from real public visits.</h2>
                             <p class="section-copy">
-                                This period includes {{ number_format($report['pageViews']) }} page views from {{ number_format($report['uniqueVisitors']) }} unique visitors across the homepage, product pages, cart, and published content.
+                                This period includes {{ number_format($report['pageViews']) }} page views from {{ number_format($report['uniqueVisitors']) }} unique visitors across the homepage, product pages, cart, and published content, with buyer intent signals captured from cart and WhatsApp CTA clicks.
                             </p>
                         </div>
 
@@ -567,9 +567,15 @@
                     </article>
 
                     <article class="summary-card">
+                        <p class="summary-label">WhatsApp Clicks</p>
+                        <p class="summary-value">{{ number_format($report['whatsappClicks']) }}</p>
+                        <p class="summary-copy">{{ number_format($report['whatsappProductClicks']) }} product order clicks / {{ number_format($report['whatsappCartClicks']) }} cart checkout clicks.</p>
+                    </article>
+
+                    <article class="summary-card">
                         <p class="summary-label">Lead Actions</p>
                         <p class="summary-value">{{ number_format($report['leadActions']) }}</p>
-                        <p class="summary-copy">{{ number_format($report['cartActions']) }} cart adds / {{ number_format($report['conversions']['enquiries']) }} enquiries / {{ number_format($report['conversions']['orders']) }} orders.</p>
+                        <p class="summary-copy">{{ number_format($report['cartActions']) }} cart adds / {{ number_format($report['whatsappClicks']) }} WhatsApp clicks / {{ number_format($report['conversions']['enquiries']) }} enquiries.</p>
                     </article>
                 </section>
 
@@ -726,9 +732,21 @@
                         <article class="panel">
                             <p class="eyebrow">Conversion Signals</p>
                             <h2 class="section-title">Real outcomes from existing store tables.</h2>
-                            <p class="section-copy">These numbers use the orders, invoices, enquiries, and payment timestamps already stored in the application.</p>
+                            <p class="section-copy">These numbers combine tracked public CTA clicks with the orders, invoices, enquiries, and payment timestamps already stored in the application.</p>
 
                             <div class="conversion-grid">
+                                <article class="conversion-card">
+                                    <p class="conversion-label">Product WhatsApp</p>
+                                    <p class="conversion-value">{{ number_format($report['whatsappProductClicks']) }}</p>
+                                    <p class="conversion-copy">Direct product order clicks sent to WhatsApp.</p>
+                                </article>
+
+                                <article class="conversion-card">
+                                    <p class="conversion-label">Cart WhatsApp</p>
+                                    <p class="conversion-value">{{ number_format($report['whatsappCartClicks']) }}</p>
+                                    <p class="conversion-copy">Checkout clicks from the cart summary CTA.</p>
+                                </article>
+
                                 <article class="conversion-card">
                                     <p class="conversion-label">Orders</p>
                                     <p class="conversion-value">{{ number_format($report['conversions']['orders']) }}</p>

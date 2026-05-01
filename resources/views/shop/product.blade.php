@@ -369,7 +369,7 @@
                     </div>
 
                     <div class="actions">
-                        <a class="btn btn-whatsapp" href="{{ $whatsappUrl }}" target="_blank" rel="noopener">
+                        <a class="btn btn-whatsapp" href="{{ route('shop.product.whatsapp', $product) }}" target="_blank" rel="noopener">
                             <i class="fa-brands fa-whatsapp"></i> Order on WhatsApp
                         </a>
 

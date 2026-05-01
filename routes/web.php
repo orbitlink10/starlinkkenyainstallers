@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/media/{path}', [MediaController::class, 'show'])->where('path', '.*')->name('media.show');
 Route::get('/product/{productSlug}', [ShopController::class, 'show'])->name('shop.product.show');
+Route::get('/product/{product}/whatsapp', [ShopController::class, 'redirectToProductWhatsapp'])->name('shop.product.whatsapp');
 Route::post('/cart/{product}', [ShopController::class, 'addToCart'])->name('shop.cart.add');
 Route::get('/cart', [ShopController::class, 'cart'])->name('shop.cart.index');
+Route::get('/cart/checkout/whatsapp', [ShopController::class, 'redirectToCartWhatsapp'])->name('shop.cart.whatsapp');
 Route::delete('/cart/{product}', [ShopController::class, 'removeFromCart'])->name('shop.cart.remove');
 
 Route::middleware('guest')->group(function (): void {

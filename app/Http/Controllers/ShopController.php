@@ -48,7 +48,6 @@ class ShopController extends Controller
             'product' => $product,
             'imageUrl' => $imageUrl,
             'cartCount' => $this->cartCount($request),
-            'whatsappUrl' => $this->whatsappUrlForProduct($product),
             'productSummary' => $productSummary,
             'productDetailsHtml' => $productDetailsHtml,
         ]);
@@ -121,7 +120,7 @@ class ShopController extends Controller
             'items' => $items,
             'total' => $total,
             'cartCount' => $this->cartCount($request),
-            'checkoutWhatsappUrl' => $this->whatsappUrlForCart($items, $total),
+            'checkoutWhatsappUrl' => route('shop.cart.whatsapp'),
         ]);
     }
 
@@ -134,6 +133,39 @@ class ShopController extends Controller
         return redirect()
             ->route('shop.cart.index')
             ->with('success', $product->name.' removed from cart.');
+    }
+
+    public function redirectToProductWhatsapp(Product $product, Request $request, AnalyticsService $analyticsService): RedirectResponse
+    {
+        abort_unless($product->is_active, 404);
+
+        $analyticsService->trackEvent($request, 'whatsapp_product_click', $product->name, 'product', [
+            'product_id' => $product->id,
+            'slug' => $product->slug,
+            'price' => (float) $product->price,
+        ], '/product/'.($product->slug ?: $product->id));
+
+        return redirect()->away($this->whatsappUrlForProduct($product));
+    }
+
+    public function redirectToCartWhatsapp(Request $request, AnalyticsService $analyticsService): RedirectResponse
+    {
+        $cart = $request->session()->get('cart', []);
+        $items = collect(array_values($cart))->map(function (array $item): array {
+            $item['line_total'] = (float) $item['price'] * (int) $item['quantity'];
+
+            return $item;
+        });
+
+        $total = (float) $items->sum('line_total');
+
+        $analyticsService->trackEvent($request, 'whatsapp_cart_click', 'Cart Checkout', 'cart', [
+            'items_count' => $items->count(),
+            'cart_count' => $this->cartCount($request),
+            'total' => $total,
+        ], '/cart');
+
+        return redirect()->away($this->whatsappUrlForCart($items, $total));
     }
 
     private function cartCount(Request $request): int

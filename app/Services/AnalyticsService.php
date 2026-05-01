@@ -17,8 +17,10 @@ use Illuminate\Support\Str;
 class AnalyticsService
 {
     private const VISITOR_COOKIE = 'starlink_visitor_id';
+    private const VISITOR_SESSION_KEY = 'analytics_visitor_id';
 
     private ?bool $analyticsTableExists = null;
+    private ?string $resolvedVisitorId = null;
 
     /**
      * @param  array<string, mixed>  $properties
@@ -69,6 +71,9 @@ class AnalyticsService
      *     productViews:int,
      *     searches:int,
      *     cartActions:int,
+     *     whatsappClicks:int,
+     *     whatsappProductClicks:int,
+     *     whatsappCartClicks:int,
      *     leadActions:int,
      *     trend:\Illuminate\Support\Collection<int, array{date:\Illuminate\Support\Carbon, dayLabel:string, views:int, height:int, tooltip:string}>,
      *     topPages:\Illuminate\Support\Collection<int, array{label:string, path:string, pageType:?string, views:int, visitors:int, lastSeen:\Illuminate\Support\Carbon}>,
@@ -124,8 +129,11 @@ class AnalyticsService
         $productViews = (clone $pageViewsQuery)->where('page_type', 'product')->count();
         $searches = $this->eventCount('search', $start, $end);
         $cartActions = $this->eventCount('add_to_cart', $start, $end);
+        $whatsappProductClicks = $this->eventCount('whatsapp_product_click', $start, $end);
+        $whatsappCartClicks = $this->eventCount('whatsapp_cart_click', $start, $end);
+        $whatsappClicks = $whatsappProductClicks + $whatsappCartClicks;
 
-        $leadActions = $cartActions + $enquiries + $orders;
+        $leadActions = $cartActions + $whatsappClicks + $enquiries;
 
         return [
             'range' => $range,
@@ -142,6 +150,9 @@ class AnalyticsService
             'productViews' => $productViews,
             'searches' => $searches,
             'cartActions' => $cartActions,
+            'whatsappClicks' => $whatsappClicks,
+            'whatsappProductClicks' => $whatsappProductClicks,
+            'whatsappCartClicks' => $whatsappCartClicks,
             'leadActions' => $leadActions,
             'trend' => $this->trafficTrend($start, $end),
             'topPages' => $this->topPages($start, $end),
@@ -201,6 +212,9 @@ class AnalyticsService
      *     productViews:int,
      *     searches:int,
      *     cartActions:int,
+     *     whatsappClicks:int,
+     *     whatsappProductClicks:int,
+     *     whatsappCartClicks:int,
      *     leadActions:int,
      *     trend:\Illuminate\Support\Collection<int, array{date:\Illuminate\Support\Carbon, dayLabel:string, views:int, height:int, tooltip:string}>,
      *     topPages:\Illuminate\Support\Collection<int, array{label:string, path:string, pageType:?string, views:int, visitors:int, lastSeen:\Illuminate\Support\Carbon}>,
@@ -231,7 +245,10 @@ class AnalyticsService
             'productViews' => 0,
             'searches' => 0,
             'cartActions' => 0,
-            'leadActions' => $conversions['orders'] + $conversions['enquiries'],
+            'whatsappClicks' => 0,
+            'whatsappProductClicks' => 0,
+            'whatsappCartClicks' => 0,
+            'leadActions' => $conversions['enquiries'],
             'trend' => $this->emptyTrend($start, $end),
             'topPages' => collect(),
             'recentVisits' => collect(),
@@ -271,16 +288,39 @@ class AnalyticsService
 
     private function visitorId(Request $request): string
     {
+        if ($this->resolvedVisitorId !== null) {
+            return $this->resolvedVisitorId;
+        }
+
         $visitorId = trim((string) $request->cookie(self::VISITOR_COOKIE));
 
         if ($visitorId !== '') {
-            return $visitorId;
+            if ($request->hasSession()) {
+                $request->session()->put(self::VISITOR_SESSION_KEY, $visitorId);
+            }
+
+            return $this->resolvedVisitorId = $visitorId;
+        }
+
+        if ($request->hasSession()) {
+            $sessionVisitorId = trim((string) $request->session()->get(self::VISITOR_SESSION_KEY, ''));
+
+            if ($sessionVisitorId !== '') {
+                Cookie::queue(Cookie::forever(self::VISITOR_COOKIE, $sessionVisitorId));
+
+                return $this->resolvedVisitorId = $sessionVisitorId;
+            }
         }
 
         $visitorId = (string) Str::uuid();
+
+        if ($request->hasSession()) {
+            $request->session()->put(self::VISITOR_SESSION_KEY, $visitorId);
+        }
+
         Cookie::queue(Cookie::forever(self::VISITOR_COOKIE, $visitorId));
 
-        return $visitorId;
+        return $this->resolvedVisitorId = $visitorId;
     }
 
     private function normalizePath(Request $request): string

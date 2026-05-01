@@ -54,9 +54,20 @@ class AnalyticsDashboardTest extends TestCase
         $this->post(route('shop.cart.add', ['product' => $product]), ['quantity' => 2])
             ->assertRedirect(route('shop.product.show', ['productSlug' => 'starlink-standard-kit']));
 
+        $productWhatsappResponse = $this->get(route('shop.product.whatsapp', ['product' => $product]));
+        $productWhatsappResponse->assertStatus(302);
+        $this->assertTrue(str_starts_with((string) $productWhatsappResponse->headers->get('Location'), 'https://wa.me/'));
+
+        $cartWhatsappResponse = $this->get(route('shop.cart.whatsapp'));
+        $cartWhatsappResponse->assertStatus(302);
+        $this->assertTrue(str_starts_with((string) $cartWhatsappResponse->headers->get('Location'), 'https://wa.me/'));
+
         $this->assertSame(4, AnalyticsEvent::query()->where('event_type', 'page_view')->count());
         $this->assertSame(1, AnalyticsEvent::query()->where('event_type', 'search')->count());
         $this->assertSame(1, AnalyticsEvent::query()->where('event_type', 'add_to_cart')->count());
+        $this->assertSame(1, AnalyticsEvent::query()->where('event_type', 'whatsapp_product_click')->count());
+        $this->assertSame(1, AnalyticsEvent::query()->where('event_type', 'whatsapp_cart_click')->count());
+        $this->assertSame(1, AnalyticsEvent::query()->distinct()->count('visitor_id'));
 
         $this->assertDatabaseHas('analytics_events', [
             'event_type' => 'page_view',
@@ -85,6 +96,20 @@ class AnalyticsDashboardTest extends TestCase
             'path' => '/product/starlink-standard-kit',
             'label' => 'Starlink Standard Kit',
             'page_type' => 'product',
+        ]);
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'whatsapp_product_click',
+            'path' => '/product/starlink-standard-kit',
+            'label' => 'Starlink Standard Kit',
+            'page_type' => 'product',
+        ]);
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'whatsapp_cart_click',
+            'path' => '/cart',
+            'label' => 'Cart Checkout',
+            'page_type' => 'cart',
         ]);
     }
 
@@ -160,6 +185,24 @@ class AnalyticsDashboardTest extends TestCase
             'occurred_at' => now()->subHours(3),
         ]);
 
+        AnalyticsEvent::query()->create([
+            'event_type' => 'whatsapp_product_click',
+            'visitor_id' => 'visitor-b',
+            'path' => '/product/starlink-mini-kit',
+            'label' => 'Starlink Mini Kit',
+            'page_type' => 'product',
+            'occurred_at' => now()->subHours(2),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'whatsapp_cart_click',
+            'visitor_id' => 'visitor-b',
+            'path' => '/cart',
+            'label' => 'Cart Checkout',
+            'page_type' => 'cart',
+            'occurred_at' => now()->subHour(),
+        ]);
+
         $order = Order::query()->create([
             'order_number' => 'ORD-1001',
             'customer_name' => 'Jane Doe',
@@ -205,6 +248,10 @@ class AnalyticsDashboardTest extends TestCase
         $response->assertSeeText('chatgpt.com');
         $response->assertSeeText('router');
         $response->assertSeeText('KSh 49,999.00');
+        $response->assertSeeText('1 product order clicks / 1 cart checkout clicks.');
+        $response->assertSeeText('1 cart adds / 2 WhatsApp clicks / 1 enquiries.');
+        $response->assertSeeText('Product WhatsApp');
+        $response->assertSeeText('Cart WhatsApp');
         $response->assertDontSeeText('Old Landing Page');
     }
 
