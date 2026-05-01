@@ -934,6 +934,7 @@
             font-size: clamp(30px, 2.35vw, 42px);
             line-height: 1.12;
             letter-spacing: -.04em;
+            text-align: center;
         }
 
         .article-box > h1:first-child,
@@ -941,6 +942,10 @@
             font-size: clamp(42px, 3.7vw, 62px);
             line-height: 1.04;
             max-width: 15ch;
+        }
+
+        .article-box > h2:first-child {
+            margin-inline: auto;
         }
 
         .article-box h1::after,
@@ -954,6 +959,11 @@
             height: 4px;
             border-radius: 999px;
             background: linear-gradient(90deg, var(--orange-dark) 0 56%, var(--sky-strong) 56% 100%);
+        }
+
+        .article-box h2::after {
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .article-box p {
