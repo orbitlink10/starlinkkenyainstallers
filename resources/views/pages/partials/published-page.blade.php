@@ -89,7 +89,7 @@
         background:
             radial-gradient(circle at top left, rgba(255, 189, 132, 0.18) 0%, rgba(255, 189, 132, 0) 24%),
             linear-gradient(125deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 246, 255, 0.96) 100%);
-        padding: 54px 54px 44px;
+        padding: 40px 42px 34px;
         box-shadow: 0 26px 72px rgba(15, 37, 79, 0.08);
     }
 
@@ -119,7 +119,7 @@
 
     .site-page-hero {
         display: flex;
-        gap: 44px;
+        gap: 32px;
         align-items: stretch;
     }
 
@@ -137,49 +137,49 @@
         gap: 12px;
         margin: 0;
         color: #506987;
-        font-size: clamp(18px, 1.5vw, 20px);
+        font-size: clamp(15px, 1.1vw, 17px);
         font-weight: 500;
     }
 
     .site-page-meta i {
         color: #29486f;
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .site-page-title {
-        margin: 26px 0 0;
-        max-width: 9ch;
+        margin: 20px 0 0;
+        max-width: 10ch;
         color: #121f3d;
-        font-size: clamp(48px, 6vw, 78px);
-        line-height: 0.98;
+        font-size: clamp(38px, 4.7vw, 60px);
+        line-height: 1.02;
         letter-spacing: -0.055em;
         font-weight: 800;
     }
 
     .site-page-summary {
-        margin: 28px 0 0;
-        max-width: 24ch;
+        margin: 22px 0 0;
+        max-width: 30ch;
         color: #647b99;
-        font-size: clamp(20px, 1.85vw, 28px);
-        line-height: 1.48;
+        font-size: clamp(17px, 1.35vw, 22px);
+        line-height: 1.58;
     }
 
     .site-page-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 18px;
-        margin-top: 34px;
+        gap: 14px;
+        margin-top: 28px;
     }
 
     .site-page-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 188px;
-        padding: 20px 30px;
-        border-radius: 18px;
+        min-width: 170px;
+        padding: 16px 24px;
+        border-radius: 16px;
         border: 1px solid transparent;
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 800;
         line-height: 1.1;
         transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
@@ -204,9 +204,9 @@
     .site-page-visual {
         position: relative;
         flex: 0 0 min(48%, 720px);
-        min-height: 520px;
+        min-height: 440px;
         overflow: hidden;
-        border-radius: 30px;
+        border-radius: 26px;
         border: 1px solid #dbe6f5;
         background:
             radial-gradient(circle at top right, rgba(255, 176, 88, 0.2) 0%, transparent 32%),
@@ -223,8 +223,8 @@
     }
 
     .site-page-visual::before {
-        inset: 22px;
-        border-radius: 24px;
+        inset: 18px;
+        border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.78);
     }
 
@@ -253,7 +253,7 @@
         inset: 0;
         display: grid;
         place-items: center;
-        padding: 42px;
+        padding: 34px;
         background:
             linear-gradient(160deg, rgba(255, 255, 255, 0.45) 0%, rgba(217, 231, 251, 0.22) 100%);
     }
@@ -273,16 +273,38 @@
     }
 
     .site-page-body {
-        margin-top: 28px;
+        position: relative;
+        margin-top: 22px;
         border: 1px solid #dde7f2;
-        border-radius: 34px;
+        border-radius: 28px;
         background: rgba(255, 255, 255, 0.96);
-        padding: 42px 46px 52px;
+        padding: 48px 56px 58px 92px;
         box-shadow: 0 22px 56px rgba(15, 37, 79, 0.06);
+        overflow: hidden;
+    }
+
+    .site-page-body::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 26px;
+        bottom: 26px;
+        width: 12px;
+        border-radius: 0 999px 999px 0;
+        background: linear-gradient(180deg, #ff8615 0%, #ffb452 100%);
+    }
+
+    .site-page-body::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
     }
 
     .site-page-copy {
-        max-width: 960px;
+        max-width: 1220px;
         color: #3a557d;
     }
 
@@ -298,31 +320,32 @@
     .site-page-copy ul,
     .site-page-copy ol {
         margin: 0;
-        font-size: clamp(18px, 1.3vw, 21px);
-        line-height: 1.82;
+        font-size: clamp(17px, 1.08vw, 19px);
+        line-height: 1.9;
+        letter-spacing: -0.01em;
     }
 
     .site-page-copy h1,
     .site-page-copy h2,
     .site-page-copy h3 {
         position: relative;
-        margin: 50px 0 0;
-        padding-bottom: 18px;
+        margin: 46px 0 0;
+        padding-bottom: 16px;
         color: #0a224d;
         letter-spacing: -0.04em;
-        line-height: 1.12;
+        line-height: 1.14;
     }
 
     .site-page-copy h1 {
-        font-size: clamp(34px, 3vw, 48px);
+        font-size: clamp(31px, 2.45vw, 42px);
     }
 
     .site-page-copy h2 {
-        font-size: clamp(31px, 2.55vw, 42px);
+        font-size: clamp(28px, 2.1vw, 36px);
     }
 
     .site-page-copy h3 {
-        font-size: clamp(26px, 2.1vw, 34px);
+        font-size: clamp(23px, 1.8vw, 29px);
     }
 
     .site-page-copy h1::after,
@@ -332,7 +355,7 @@
         position: absolute;
         left: 0;
         bottom: 0;
-        width: 72px;
+        width: 64px;
         height: 4px;
         border-radius: 999px;
         background: linear-gradient(90deg, #f28c1f 0 56%, #7fd6f3 56% 100%);
@@ -340,7 +363,7 @@
 
     .site-page-copy ul,
     .site-page-copy ol {
-        padding-left: 28px;
+        padding-left: 32px;
     }
 
     .site-page-copy li + li {
@@ -348,30 +371,30 @@
     }
 
     .site-page-copy blockquote {
-        margin: 34px 0 0;
+        margin: 32px 0 0;
         border-left: 4px solid #ff961f;
         padding: 6px 0 6px 20px;
         color: #27425f;
-        font-size: clamp(20px, 1.65vw, 24px);
+        font-size: clamp(18px, 1.2vw, 21px);
         font-weight: 600;
-        line-height: 1.7;
+        line-height: 1.72;
     }
 
     .site-page-copy img {
         display: block;
         width: 100%;
         max-width: 980px;
-        margin-top: 34px;
-        border-radius: 26px;
+        margin-top: 32px;
+        border-radius: 24px;
         height: auto;
     }
 
     .site-page-copy table {
         width: 100%;
-        margin-top: 34px;
+        margin-top: 32px;
         border-collapse: collapse;
         overflow: hidden;
-        border-radius: 20px;
+        border-radius: 18px;
         border: 1px solid #e2eaf4;
         background: #fff;
     }
@@ -381,7 +404,7 @@
         border: 1px solid #e2eaf4;
         padding: 14px 16px;
         text-align: left;
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .site-page-copy th {
@@ -418,7 +441,7 @@
 
         .site-page-visual {
             flex-basis: auto;
-            min-height: 420px;
+            min-height: 360px;
         }
     }
 
@@ -433,63 +456,73 @@
 
         .site-page-hero-shell,
         .site-page-body {
-            padding: 28px 24px 32px;
-            border-radius: 30px;
+            padding: 24px 20px 28px;
+            border-radius: 24px;
         }
 
         .site-page-title {
-            margin-top: 20px;
-            font-size: clamp(38px, 10vw, 52px);
+            margin-top: 16px;
+            font-size: clamp(32px, 9vw, 42px);
         }
 
         .site-page-summary {
-            margin-top: 22px;
-            font-size: 18px;
+            margin-top: 18px;
+            font-size: 16px;
         }
 
         .site-page-actions {
-            margin-top: 26px;
+            margin-top: 22px;
         }
 
         .site-page-btn {
             width: 100%;
             min-width: 0;
-            padding: 18px 22px;
+            padding: 16px 20px;
         }
 
         .site-page-visual {
-            min-height: 280px;
-            border-radius: 24px;
+            min-height: 240px;
+            border-radius: 20px;
         }
 
         .site-page-copy p,
         .site-page-copy ul,
         .site-page-copy ol {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.78;
         }
 
         .site-page-copy h1,
         .site-page-copy h2,
         .site-page-copy h3 {
-            margin-top: 38px;
-            padding-bottom: 16px;
+            margin-top: 34px;
+            padding-bottom: 14px;
         }
 
         .site-page-copy h1 {
-            font-size: clamp(28px, 7vw, 38px);
+            font-size: clamp(25px, 6.6vw, 32px);
         }
 
         .site-page-copy h2 {
-            font-size: clamp(26px, 6.4vw, 34px);
+            font-size: clamp(23px, 6vw, 29px);
         }
 
         .site-page-copy h3 {
-            font-size: clamp(22px, 5.8vw, 30px);
+            font-size: clamp(20px, 5.2vw, 25px);
         }
 
         .site-page-copy blockquote {
-            font-size: 18px;
+            font-size: 16px;
+        }
+
+        .site-page-body {
+            padding: 28px 22px 34px 34px;
+        }
+
+        .site-page-body::before {
+            top: 18px;
+            bottom: 18px;
+            width: 8px;
         }
     }
 </style>
