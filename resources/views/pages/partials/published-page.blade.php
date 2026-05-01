@@ -134,8 +134,8 @@
 
     .site-page-hero {
         display: grid;
-        grid-template-columns: minmax(0, 540px) minmax(320px, 1fr);
-        gap: 24px;
+        grid-template-columns: minmax(0, 1.12fr) minmax(380px, 0.88fr);
+        gap: 16px;
         align-items: center;
     }
 
@@ -143,7 +143,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        max-width: 540px;
+        max-width: 680px;
         min-width: 0;
     }
 
@@ -164,7 +164,7 @@
 
     .site-page-title {
         margin: 16px 0 0;
-        max-width: 13ch;
+        max-width: 16ch;
         color: #121f3d;
         font-size: clamp(28px, 2.8vw, 40px);
         line-height: 1.04;
@@ -174,7 +174,7 @@
 
     .site-page-summary {
         margin: 18px 0 0;
-        max-width: 34ch;
+        max-width: 42ch;
         color: #647b99;
         font-size: clamp(15px, 1vw, 18px);
         line-height: 1.5;
