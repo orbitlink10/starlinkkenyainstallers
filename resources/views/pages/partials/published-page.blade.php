@@ -1,38 +1,59 @@
 @php
     use Illuminate\Support\Str;
+    use Illuminate\Support\Facades\Storage;
 
     $pageTitle = trim((string) $page->page_title);
     $contentHtml = trim((string) $page->page_description);
-    $heroImage = $page->image_path
-        ? route('media.show', ['path' => $page->image_path])
-        : null;
+    $heroImagePath = trim((string) $page->image_path, '/');
+    $normalizedHeroImagePath = preg_replace('#^public/#', '', $heroImagePath) ?? $heroImagePath;
+    $heroImage = null;
+
+    if ($normalizedHeroImagePath !== '') {
+        $publicDisk = Storage::disk('public');
+        $heroImage = $publicDisk->exists($normalizedHeroImagePath)
+            ? url('storage/'.$normalizedHeroImagePath)
+            : route('media.show', ['path' => $normalizedHeroImagePath]);
+    }
     $showPreviewBadge = $showPreviewBadge ?? false;
     $imageAlt = $page->image_alt_text ?: $pageTitle;
     $pageDate = $page->created_at?->format('M d, Y') ?? now()->format('M d, Y');
     $shopUrl = route('home').'#packages';
     $expertUrl = 'tel:+254700123456';
+    $backUrl = $backUrl ?? route('home');
+    $backLabel = $backLabel ?? 'Back';
+    $pageLabel = trim((string) $page->heading_2);
 
     $normalizedPageTitle = (string) Str::of(html_entity_decode(strip_tags($pageTitle), ENT_QUOTES | ENT_HTML5, 'UTF-8'))
         ->squish()
         ->lower();
 
+    if ($pageLabel === '') {
+        $pageLabel = trim((string) Str::of($pageTitle)->before(':'));
+    }
+
+    if ($pageLabel === '' || mb_strlen($pageLabel) > 42) {
+        $pageLabel = trim((string) Str::of($pageTitle)->words(4, ''));
+    }
+
+    if ($pageLabel === '') {
+        $pageLabel = 'Starlink Kenya';
+    }
+
+    $articleTitle = $pageTitle;
+
     if ($contentHtml !== '') {
-        $contentHtml = preg_replace_callback(
-            '/^\s*<(h[1-3])\b[^>]*>(.*?)<\/\1>/isu',
-            static function (array $matches) use ($normalizedPageTitle): string {
-                $headingText = (string) Str::of(html_entity_decode(strip_tags($matches[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8'))
-                    ->squish()
-                    ->lower();
+        if (preg_match('/^\s*<(h[1-3])\b[^>]*>(.*?)<\/\1>/isu', $contentHtml, $matches) === 1) {
+            $firstHeadingText = trim((string) preg_replace(
+                '/\s+/u',
+                ' ',
+                strip_tags(html_entity_decode($matches[2], ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+            ));
 
-                if ($headingText === '' || $normalizedPageTitle === '') {
-                    return $matches[0];
-                }
-
-                return str_starts_with($headingText, $normalizedPageTitle) ? '' : $matches[0];
-            },
-            $contentHtml,
-            1
-        ) ?? $contentHtml;
+            if ($firstHeadingText !== '') {
+                $articleTitle = $firstHeadingText;
+                $contentHtml = preg_replace('/^\s*<(h[1-3])\b[^>]*>.*?<\/\1>/isu', '', $contentHtml, 1) ?? $contentHtml;
+            }
+        }
     }
 
     $plainCopy = trim(preg_replace(
@@ -63,7 +84,7 @@
     }
 
     .site-page-container {
-        width: min(1480px, 94vw);
+        width: min(1680px, 94vw);
         margin: 24px auto 0;
     }
 
@@ -148,9 +169,9 @@
 
     .site-page-title {
         margin: 20px 0 0;
-        max-width: 10ch;
+        max-width: 11.5ch;
         color: #121f3d;
-        font-size: clamp(38px, 4.7vw, 60px);
+        font-size: clamp(34px, 4vw, 52px);
         line-height: 1.02;
         letter-spacing: -0.055em;
         font-weight: 800;
@@ -158,10 +179,14 @@
 
     .site-page-summary {
         margin: 22px 0 0;
-        max-width: 30ch;
+        max-width: 27ch;
         color: #647b99;
-        font-size: clamp(17px, 1.35vw, 22px);
+        font-size: clamp(16px, 1.15vw, 19px);
         line-height: 1.58;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
     }
 
     .site-page-actions {
@@ -203,8 +228,8 @@
 
     .site-page-visual {
         position: relative;
-        flex: 0 0 min(48%, 720px);
-        min-height: 440px;
+        flex: 0 0 min(45%, 660px);
+        min-height: 380px;
         overflow: hidden;
         border-radius: 26px;
         border: 1px solid #dbe6f5;
@@ -246,6 +271,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        z-index: 1;
     }
 
     .site-page-visual-placeholder {
@@ -274,11 +300,12 @@
 
     .site-page-body {
         position: relative;
-        margin-top: 22px;
+        max-width: 1380px;
+        margin: 38px auto 0;
         border: 1px solid #dde7f2;
-        border-radius: 28px;
+        border-radius: 36px;
         background: rgba(255, 255, 255, 0.96);
-        padding: 48px 56px 58px 92px;
+        padding: 54px 68px 64px 92px;
         box-shadow: 0 22px 56px rgba(15, 37, 79, 0.06);
         overflow: hidden;
     }
@@ -287,8 +314,8 @@
         content: '';
         position: absolute;
         left: 0;
-        top: 26px;
-        bottom: 26px;
+        top: 18px;
+        bottom: 18px;
         width: 12px;
         border-radius: 0 999px 999px 0;
         background: linear-gradient(180deg, #ff8615 0%, #ffb452 100%);
@@ -303,7 +330,66 @@
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
     }
 
+    .site-page-article-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 30px;
+    }
+
+    .site-page-article-kicker {
+        margin: 0;
+        color: #0b4b8e;
+        font-size: clamp(24px, 1.8vw, 34px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+    }
+
+    .site-page-article-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        border: 1px solid #d8e2ef;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 12px 18px;
+        color: #ff7c11;
+        font-size: 15px;
+        font-weight: 700;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+        box-shadow: 0 10px 24px rgba(15, 37, 79, 0.04);
+        white-space: nowrap;
+    }
+
+    .site-page-article-back:hover {
+        transform: translateY(-1px);
+        border-color: #ffcf9c;
+        box-shadow: 0 14px 28px rgba(15, 37, 79, 0.08);
+    }
+
+    .site-page-article-title {
+        margin: 0;
+        max-width: 17ch;
+        color: #131d39;
+        font-size: clamp(44px, 4.8vw, 62px);
+        line-height: 1.05;
+        letter-spacing: -0.055em;
+        font-weight: 500;
+    }
+
+    .site-page-article-image {
+        display: block;
+        width: min(930px, 100%);
+        margin-top: 26px;
+        border-radius: 24px;
+        border: 1px solid #e2eaf4;
+        box-shadow: 0 18px 42px rgba(15, 37, 79, 0.08);
+        height: auto;
+    }
+
     .site-page-copy {
+        margin-top: 40px;
         max-width: 1220px;
         color: #3a557d;
     }
@@ -434,14 +520,19 @@
         }
 
         .site-page-title,
-        .site-page-summary,
-        .site-page-copy {
+        .site-page-summary {
             max-width: none;
         }
 
         .site-page-visual {
             flex-basis: auto;
-            min-height: 360px;
+            min-height: 320px;
+        }
+
+        .site-page-body,
+        .site-page-copy,
+        .site-page-article-title {
+            max-width: none;
         }
     }
 
@@ -462,12 +553,13 @@
 
         .site-page-title {
             margin-top: 16px;
-            font-size: clamp(32px, 9vw, 42px);
+            font-size: clamp(30px, 8vw, 38px);
         }
 
         .site-page-summary {
             margin-top: 18px;
-            font-size: 16px;
+            font-size: 15px;
+            -webkit-line-clamp: 3;
         }
 
         .site-page-actions {
@@ -481,7 +573,7 @@
         }
 
         .site-page-visual {
-            min-height: 240px;
+            min-height: 220px;
             border-radius: 20px;
         }
 
@@ -516,13 +608,45 @@
         }
 
         .site-page-body {
-            padding: 28px 22px 34px 34px;
+            margin-top: 26px;
+            padding: 30px 20px 36px 34px;
+            border-radius: 26px;
         }
 
         .site-page-body::before {
             top: 18px;
             bottom: 18px;
             width: 8px;
+        }
+
+        .site-page-article-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .site-page-article-kicker {
+            font-size: 18px;
+        }
+
+        .site-page-article-back {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .site-page-article-title {
+            font-size: clamp(30px, 8vw, 42px);
+            line-height: 1.08;
+        }
+
+        .site-page-article-image {
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+
+        .site-page-copy {
+            margin-top: 28px;
         }
     }
 </style>
@@ -559,16 +683,27 @@
                 </div>
 
                 <div class="site-page-visual {{ $heroImage ? 'has-image' : '' }}" aria-hidden="true">
+                    <div class="site-page-visual-placeholder"></div>
+
                     @if ($heroImage)
-                        <img src="{{ $heroImage }}" alt="{{ $imageAlt }}">
-                    @else
-                        <div class="site-page-visual-placeholder"></div>
+                        <img src="{{ $heroImage }}" alt="{{ $imageAlt }}" loading="eager" decoding="async" onerror="this.style.display='none'; this.closest('.site-page-visual').classList.remove('has-image');">
                     @endif
                 </div>
             </div>
         </section>
 
         <section class="site-page-body">
+            <div class="site-page-article-header">
+                <p class="site-page-article-kicker">{{ $pageLabel }}</p>
+                <a class="site-page-article-back" href="{{ $backUrl }}">{{ $backLabel }}</a>
+            </div>
+
+            <h2 class="site-page-article-title">{{ $articleTitle }}</h2>
+
+            @if ($heroImage)
+                <img class="site-page-article-image" src="{{ $heroImage }}" alt="{{ $imageAlt }}" loading="eager" decoding="async">
+            @endif
+
             @if ($contentHtml !== '')
                 <article class="site-page-copy">
                     {!! $contentHtml !!}

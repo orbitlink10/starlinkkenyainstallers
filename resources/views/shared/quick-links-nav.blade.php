@@ -2,24 +2,22 @@
     $useHashLinks = $useHashLinks ?? false;
     $variant = $variant ?? 'pill';
     $homeUrl = route('home');
-    $quickLinks = [
-        [
-            'label' => 'Starlink Kenya Packages',
-            'href' => $useHashLinks ? '#packages' : $homeUrl.'#packages',
-        ],
-        [
-            'label' => 'Starlink Kenya Prices',
-            'href' => $useHashLinks ? '#prices' : $homeUrl.'#prices',
-        ],
-        [
-            'label' => 'Order Now',
-            'href' => $useHashLinks ? '#order-now' : $homeUrl.'#order-now',
-        ],
-        [
-            'label' => 'Installation',
-            'href' => $useHashLinks ? '#installation' : $homeUrl.'#installation',
-        ],
-    ];
+    $quickLinks = collect($siteNavigationMenu ?? \App\Models\HomepageContent::defaultNavigationMenu())
+        ->map(function (array $item) use ($useHashLinks, $homeUrl): array {
+            $href = trim((string) ($item['href'] ?? ''));
+
+            if ($href !== '' && str_starts_with($href, '#')) {
+                $href = $useHashLinks ? $href : $homeUrl.$href;
+            }
+
+            return [
+                'label' => trim((string) ($item['label'] ?? '')),
+                'href' => $href,
+            ];
+        })
+        ->filter(fn (array $item): bool => $item['label'] !== '' && $item['href'] !== '')
+        ->values()
+        ->all();
 @endphp
 
 @once

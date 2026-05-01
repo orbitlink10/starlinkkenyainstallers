@@ -25,18 +25,15 @@ class AdminSectionController extends Controller
         $meta = $sections[$section];
         $table = $this->tableForSection($section, $request);
         $homepageContent = null;
+        $menuItemsConfig = null;
 
-        if ($section === 'homepage-content') {
-            $homepageContent = HomepageContent::query()->firstOrCreate(
-                ['id' => 1],
-                [
-                    'hero_header_title' => 'Starlink Kenya | High-Speed Satellite Internet Across Kenya',
-                    'hero_header_description' => 'Starlink Kenya offers high-speed satellite internet with affordable packages, hardware, and monthly plans.',
-                    'why_choose_title' => 'Why Starlink Kenya Is Ideal for You',
-                    'why_choose_description' => 'Tailored for the Kenyan market.',
-                    'products_section_title' => 'Hot-Selling Products.',
-                    'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore the complete guide to STARLINK KENYA.</p>',
-                ]
+        if (in_array($section, ['homepage-content', 'menus'], true)) {
+            $homepageContent = $this->homepageContentRecord();
+        }
+
+        if ($section === 'menus' && $homepageContent) {
+            $menuItemsConfig = HomepageContent::normalizeNavigationMenu(
+                old('navigation_menu', $homepageContent->navigation_menu)
             );
         }
 
@@ -47,6 +44,7 @@ class AdminSectionController extends Controller
             'description' => $meta['description'],
             'table' => $table,
             'homepageContent' => $homepageContent,
+            'menuItemsConfig' => $menuItemsConfig,
         ]);
     }
 
@@ -62,10 +60,7 @@ class AdminSectionController extends Controller
             'home_page_content' => ['nullable', 'string'],
         ]);
 
-        $content = HomepageContent::query()->firstOrCreate(
-            ['id' => 1],
-            ['hero_header_title' => 'Starlink Kenya']
-        );
+        $content = $this->homepageContentRecord();
 
         if ($request->hasFile('hero_image')) {
             if ($content->hero_image_path && Storage::disk('public')->exists($content->hero_image_path)) {
@@ -82,6 +77,48 @@ class AdminSectionController extends Controller
         return redirect()
             ->route('admin.section', ['section' => 'homepage-content'])
             ->with('success', 'Homepage content saved successfully.');
+    }
+
+    public function updateMenus(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'navigation_menu' => ['required', 'array', 'max:10'],
+            'navigation_menu.*.label' => ['nullable', 'string', 'max:80'],
+            'navigation_menu.*.href' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $menuItems = collect($validated['navigation_menu'] ?? [])
+            ->map(function (array $item): ?array {
+                $label = trim((string) ($item['label'] ?? ''));
+                $href = trim((string) ($item['href'] ?? ''));
+
+                if ($label === '' || $href === '') {
+                    return null;
+                }
+
+                return [
+                    'label' => $label,
+                    'href' => $href,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
+
+        if ($menuItems === []) {
+            return redirect()
+                ->route('admin.section', ['section' => 'menus'])
+                ->withErrors(['navigation_menu' => 'Add at least one menu item with both a label and a link.'])
+                ->withInput();
+        }
+
+        $this->homepageContentRecord()->update([
+            'navigation_menu' => $menuItems,
+        ]);
+
+        return redirect()
+            ->route('admin.section', ['section' => 'menus'])
+            ->with('success', 'Menus updated successfully.');
     }
 
     /**
@@ -191,5 +228,21 @@ class AdminSectionController extends Controller
             ],
             default => null,
         };
+    }
+
+    private function homepageContentRecord(): HomepageContent
+    {
+        return HomepageContent::query()->firstOrCreate(
+            ['id' => 1],
+            [
+                'hero_header_title' => 'Starlink Kenya | High-Speed Satellite Internet Across Kenya',
+                'hero_header_description' => 'Starlink Kenya offers high-speed satellite internet with affordable packages, hardware, and monthly plans.',
+                'why_choose_title' => 'Why Starlink Kenya Is Ideal for You',
+                'why_choose_description' => 'Tailored for the Kenyan market.',
+                'products_section_title' => 'Hot-Selling Products.',
+                'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore the complete guide to STARLINK KENYA.</p>',
+                'navigation_menu' => HomepageContent::defaultNavigationMenu(),
+            ]
+        );
     }
 }

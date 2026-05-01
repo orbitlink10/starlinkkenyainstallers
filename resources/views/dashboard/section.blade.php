@@ -289,6 +289,59 @@
             cursor: pointer;
         }
 
+        .menu-editor-actions {
+            margin-top: 6px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .menu-items-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .menu-item-card {
+            border: 1px solid #d9e3f0;
+            border-radius: 16px;
+            background: #f8fbff;
+            padding: 16px;
+        }
+
+        .menu-item-grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+        }
+
+        .secondary-btn,
+        .danger-btn {
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .secondary-btn {
+            border: 1px solid #b6c5da;
+            background: #eef4fc;
+            color: #38557f;
+        }
+
+        .danger-btn {
+            border: 1px solid #efc0c6;
+            background: #fff5f6;
+            color: #a53848;
+        }
+
+        .menu-item-actions {
+            margin-top: 14px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
         @media (max-width: 1200px) {
             .layout {
                 flex-direction: column;
@@ -298,6 +351,10 @@
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #dbe1eb;
+            }
+
+            .menu-item-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -385,6 +442,137 @@
                                 block_formats: 'Paragraph=p; Heading 2=h2; Heading 3=h3',
                             });
                         }
+                    </script>
+                @elseif ($section === 'menus' && isset($menuItemsConfig))
+                    @if (session('success'))
+                        <div class="flash-success">{{ session('success') }}</div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="flash-error">{{ $errors->first() }}</div>
+                    @endif
+
+                    <form class="form-grid" method="POST" action="{{ route('admin.menus.update') }}">
+                        @csrf
+
+                        <div>
+                            <label class="field-label">Website Menu Items</label>
+                            <p class="field-help">Update the menu text and the link each item opens. Use anchors like <code>#packages</code>, relative paths like <code>/cart</code>, or full URLs.</p>
+                        </div>
+
+                        <div id="menu-items-list" class="menu-items-list">
+                            @foreach ($menuItemsConfig as $index => $item)
+                                <div class="menu-item-card" data-menu-item>
+                                    <div class="menu-item-grid">
+                                        <div>
+                                            <label class="field-label" for="menu-label-{{ $index }}">Menu Label</label>
+                                            <input class="field-input" id="menu-label-{{ $index }}" name="navigation_menu[{{ $index }}][label]" type="text" value="{{ $item['label'] }}" maxlength="80" required>
+                                        </div>
+
+                                        <div>
+                                            <label class="field-label" for="menu-href-{{ $index }}">Menu Link</label>
+                                            <input class="field-input" id="menu-href-{{ $index }}" name="navigation_menu[{{ $index }}][href]" type="text" value="{{ $item['href'] }}" maxlength="255" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="menu-item-actions">
+                                        <button class="danger-btn js-remove-menu-item" type="button">Remove</button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="menu-editor-actions">
+                            <button class="secondary-btn js-add-menu-item" type="button">Add Menu Item</button>
+                            <button class="save-btn" type="submit">Save Menus</button>
+                        </div>
+                    </form>
+
+                    <template id="menu-item-template">
+                        <div class="menu-item-card" data-menu-item>
+                            <div class="menu-item-grid">
+                                <div>
+                                    <label class="field-label">Menu Label</label>
+                                    <input class="field-input" data-menu-label type="text" maxlength="80" required>
+                                </div>
+
+                                <div>
+                                    <label class="field-label">Menu Link</label>
+                                    <input class="field-input" data-menu-href type="text" maxlength="255" required>
+                                </div>
+                            </div>
+
+                            <div class="menu-item-actions">
+                                <button class="danger-btn js-remove-menu-item" type="button">Remove</button>
+                            </div>
+                        </div>
+                    </template>
+
+                    <script>
+                        (() => {
+                            const list = document.getElementById('menu-items-list');
+                            const addButton = document.querySelector('.js-add-menu-item');
+                            const template = document.getElementById('menu-item-template');
+
+                            if (!list || !addButton || !template) {
+                                return;
+                            }
+
+                            const reindexItems = () => {
+                                const items = Array.from(list.querySelectorAll('[data-menu-item]'));
+
+                                items.forEach((item, index) => {
+                                    const label = item.querySelector('[data-menu-label], input[name*="[label]"]');
+                                    const href = item.querySelector('[data-menu-href], input[name*="[href]"]');
+
+                                    if (label) {
+                                        label.name = `navigation_menu[${index}][label]`;
+                                        label.id = `menu-label-${index}`;
+                                        const labelField = item.querySelector('label');
+
+                                        if (labelField) {
+                                            labelField.setAttribute('for', label.id);
+                                        }
+                                    }
+
+                                    if (href) {
+                                        href.name = `navigation_menu[${index}][href]`;
+                                        href.id = `menu-href-${index}`;
+                                        const hrefField = item.querySelectorAll('label')[1];
+
+                                        if (hrefField) {
+                                            hrefField.setAttribute('for', href.id);
+                                        }
+                                    }
+                                });
+
+                                const removeButtons = list.querySelectorAll('.js-remove-menu-item');
+                                removeButtons.forEach((button) => {
+                                    button.disabled = removeButtons.length <= 1;
+                                    button.style.opacity = removeButtons.length <= 1 ? '0.55' : '1';
+                                    button.style.cursor = removeButtons.length <= 1 ? 'not-allowed' : 'pointer';
+                                });
+                            };
+
+                            addButton.addEventListener('click', () => {
+                                const fragment = template.content.cloneNode(true);
+                                list.appendChild(fragment);
+                                reindexItems();
+                            });
+
+                            list.addEventListener('click', (event) => {
+                                const button = event.target.closest('.js-remove-menu-item');
+
+                                if (!button || list.querySelectorAll('[data-menu-item]').length <= 1) {
+                                    return;
+                                }
+
+                                button.closest('[data-menu-item]')?.remove();
+                                reindexItems();
+                            });
+
+                            reindexItems();
+                        })();
                     </script>
                 @elseif ($table)
                     <div class="table-wrap">

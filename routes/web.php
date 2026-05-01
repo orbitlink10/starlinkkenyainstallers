@@ -74,6 +74,8 @@ Route::middleware('auth')->group(function (): void {
         ->name('admin.section');
     Route::post('/admin/homepage-content', [AdminSectionController::class, 'updateHomepageContent'])
         ->name('admin.homepage-content.update');
+    Route::post('/admin/menus', [AdminSectionController::class, 'updateMenus'])
+        ->name('admin.menus.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/logout.php', [AuthController::class, 'logout'])->name('logout.shortcut');
 });

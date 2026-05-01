@@ -35,9 +35,10 @@ class SitePageViewTest extends TestCase
         $response->assertSeeText('Mar 05, 2026');
         $response->assertSeeText('Starlink Nairobi Subscription Suspension');
         $response->assertSeeText('Learn how to fix Starlink Nairobi Subscription Suspension fast.');
+        $response->assertSeeText('Back');
         $response->assertSeeText('Shop Now');
         $response->assertSeeText('Talk to an Expert');
-        $response->assertDontSeeText('Starlink Nairobi Subscription Suspension: The Critical Guide to Restoring Your Internet Fast in 2026');
+        $response->assertSeeText('Starlink Nairobi Subscription Suspension: The Critical Guide to Restoring Your Internet Fast in 2026');
         $response->assertSeeText('Discover causes, reactivation steps, and expert tips.');
     }
 }

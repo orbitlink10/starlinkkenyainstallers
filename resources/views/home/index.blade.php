@@ -36,6 +36,18 @@
         $rootBaseUrl = request()->getSchemeAndHttpHost();
         $loginEntryUrl = $rootBaseUrl.'/login.php';
         $dashboardEntryUrl = $rootBaseUrl.'/dashboard.php';
+        $homeNavigationMenu = collect($siteNavigationMenu ?? \App\Models\HomepageContent::defaultNavigationMenu())
+            ->map(function (array $item): array {
+                $href = trim((string) ($item['href'] ?? ''));
+
+                return [
+                    'label' => trim((string) ($item['label'] ?? '')),
+                    'href' => $href,
+                ];
+            })
+            ->filter(fn (array $item): bool => $item['label'] !== '' && $item['href'] !== '')
+            ->values()
+            ->all();
     @endphp
 
     <style>
@@ -1394,10 +1406,9 @@
         </header>
         <div class="container">
             <nav class="section-nav" aria-label="Page section navigation">
-                <a href="#packages">Starlink Kenya Packages</a>
-                <a href="#prices">Starlink Kenya Prices</a>
-                <a href="#order-now">Order Now</a>
-                <a href="#installation">Installation</a>
+                @foreach ($homeNavigationMenu as $menuItem)
+                    <a href="{{ $menuItem['href'] }}">{{ $menuItem['label'] }}</a>
+                @endforeach
             </nav>
 
             <section class="hero">
