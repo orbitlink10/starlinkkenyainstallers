@@ -11,6 +11,7 @@ use App\Models\SitePage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class AnalyticsDashboardTest extends TestCase
@@ -205,5 +206,20 @@ class AnalyticsDashboardTest extends TestCase
         $response->assertSeeText('router');
         $response->assertSeeText('KSh 49,999.00');
         $response->assertDontSeeText('Old Landing Page');
+    }
+
+    public function test_analytics_pages_fail_safe_when_tracking_table_is_missing(): void
+    {
+        $user = User::factory()->create();
+
+        Schema::drop('analytics_events');
+
+        $this->get('/')->assertOk();
+
+        $response = $this->actingAs($user)->get(route('analytics.index'));
+
+        $response->assertOk();
+        $response->assertSeeText('Website Analytics');
+        $response->assertSeeText('Waiting for first visit');
     }
 }

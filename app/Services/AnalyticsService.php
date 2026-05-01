@@ -11,11 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class AnalyticsService
 {
     private const VISITOR_COOKIE = 'starlink_visitor_id';
+
+    private ?bool $analyticsTableExists = null;
 
     /**
      * @param  array<string, mixed>  $properties
@@ -88,14 +91,6 @@ class AnalyticsService
         $end = now()->endOfDay();
         $start = now()->startOfDay()->subDays($range - 1);
 
-        $pageViewsQuery = $this->pageViewsWithin($start, $end);
-        $pageViews = (clone $pageViewsQuery)->count();
-        $uniqueVisitors = (clone $pageViewsQuery)->distinct()->count('visitor_id');
-        $trackedPages = (clone $pageViewsQuery)->distinct()->count('path');
-        $productViews = (clone $pageViewsQuery)->where('page_type', 'product')->count();
-        $searches = $this->eventCount('search', $start, $end);
-        $cartActions = $this->eventCount('add_to_cart', $start, $end);
-
         $orders = Order::query()
             ->whereBetween('created_at', [$start, $end])
             ->count();
@@ -107,6 +102,28 @@ class AnalyticsService
         $paidOrdersQuery = Order::query()
             ->whereNotNull('paid_at')
             ->whereBetween('paid_at', [$start, $end]);
+
+        $conversions = [
+            'orders' => $orders,
+            'paidOrders' => (clone $paidOrdersQuery)->count(),
+            'invoices' => Invoice::query()
+                ->whereBetween('issued_at', [$start->toDateString(), $end->toDateString()])
+                ->count(),
+            'enquiries' => $enquiries,
+            'revenue' => (float) (clone $paidOrdersQuery)->sum('amount'),
+        ];
+
+        if (! $this->analyticsTableExists()) {
+            return $this->emptyReport($range, $start, $end, $conversions);
+        }
+
+        $pageViewsQuery = $this->pageViewsWithin($start, $end);
+        $pageViews = (clone $pageViewsQuery)->count();
+        $uniqueVisitors = (clone $pageViewsQuery)->distinct()->count('visitor_id');
+        $trackedPages = (clone $pageViewsQuery)->distinct()->count('path');
+        $productViews = (clone $pageViewsQuery)->where('page_type', 'product')->count();
+        $searches = $this->eventCount('search', $start, $end);
+        $cartActions = $this->eventCount('add_to_cart', $start, $end);
 
         $leadActions = $cartActions + $enquiries + $orders;
 
@@ -132,15 +149,7 @@ class AnalyticsService
             'topReferrers' => $this->topReferrers($start, $end),
             'topProducts' => $this->topProducts($start, $end),
             'topSearches' => $this->topSearches($start, $end),
-            'conversions' => [
-                'orders' => $orders,
-                'paidOrders' => (clone $paidOrdersQuery)->count(),
-                'invoices' => Invoice::query()
-                    ->whereBetween('issued_at', [$start->toDateString(), $end->toDateString()])
-                    ->count(),
-                'enquiries' => $enquiries,
-                'revenue' => (float) (clone $paidOrdersQuery)->sum('amount'),
-            ],
+            'conversions' => $conversions,
         ];
     }
 
@@ -155,6 +164,10 @@ class AnalyticsService
         ?string $path,
         array $properties,
     ): void {
+        if (! $this->analyticsTableExists()) {
+            return;
+        }
+
         AnalyticsEvent::query()->create([
             'event_type' => $eventType,
             'visitor_id' => $this->visitorId($request),
@@ -166,6 +179,94 @@ class AnalyticsService
             'properties' => $properties === [] ? null : $properties,
             'occurred_at' => now(),
         ]);
+    }
+
+    /**
+     * @param  array{
+     *     orders:int,
+     *     paidOrders:int,
+     *     invoices:int,
+     *     enquiries:int,
+     *     revenue:float
+     * }  $conversions
+     * @return array{
+     *     range:int,
+     *     start:\Illuminate\Support\Carbon,
+     *     end:\Illuminate\Support\Carbon,
+     *     firstTrackedVisit:\Illuminate\Support\Carbon|null,
+     *     pageViews:int,
+     *     uniqueVisitors:int,
+     *     trackedPages:int,
+     *     pagesPerVisitor:float,
+     *     productViews:int,
+     *     searches:int,
+     *     cartActions:int,
+     *     leadActions:int,
+     *     trend:\Illuminate\Support\Collection<int, array{date:\Illuminate\Support\Carbon, dayLabel:string, views:int, height:int, tooltip:string}>,
+     *     topPages:\Illuminate\Support\Collection<int, array{label:string, path:string, pageType:?string, views:int, visitors:int, lastSeen:\Illuminate\Support\Carbon}>,
+     *     recentVisits:\Illuminate\Support\Collection<int, array{label:string, path:string, referrer:string, occurredAt:\Illuminate\Support\Carbon}>,
+     *     topReferrers:\Illuminate\Support\Collection<int, array{host:string, views:int, visitors:int}>,
+     *     topProducts:\Illuminate\Support\Collection<int, array{label:string, path:string, views:int, visitors:int, lastSeen:\Illuminate\Support\Carbon}>,
+     *     topSearches:\Illuminate\Support\Collection<int, array{query:string, searches:int, visitors:int, lastSeen:\Illuminate\Support\Carbon}>,
+     *     conversions:array{
+     *         orders:int,
+     *         paidOrders:int,
+     *         invoices:int,
+     *         enquiries:int,
+     *         revenue:float
+     *     }
+     * }
+     */
+    private function emptyReport(int $range, Carbon $start, Carbon $end, array $conversions): array
+    {
+        return [
+            'range' => $range,
+            'start' => $start,
+            'end' => $end,
+            'firstTrackedVisit' => null,
+            'pageViews' => 0,
+            'uniqueVisitors' => 0,
+            'trackedPages' => 0,
+            'pagesPerVisitor' => 0.0,
+            'productViews' => 0,
+            'searches' => 0,
+            'cartActions' => 0,
+            'leadActions' => $conversions['orders'] + $conversions['enquiries'],
+            'trend' => $this->emptyTrend($start, $end),
+            'topPages' => collect(),
+            'recentVisits' => collect(),
+            'topReferrers' => collect(),
+            'topProducts' => collect(),
+            'topSearches' => collect(),
+            'conversions' => $conversions,
+        ];
+    }
+
+    /**
+     * @return Collection<int, array{date:Carbon, dayLabel:string, views:int, height:int, tooltip:string}>
+     */
+    private function emptyTrend(Carbon $start, Carbon $end): Collection
+    {
+        $days = collect();
+        $cursor = $start->copy()->startOfDay();
+
+        while ($cursor->lte($end)) {
+            $days->push([
+                'date' => $cursor->copy(),
+                'dayLabel' => $cursor->format('d'),
+                'views' => 0,
+                'height' => 12,
+                'tooltip' => sprintf('%s: 0 views', $cursor->format('d M Y')),
+            ]);
+            $cursor->addDay();
+        }
+
+        return $days;
+    }
+
+    private function analyticsTableExists(): bool
+    {
+        return $this->analyticsTableExists ??= Schema::hasTable('analytics_events');
     }
 
     private function visitorId(Request $request): string
