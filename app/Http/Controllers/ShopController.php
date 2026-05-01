@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\AnalyticsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,7 +13,7 @@ class ShopController extends Controller
 {
     private const WHATSAPP_PHONE = '254700123456';
 
-    public function show(Request $request, string $productSlug): View|RedirectResponse
+    public function show(Request $request, string $productSlug, AnalyticsService $analyticsService): View|RedirectResponse
     {
         $product = Product::query()
             ->where('slug', $productSlug)
@@ -37,6 +38,12 @@ class ShopController extends Controller
             'detailsHtml' => $productDetailsHtml,
         ] = $this->productCopy($product);
 
+        $analyticsService->trackPageView($request, $product->name, 'product', [
+            'product_id' => $product->id,
+            'slug' => $product->slug,
+            'price' => (float) $product->price,
+        ]);
+
         return view('shop.product', [
             'product' => $product,
             'imageUrl' => $imageUrl,
@@ -47,7 +54,7 @@ class ShopController extends Controller
         ]);
     }
 
-    public function addToCart(Request $request, Product $product): RedirectResponse
+    public function addToCart(Request $request, Product $product, AnalyticsService $analyticsService): RedirectResponse
     {
         abort_unless($product->is_active, 404);
 
@@ -78,12 +85,19 @@ class ShopController extends Controller
 
         $request->session()->put('cart', $cart);
 
+        $analyticsService->trackEvent($request, 'add_to_cart', $product->name, 'product', [
+            'product_id' => $product->id,
+            'slug' => $product->slug,
+            'quantity' => $quantityToAdd,
+            'cart_quantity' => $newQuantity,
+        ], '/product/'.($product->slug ?: $product->id));
+
         return redirect()
             ->route('shop.product.show', ['productSlug' => $product->slug ?: $product->id])
             ->with('success', $product->name.' added to cart.');
     }
 
-    public function cart(Request $request): View
+    public function cart(Request $request, AnalyticsService $analyticsService): View
     {
         $cart = $request->session()->get('cart', []);
         $items = collect(array_values($cart))->map(function (array $item): array {
@@ -96,6 +110,12 @@ class ShopController extends Controller
         });
 
         $total = (float) $items->sum('line_total');
+
+        $analyticsService->trackPageView($request, 'Shopping Cart', 'cart', [
+            'items_count' => $items->count(),
+            'cart_count' => $this->cartCount($request),
+            'total' => $total,
+        ]);
 
         return view('shop.cart', [
             'items' => $items,

@@ -6,6 +6,11 @@
     $menuIconBase = 'menu-icon grid h-11 w-11 shrink-0 place-items-center rounded-[0.95rem] text-[0.95rem] transition duration-200';
     $menuIconInactive = 'bg-[#e6edf7] text-[#6f84a1] group-hover:bg-[#e1efff] group-hover:text-[#1a73e8]';
     $menuIconActive = 'bg-[#e1efff] text-[#1a73e8]';
+    $primaryItems = [
+        ['key' => 'dashboard', 'label' => 'Dashboard', 'icon' => 'fa-gauge-high', 'route' => route('dashboard')],
+        ['key' => 'analytics', 'label' => 'Analytics', 'icon' => 'fa-chart-line', 'route' => route('analytics.index')],
+    ];
+
     $menuItems = [
         ['key' => 'categories', 'label' => 'Categories', 'icon' => 'fa-table-list', 'route' => route('categories.index')],
         ['key' => 'sub-categories', 'label' => 'Sub Categories', 'icon' => 'fa-tags', 'route' => route('admin.section', ['section' => 'sub-categories'])],
@@ -39,10 +44,11 @@
     </a>
 
     <div class="menu-block mt-7">
-        <a class="{{ $menuLinkBase }} {{ $active === 'dashboard' ? $menuLinkActive : $menuLinkInactive }}" href="{{ route('dashboard') }}">
-            <span class="{{ $menuIconBase }} {{ $active === 'dashboard' ? $menuIconActive : $menuIconInactive }}"><i class="fa-solid fa-gauge-high"></i></span>
-            Dashboard
-        </a>
+        @foreach ($primaryItems as $item)
+            <a class="{{ $menuLinkBase }} {{ $active === $item['key'] ? $menuLinkActive : $menuLinkInactive }}" href="{{ $item['route'] }}">
+                <span class="{{ $menuIconBase }} {{ $active === $item['key'] ? $menuIconActive : $menuIconInactive }}"><i class="fa-solid {{ $item['icon'] }}"></i></span>{{ $item['label'] }}
+            </a>
+        @endforeach
     </div>
 
     <div class="menu-block mt-6">

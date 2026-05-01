@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminContentController;
 use App\Http\Controllers\AdminSectionController;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
@@ -27,6 +28,7 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard.php', [DashboardController::class, 'index'])->name('dashboard.shortcut');
+    Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 
     Route::get('/pages', [AdminContentController::class, 'pagesIndex'])->name('pages.index');
     Route::get('/pages/create', [AdminContentController::class, 'pagesCreate'])->name('pages.create');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HomepageContent;
 use App\Models\Order;
 use App\Models\Product;
+use App\Services\AnalyticsService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,7 +13,7 @@ use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, AnalyticsService $analyticsService): View
     {
         $searchQuery = trim((string) $request->string('q'));
 
@@ -42,6 +43,17 @@ class HomeController extends Controller
         $homepageContent = HomepageContent::query()->first();
         $defaultHomeContent = '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya.</p>';
         $homePageContentHtml = $this->formatHomePageContent($homepageContent?->home_page_content ?: $defaultHomeContent);
+
+        $analyticsService->trackPageView($request, 'Homepage', 'home', [
+            'has_search' => $searchQuery !== '',
+            'results_count' => $products->count(),
+        ]);
+
+        if ($searchQuery !== '') {
+            $analyticsService->trackEvent($request, 'search', $searchQuery, 'home', [
+                'results_count' => $products->count(),
+            ], '/');
+        }
 
         return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery'));
     }

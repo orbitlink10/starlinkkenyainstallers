@@ -1,0 +1,209 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\AnalyticsEvent;
+use App\Models\Enquiry;
+use App\Models\Invoice;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\SitePage;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
+
+class AnalyticsDashboardTest extends TestCase
+{
+    use RefreshDatabase;
+
+    protected function tearDown(): void
+    {
+        Carbon::setTestNow();
+
+        parent::tearDown();
+    }
+
+    public function test_public_visits_searches_and_cart_actions_are_recorded(): void
+    {
+        Carbon::setTestNow('2026-05-01 09:30:00');
+
+        $product = Product::query()->create([
+            'name' => 'Starlink Standard Kit',
+            'slug' => 'starlink-standard-kit',
+            'price' => 49999,
+            'stock' => 12,
+            'is_active' => true,
+        ]);
+
+        SitePage::query()->create([
+            'page_title' => 'Satellite Internet Guide',
+            'slug' => 'satellite-internet-guide',
+            'type' => 'Post',
+        ]);
+
+        $this->withHeader('referer', 'https://www.google.com/search?q=starlink')
+            ->get('/?q=router')
+            ->assertOk();
+
+        $this->get('/product/starlink-standard-kit')->assertOk();
+        $this->get('/cart')->assertOk();
+        $this->get('/satellite-internet-guide')->assertOk();
+
+        $this->post(route('shop.cart.add', ['product' => $product]), ['quantity' => 2])
+            ->assertRedirect(route('shop.product.show', ['productSlug' => 'starlink-standard-kit']));
+
+        $this->assertSame(4, AnalyticsEvent::query()->where('event_type', 'page_view')->count());
+        $this->assertSame(1, AnalyticsEvent::query()->where('event_type', 'search')->count());
+        $this->assertSame(1, AnalyticsEvent::query()->where('event_type', 'add_to_cart')->count());
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'page_view',
+            'path' => '/',
+            'label' => 'Homepage',
+            'page_type' => 'home',
+            'referrer_host' => 'www.google.com',
+        ]);
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'search',
+            'path' => '/',
+            'label' => 'router',
+            'page_type' => 'home',
+        ]);
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'page_view',
+            'path' => '/product/starlink-standard-kit',
+            'label' => 'Starlink Standard Kit',
+            'page_type' => 'product',
+        ]);
+
+        $this->assertDatabaseHas('analytics_events', [
+            'event_type' => 'add_to_cart',
+            'path' => '/product/starlink-standard-kit',
+            'label' => 'Starlink Standard Kit',
+            'page_type' => 'product',
+        ]);
+    }
+
+    public function test_admin_can_view_analytics_dashboard(): void
+    {
+        Carbon::setTestNow('2026-05-01 15:00:00');
+
+        $user = User::factory()->create();
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'page_view',
+            'visitor_id' => 'visitor-a',
+            'path' => '/',
+            'label' => 'Homepage',
+            'page_type' => 'home',
+            'referrer_host' => 'www.google.com',
+            'occurred_at' => now()->subDays(1),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'page_view',
+            'visitor_id' => 'visitor-a',
+            'path' => '/product/starlink-mini-kit',
+            'label' => 'Starlink Mini Kit',
+            'page_type' => 'product',
+            'referrer_host' => 'www.google.com',
+            'occurred_at' => now()->subHours(6),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'page_view',
+            'visitor_id' => 'visitor-b',
+            'path' => '/product/starlink-mini-kit',
+            'label' => 'Starlink Mini Kit',
+            'page_type' => 'product',
+            'referrer_host' => 'chatgpt.com',
+            'occurred_at' => now()->subDays(2),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'page_view',
+            'visitor_id' => 'visitor-c',
+            'path' => '/installation-guide',
+            'label' => 'Installation Guide',
+            'page_type' => 'page',
+            'occurred_at' => now()->subDays(3),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'page_view',
+            'visitor_id' => 'visitor-legacy',
+            'path' => '/legacy-page',
+            'label' => 'Old Landing Page',
+            'page_type' => 'page',
+            'occurred_at' => now()->subDays(45),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'search',
+            'visitor_id' => 'visitor-a',
+            'path' => '/',
+            'label' => 'router',
+            'page_type' => 'home',
+            'occurred_at' => now()->subDay(),
+        ]);
+
+        AnalyticsEvent::query()->create([
+            'event_type' => 'add_to_cart',
+            'visitor_id' => 'visitor-b',
+            'path' => '/product/starlink-mini-kit',
+            'label' => 'Starlink Mini Kit',
+            'page_type' => 'product',
+            'occurred_at' => now()->subHours(3),
+        ]);
+
+        $order = Order::query()->create([
+            'order_number' => 'ORD-1001',
+            'customer_name' => 'Jane Doe',
+            'customer_email' => 'jane@example.com',
+            'amount' => 49999,
+            'status' => 'completed',
+            'paid_at' => now()->subHours(2),
+        ]);
+        $order->forceFill([
+            'created_at' => now()->subDay(),
+            'updated_at' => now()->subDay(),
+        ])->save();
+
+        Invoice::query()->create([
+            'invoice_number' => 'INV-1001',
+            'order_id' => $order->id,
+            'amount' => 49999,
+            'status' => 'paid',
+            'issued_at' => now()->toDateString(),
+            'due_at' => now()->addDays(7)->toDateString(),
+            'paid_at' => now()->subHour(),
+        ]);
+
+        $enquiry = Enquiry::query()->create([
+            'name' => 'Alex Client',
+            'email' => 'alex@example.com',
+            'phone' => '0700123456',
+            'message' => 'Need Starlink installation support.',
+            'status' => 'new',
+        ]);
+        $enquiry->forceFill([
+            'created_at' => now()->subHours(8),
+            'updated_at' => now()->subHours(8),
+        ])->save();
+
+        $response = $this->actingAs($user)->get(route('analytics.index', ['range' => 30]));
+
+        $response->assertOk();
+        $response->assertSeeText('Website Analytics');
+        $response->assertSeeText('Starlink Mini Kit');
+        $response->assertSeeText('Installation Guide');
+        $response->assertSeeText('www.google.com');
+        $response->assertSeeText('chatgpt.com');
+        $response->assertSeeText('router');
+        $response->assertSeeText('KSh 49,999.00');
+        $response->assertDontSeeText('Old Landing Page');
+    }
+}
