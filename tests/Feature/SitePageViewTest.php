@@ -18,7 +18,8 @@ class SitePageViewTest extends TestCase
             'slug' => 'starlink-nairobi-subscription-suspension',
             'meta_description' => 'Learn how to fix Starlink Nairobi Subscription Suspension fast.',
             'type' => 'Post',
-            'page_description' => '<h1>Starlink Nairobi Subscription Suspension: The Critical Guide to Restoring Your Internet Fast in 2026</h1><p>Discover causes, reactivation steps, and expert tips.</p>',
+            'image_path' => 'pages/test-image.jpg',
+            'page_description' => '<h1>Starlink Nairobi Subscription Suspension: The Critical Guide to Restoring Your Internet Fast in 2026</h1><p>Discover causes, reactivation steps, and expert tips.</p><ul><li>Reliable installation</li></ul><ol><li>Restore the account</li></ol>',
         ]);
 
         $page->forceFill([
@@ -40,5 +41,8 @@ class SitePageViewTest extends TestCase
         $response->assertSeeText('Talk to an Expert');
         $response->assertSeeText('Starlink Nairobi Subscription Suspension: The Critical Guide to Restoring Your Internet Fast in 2026');
         $response->assertSeeText('Discover causes, reactivation steps, and expert tips.');
+        $response->assertSee(route('media.show', ['path' => 'pages/test-image.jpg']), false);
+        $response->assertSee('list-style-type: disc;', false);
+        $response->assertSee('list-style-type: decimal;', false);
     }
 }

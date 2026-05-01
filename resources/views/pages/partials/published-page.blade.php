@@ -1,19 +1,13 @@
 @php
     use Illuminate\Support\Str;
-    use Illuminate\Support\Facades\Storage;
 
     $pageTitle = trim((string) $page->page_title);
     $contentHtml = trim((string) $page->page_description);
     $heroImagePath = trim((string) $page->image_path, '/');
     $normalizedHeroImagePath = preg_replace('#^public/#', '', $heroImagePath) ?? $heroImagePath;
-    $heroImage = null;
-
-    if ($normalizedHeroImagePath !== '') {
-        $publicDisk = Storage::disk('public');
-        $heroImage = $publicDisk->exists($normalizedHeroImagePath)
-            ? url('storage/'.$normalizedHeroImagePath)
-            : route('media.show', ['path' => $normalizedHeroImagePath]);
-    }
+    $heroImage = $normalizedHeroImagePath !== ''
+        ? route('media.show', ['path' => $normalizedHeroImagePath])
+        : null;
     $showPreviewBadge = $showPreviewBadge ?? false;
     $imageAlt = $page->image_alt_text ?: $pageTitle;
     $pageDate = $page->created_at?->format('M d, Y') ?? now()->format('M d, Y');
@@ -84,7 +78,7 @@
     }
 
     .site-page-container {
-        width: min(1500px, 94vw);
+        width: min(1360px, 94vw);
         margin: 24px auto 0;
     }
 
@@ -110,7 +104,7 @@
         background:
             radial-gradient(circle at top left, rgba(255, 189, 132, 0.18) 0%, rgba(255, 189, 132, 0) 24%),
             linear-gradient(125deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 246, 255, 0.96) 100%);
-        padding: 34px 36px 30px;
+        padding: 30px 32px 28px;
         box-shadow: 0 26px 72px rgba(15, 37, 79, 0.08);
     }
 
@@ -139,16 +133,17 @@
     }
 
     .site-page-hero {
-        display: flex;
-        gap: 32px;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: minmax(0, 540px) minmax(320px, 1fr);
+        gap: 24px;
+        align-items: center;
     }
 
     .site-page-copy-side {
-        flex: 1 1 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
+        max-width: 540px;
         min-width: 0;
     }
 
@@ -168,21 +163,21 @@
     }
 
     .site-page-title {
-        margin: 20px 0 0;
-        max-width: 11.5ch;
+        margin: 16px 0 0;
+        max-width: 13ch;
         color: #121f3d;
-        font-size: clamp(30px, 3.3vw, 44px);
-        line-height: 1.08;
+        font-size: clamp(28px, 2.8vw, 40px);
+        line-height: 1.04;
         letter-spacing: -0.055em;
         font-weight: 800;
     }
 
     .site-page-summary {
-        margin: 22px 0 0;
-        max-width: 27ch;
+        margin: 18px 0 0;
+        max-width: 34ch;
         color: #647b99;
-        font-size: clamp(16px, 1.15vw, 19px);
-        line-height: 1.58;
+        font-size: clamp(15px, 1vw, 18px);
+        line-height: 1.5;
         display: -webkit-box;
         overflow: hidden;
         -webkit-box-orient: vertical;
@@ -193,7 +188,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 14px;
-        margin-top: 28px;
+        margin-top: 22px;
     }
 
     .site-page-btn {
@@ -228,8 +223,8 @@
 
     .site-page-visual {
         position: relative;
-        flex: 0 0 min(45%, 660px);
-        min-height: 380px;
+        width: 100%;
+        min-height: 340px;
         overflow: hidden;
         border-radius: 26px;
         border: 1px solid #dbe6f5;
@@ -450,6 +445,19 @@
     .site-page-copy ul,
     .site-page-copy ol {
         padding-left: 32px;
+        list-style-position: outside;
+    }
+
+    .site-page-copy ul {
+        list-style-type: disc;
+    }
+
+    .site-page-copy ol {
+        list-style-type: decimal;
+    }
+
+    .site-page-copy li {
+        display: list-item;
     }
 
     .site-page-copy li + li {
@@ -535,7 +543,8 @@
 
     @media (max-width: 1180px) {
         .site-page-hero {
-            flex-direction: column;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
         .site-page-title,
@@ -543,8 +552,11 @@
             max-width: none;
         }
 
+        .site-page-copy-side {
+            max-width: none;
+        }
+
         .site-page-visual {
-            flex-basis: auto;
             min-height: 320px;
         }
 
@@ -571,18 +583,18 @@
         }
 
         .site-page-title {
-            margin-top: 16px;
-            font-size: clamp(28px, 7vw, 34px);
+            margin-top: 14px;
+            font-size: clamp(24px, 6.5vw, 30px);
         }
 
         .site-page-summary {
-            margin-top: 18px;
-            font-size: 15px;
+            margin-top: 14px;
+            font-size: 14px;
             -webkit-line-clamp: 3;
         }
 
         .site-page-actions {
-            margin-top: 22px;
+            margin-top: 18px;
         }
 
         .site-page-btn {
