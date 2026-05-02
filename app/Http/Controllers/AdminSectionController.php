@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -26,8 +27,10 @@ class AdminSectionController extends Controller
         $table = $this->tableForSection($section, $request);
         $homepageContent = null;
         $menuItemsConfig = null;
+        $supportsYoutubeVideoUrl = false;
 
         if (in_array($section, ['homepage-content', 'menus'], true)) {
+            $supportsYoutubeVideoUrl = $this->supportsYoutubeVideoUrl();
             $homepageContent = $this->homepageContentRecord();
         }
 
@@ -45,18 +48,26 @@ class AdminSectionController extends Controller
             'table' => $table,
             'homepageContent' => $homepageContent,
             'menuItemsConfig' => $menuItemsConfig,
+            'supportsYoutubeVideoUrl' => $supportsYoutubeVideoUrl,
         ]);
     }
 
     public function updateHomepageContent(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $supportsYoutubeVideoUrl = $this->supportsYoutubeVideoUrl();
+
+        $rules = [
             'hero_header_title' => ['required', 'string', 'max:255'],
             'hero_header_description' => ['nullable', 'string'],
             'hero_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
             'why_choose_title' => ['nullable', 'string', 'max:255'],
             'why_choose_description' => ['nullable', 'string'],
-            'youtube_video_url' => [
+            'products_section_title' => ['nullable', 'string', 'max:255'],
+            'home_page_content' => ['nullable', 'string'],
+        ];
+
+        if ($supportsYoutubeVideoUrl) {
+            $rules['youtube_video_url'] = [
                 'nullable',
                 'string',
                 'max:255',
@@ -67,13 +78,23 @@ class AdminSectionController extends Controller
                         $fail('Enter a valid YouTube link or 11-character video ID.');
                     }
                 },
-            ],
-            'products_section_title' => ['nullable', 'string', 'max:255'],
-            'home_page_content' => ['nullable', 'string'],
-        ]);
+            ];
+        }
+
+        $validated = $request->validate($rules);
+
+        if (! $supportsYoutubeVideoUrl && trim((string) $request->input('youtube_video_url')) !== '') {
+            return redirect()
+                ->route('admin.section', ['section' => 'homepage-content'])
+                ->withErrors(['youtube_video_url' => 'Run the latest database migration to enable the homepage YouTube link field.'])
+                ->withInput();
+        }
 
         $content = $this->homepageContentRecord();
-        $validated['youtube_video_url'] = trim((string) ($validated['youtube_video_url'] ?? '')) ?: null;
+
+        if ($supportsYoutubeVideoUrl) {
+            $validated['youtube_video_url'] = trim((string) ($validated['youtube_video_url'] ?? '')) ?: null;
+        }
 
         if ($request->hasFile('hero_image')) {
             if ($content->hero_image_path && Storage::disk('public')->exists($content->hero_image_path)) {
@@ -245,18 +266,28 @@ class AdminSectionController extends Controller
 
     private function homepageContentRecord(): HomepageContent
     {
+        $defaults = [
+            'hero_header_title' => 'Starlink Kenya | High-Speed Satellite Internet Across Kenya',
+            'hero_header_description' => 'Starlink Kenya offers high-speed satellite internet with affordable packages, hardware, and monthly plans.',
+            'why_choose_title' => 'Why Starlink Kenya Is Ideal for You',
+            'why_choose_description' => 'Tailored for the Kenyan market.',
+            'products_section_title' => 'Hot-Selling Products.',
+            'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore the complete guide to STARLINK KENYA.</p>',
+            'navigation_menu' => HomepageContent::defaultNavigationMenu(),
+        ];
+
+        if ($this->supportsYoutubeVideoUrl()) {
+            $defaults['youtube_video_url'] = HomepageContent::defaultYoutubeVideoUrl();
+        }
+
         return HomepageContent::query()->firstOrCreate(
             ['id' => 1],
-            [
-                'hero_header_title' => 'Starlink Kenya | High-Speed Satellite Internet Across Kenya',
-                'hero_header_description' => 'Starlink Kenya offers high-speed satellite internet with affordable packages, hardware, and monthly plans.',
-                'why_choose_title' => 'Why Starlink Kenya Is Ideal for You',
-                'why_choose_description' => 'Tailored for the Kenyan market.',
-                'youtube_video_url' => HomepageContent::defaultYoutubeVideoUrl(),
-                'products_section_title' => 'Hot-Selling Products.',
-                'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore the complete guide to STARLINK KENYA.</p>',
-                'navigation_menu' => HomepageContent::defaultNavigationMenu(),
-            ]
+            $defaults
         );
+    }
+
+    private function supportsYoutubeVideoUrl(): bool
+    {
+        return Schema::hasColumn('homepage_contents', 'youtube_video_url');
     }
 }

@@ -444,21 +444,27 @@
                             <textarea class="field-textarea" id="why_choose_description" name="why_choose_description">{{ old('why_choose_description', $homepageContent->why_choose_description) }}</textarea>
                         </div>
 
-                        <div>
-                            <label class="field-label" for="youtube_video_url">Coverage Section YouTube Link</label>
-                            <p class="field-help">Paste a YouTube watch URL, share URL, shorts URL, or the 11-character video ID. This video appears beside the Why Choose section on the homepage.</p>
-                            <input class="field-input" id="youtube_video_url" name="youtube_video_url" type="text" value="{{ $youtubeVideoInput }}" placeholder="https://www.youtube.com/watch?v=y4j-B6Vf8vo">
+                        @if ($supportsYoutubeVideoUrl ?? false)
+                            <div>
+                                <label class="field-label" for="youtube_video_url">Coverage Section YouTube Link</label>
+                                <p class="field-help">Paste a YouTube watch URL, share URL, shorts URL, or the 11-character video ID. This video appears beside the Why Choose section on the homepage.</p>
+                                <input class="field-input" id="youtube_video_url" name="youtube_video_url" type="text" value="{{ $youtubeVideoInput }}" placeholder="https://www.youtube.com/watch?v=y4j-B6Vf8vo">
 
-                            <div class="hero-preview">
-                                <iframe
-                                    src="{{ $youtubeVideoPreviewUrl }}"
-                                    title="Homepage video preview"
-                                    loading="lazy"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen>
-                                </iframe>
+                                <div class="hero-preview">
+                                    <iframe
+                                        src="{{ $youtubeVideoPreviewUrl }}"
+                                        title="Homepage video preview"
+                                        loading="lazy"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="flash-error">
+                                Run the latest database migration to enable the homepage YouTube link field.
+                            </div>
+                        @endif
 
                         <div>
                             <label class="field-label" for="products_section_title">Products Section Title</label>

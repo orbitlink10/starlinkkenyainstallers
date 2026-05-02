@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\HomepageContent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class HomepageVideoLinkTest extends TestCase
@@ -62,5 +64,24 @@ class HomepageVideoLinkTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('src="https://www.youtube.com/embed/dQw4w9WgXcQ"', false);
+    }
+
+    public function test_homepage_editor_shows_migration_notice_when_youtube_column_is_missing(): void
+    {
+        Schema::table('homepage_contents', function (Blueprint $table): void {
+            $table->dropColumn('youtube_video_url');
+        });
+
+        HomepageContent::query()->create([
+            'hero_header_title' => 'Starlink Kenya',
+        ]);
+
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('admin.section', ['section' => 'homepage-content']));
+
+        $response->assertOk();
+        $response->assertSeeText('Run the latest database migration to enable the homepage YouTube link field.');
+        $response->assertDontSee('name="youtube_video_url"', false);
     }
 }
