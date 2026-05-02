@@ -121,6 +121,7 @@ class BusinessSeeder extends Seeder
                 'youtube_video_url' => HomepageContent::defaultYoutubeVideoUrl(),
                 'products_section_title' => 'Starlink Kits in Kenya',
                 'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya. Learn about speeds, installation, costs, benefits, challenges, and how it compares to fiber and mobile networks.</p>',
+                'case_studies' => HomepageContent::defaultCaseStudies(),
             ]
         );
 

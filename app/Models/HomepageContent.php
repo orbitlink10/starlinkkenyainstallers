@@ -18,12 +18,14 @@ class HomepageContent extends Model
         'products_section_title',
         'home_page_content',
         'navigation_menu',
+        'case_studies',
     ];
 
     protected function casts(): array
     {
         return [
             'navigation_menu' => 'array',
+            'case_studies' => 'array',
         ];
     }
 
@@ -78,6 +80,80 @@ class HomepageContent extends Model
     public static function currentNavigationMenu(): array
     {
         return static::normalizeNavigationMenu(static::query()->first()?->navigation_menu);
+    }
+
+    /**
+     * @return array<int, array{label:string, title:string, excerpt:string, href:string, image_path:?string, image_alt:string}>
+     */
+    public static function defaultCaseStudies(): array
+    {
+        return [
+            [
+                'label' => 'Education rollout',
+                'title' => 'University of Nairobi',
+                'excerpt' => 'Campus-ready connectivity with dependable Starlink coverage for research teams, lecture spaces, and admin operations.',
+                'href' => '#faqs',
+                'image_path' => null,
+                'image_alt' => 'University connectivity rollout',
+            ],
+            [
+                'label' => 'Healthcare deployment',
+                'title' => 'Kenyatta National Hospital',
+                'excerpt' => 'Reliable internet support for hospital operations, staff coordination, and faster access to digital systems.',
+                'href' => '#faqs',
+                'image_path' => null,
+                'image_alt' => 'Hospital Starlink installation',
+            ],
+            [
+                'label' => 'County coverage',
+                'title' => 'Makindu Sub County Hospital',
+                'excerpt' => 'Remote-site Starlink setup built to keep essential services online even where terrestrial options are limited.',
+                'href' => '#faqs',
+                'image_path' => null,
+                'image_alt' => 'County connectivity project',
+            ],
+            [
+                'label' => 'Hospitality network',
+                'title' => 'Ocean Beach Hotel',
+                'excerpt' => 'Guest Wi-Fi expansion and stable backhaul for hospitality teams that need reliable uptime across the property.',
+                'href' => '#faqs',
+                'image_path' => null,
+                'image_alt' => 'Hotel connectivity deployment',
+            ],
+        ];
+    }
+
+    /**
+     * @param  array<int, mixed>|null  $items
+     * @return array<int, array{label:string, title:string, excerpt:string, href:string, image_path:?string, image_alt:string}>
+     */
+    public static function normalizeCaseStudies(?array $items): array
+    {
+        $defaults = static::defaultCaseStudies();
+
+        return collect($defaults)
+            ->map(function (array $default, int $index) use ($items): array {
+                $item = $items[$index] ?? null;
+                $item = is_array($item) ? $item : [];
+
+                $label = trim((string) ($item['label'] ?? $default['label']));
+                $title = trim((string) ($item['title'] ?? $default['title']));
+                $excerpt = trim((string) ($item['excerpt'] ?? $default['excerpt']));
+                $href = trim((string) ($item['href'] ?? $default['href']));
+                $imagePath = trim((string) ($item['image_path'] ?? ''));
+                $imageAlt = trim((string) ($item['image_alt'] ?? ''));
+
+                return [
+                    'label' => $label !== '' ? $label : $default['label'],
+                    'title' => $title !== '' ? $title : $default['title'],
+                    'excerpt' => $excerpt !== '' ? $excerpt : $default['excerpt'],
+                    'href' => $href !== '' ? $href : $default['href'],
+                    'image_path' => $imagePath !== '' ? $imagePath : $default['image_path'],
+                    'image_alt' => $imageAlt !== '' ? $imageAlt : ($title !== '' ? $title : $default['image_alt']),
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     public static function defaultYoutubeVideoUrl(): string

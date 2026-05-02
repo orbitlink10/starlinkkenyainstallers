@@ -17,15 +17,9 @@ class HomepageVideoLinkTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post(route('admin.homepage-content.update'), [
-            'hero_header_title' => 'Starlink Kenya',
-            'hero_header_description' => 'Fast satellite internet.',
-            'why_choose_title' => 'Why choose Starlink',
-            'why_choose_description' => 'Reliable setup and support.',
+        $response = $this->actingAs($user)->post(route('admin.homepage-content.update'), $this->validHomepageContentPayload([
             'youtube_video_url' => 'https://youtu.be/dQw4w9WgXcQ',
-            'products_section_title' => 'Featured kits',
-            'home_page_content' => '<h2>Guide</h2><p>Content</p>',
-        ]);
+        ]));
 
         $response->assertRedirect(route('admin.section', ['section' => 'homepage-content']));
         $response->assertSessionHas('success', 'Homepage content saved successfully.');
@@ -42,10 +36,9 @@ class HomepageVideoLinkTest extends TestCase
 
         $response = $this->from(route('admin.section', ['section' => 'homepage-content']))
             ->actingAs($user)
-            ->post(route('admin.homepage-content.update'), [
-                'hero_header_title' => 'Starlink Kenya',
+            ->post(route('admin.homepage-content.update'), $this->validHomepageContentPayload([
                 'youtube_video_url' => 'https://example.com/not-youtube',
-            ]);
+            ]));
 
         $response->assertRedirect(route('admin.section', ['section' => 'homepage-content']));
         $response->assertSessionHasErrors([
@@ -95,5 +88,22 @@ class HomepageVideoLinkTest extends TestCase
         $response->assertOk();
         $response->assertSeeText('Run the latest database migration to enable the homepage YouTube link field.');
         $response->assertDontSee('name="youtube_video_url"', false);
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @return array<string, mixed>
+     */
+    private function validHomepageContentPayload(array $overrides = []): array
+    {
+        return array_replace_recursive([
+            'hero_header_title' => 'Starlink Kenya',
+            'hero_header_description' => 'Fast satellite internet.',
+            'why_choose_title' => 'Why choose Starlink',
+            'why_choose_description' => 'Reliable setup and support.',
+            'products_section_title' => 'Featured kits',
+            'home_page_content' => '<h2>Guide</h2><p>Content</p>',
+            'case_studies' => HomepageContent::defaultCaseStudies(),
+        ], $overrides);
     }
 }

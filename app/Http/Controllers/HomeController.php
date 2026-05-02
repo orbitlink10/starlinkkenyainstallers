@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\HomepageContent;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\SitePage;
 use App\Services\AnalyticsService;
 use App\Support\SeoData;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,22 +34,6 @@ class HomeController extends Controller
             ->orderBy('price')
             ->get();
 
-        $caseStudies = SitePage::query()
-            ->orderByRaw("CASE WHEN LOWER(COALESCE(type, '')) = 'post' THEN 0 ELSE 1 END")
-            ->latest('updated_at')
-            ->limit(4)
-            ->get()
-            ->map(function (SitePage $page): array {
-                return [
-                    'title' => trim((string) $page->page_title),
-                    'excerpt' => $this->caseStudyExcerpt($page),
-                    'href' => route('site-pages.show', ['page' => $page->slug]),
-                    'image_url' => SeoData::mediaUrl($page->image_path),
-                    'image_alt' => trim((string) ($page->image_alt_text ?: $page->page_title)) ?: 'Starlink case study',
-                    'label' => trim((string) $page->heading_2) ?: 'Successful installation',
-                ];
-            });
-
         $stats = [
             'activeProducts' => (clone $activeProductsQuery)->count(),
             'ordersCompleted' => Order::query()->where('status', 'completed')->count(),
@@ -66,6 +49,19 @@ class HomeController extends Controller
         $heroImageUrl = SeoData::mediaUrl($homepageContent?->hero_image_path);
         $heroTitle = $homepageContent?->hero_header_title ?: 'Starlink Kenya | Official Starlink Reseller and Installer in Kenya';
         $heroDescription = $homepageContent?->hero_header_description ?: SeoData::defaultDescription();
+        $caseStudies = collect(HomepageContent::normalizeCaseStudies($homepageContent?->case_studies))
+            ->map(function (array $caseStudy): array {
+                $imagePath = trim((string) ($caseStudy['image_path'] ?? ''));
+
+                return [
+                    'title' => $caseStudy['title'],
+                    'excerpt' => $caseStudy['excerpt'],
+                    'href' => $caseStudy['href'],
+                    'image_url' => $imagePath !== '' ? SeoData::mediaUrl($imagePath) : null,
+                    'image_alt' => $caseStudy['image_alt'],
+                    'label' => $caseStudy['label'],
+                ];
+            });
 
         $analyticsService->trackPageView($request, 'Homepage', 'home', [
             'has_search' => $searchQuery !== '',
@@ -93,21 +89,6 @@ class HomeController extends Controller
         ];
 
         return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery', 'seo', 'caseStudies'));
-    }
-
-    private function caseStudyExcerpt(SitePage $page): string
-    {
-        $excerpt = trim((string) $page->meta_description);
-
-        if ($excerpt !== '') {
-            return SeoData::trimDescription($excerpt, 124);
-        }
-
-        $excerpt = SeoData::trimDescription((string) $page->page_description, 124);
-
-        return $excerpt !== ''
-            ? $excerpt
-            : 'Read how this Starlink rollout improved connectivity, uptime, and support for the client.';
     }
 
     private function formatHomePageContent(?string $content): string

@@ -28,10 +28,19 @@ class AdminSectionController extends Controller
         $homepageContent = null;
         $menuItemsConfig = null;
         $supportsYoutubeVideoUrl = false;
+        $supportsCaseStudies = false;
+        $caseStudiesConfig = null;
 
         if (in_array($section, ['homepage-content', 'menus'], true)) {
             $supportsYoutubeVideoUrl = $this->supportsYoutubeVideoUrl();
+            $supportsCaseStudies = $this->supportsCaseStudies();
             $homepageContent = $this->homepageContentRecord();
+        }
+
+        if ($section === 'homepage-content' && $homepageContent) {
+            $caseStudiesConfig = HomepageContent::normalizeCaseStudies(
+                old('case_studies', $homepageContent->case_studies)
+            );
         }
 
         if ($section === 'menus' && $homepageContent) {
@@ -49,12 +58,15 @@ class AdminSectionController extends Controller
             'homepageContent' => $homepageContent,
             'menuItemsConfig' => $menuItemsConfig,
             'supportsYoutubeVideoUrl' => $supportsYoutubeVideoUrl,
+            'supportsCaseStudies' => $supportsCaseStudies,
+            'caseStudiesConfig' => $caseStudiesConfig,
         ]);
     }
 
     public function updateHomepageContent(Request $request): RedirectResponse
     {
         $supportsYoutubeVideoUrl = $this->supportsYoutubeVideoUrl();
+        $supportsCaseStudies = $this->supportsCaseStudies();
 
         $rules = [
             'hero_header_title' => ['required', 'string', 'max:255'],
@@ -81,12 +93,30 @@ class AdminSectionController extends Controller
             ];
         }
 
+        if ($supportsCaseStudies) {
+            $rules['case_studies'] = ['required', 'array', 'size:4'];
+            $rules['case_studies.*.label'] = ['required', 'string', 'max:80'];
+            $rules['case_studies.*.title'] = ['required', 'string', 'max:255'];
+            $rules['case_studies.*.excerpt'] = ['required', 'string', 'max:600'];
+            $rules['case_studies.*.href'] = ['required', 'string', 'max:255'];
+            $rules['case_studies.*.image_alt'] = ['nullable', 'string', 'max:255'];
+            $rules['case_study_images'] = ['nullable', 'array', 'max:4'];
+            $rules['case_study_images.*'] = ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'];
+        }
+
         $validated = $request->validate($rules);
 
         if (! $supportsYoutubeVideoUrl && trim((string) $request->input('youtube_video_url')) !== '') {
             return redirect()
                 ->route('admin.section', ['section' => 'homepage-content'])
                 ->withErrors(['youtube_video_url' => 'Run the latest database migration to enable the homepage YouTube link field.'])
+                ->withInput();
+        }
+
+        if (! $supportsCaseStudies && is_array($request->input('case_studies'))) {
+            return redirect()
+                ->route('admin.section', ['section' => 'homepage-content'])
+                ->withErrors(['case_studies' => 'Run the latest database migration to enable homepage case studies editing.'])
                 ->withInput();
         }
 
@@ -104,7 +134,12 @@ class AdminSectionController extends Controller
             $validated['hero_image_path'] = $request->file('hero_image')->store('homepage', 'public');
         }
 
+        if ($supportsCaseStudies) {
+            $validated['case_studies'] = $this->storeCaseStudies($request, $content, $validated['case_studies'] ?? []);
+        }
+
         unset($validated['hero_image']);
+        unset($validated['case_study_images']);
 
         $content->update($validated);
 
@@ -280,6 +315,10 @@ class AdminSectionController extends Controller
             $defaults['youtube_video_url'] = HomepageContent::defaultYoutubeVideoUrl();
         }
 
+        if ($this->supportsCaseStudies()) {
+            $defaults['case_studies'] = HomepageContent::defaultCaseStudies();
+        }
+
         return HomepageContent::query()->firstOrCreate(
             ['id' => 1],
             $defaults
@@ -289,5 +328,40 @@ class AdminSectionController extends Controller
     private function supportsYoutubeVideoUrl(): bool
     {
         return Schema::hasColumn('homepage_contents', 'youtube_video_url');
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $caseStudies
+     * @return array<int, array{label:string, title:string, excerpt:string, href:string, image_path:?string, image_alt:string}>
+     */
+    private function storeCaseStudies(Request $request, HomepageContent $content, array $caseStudies): array
+    {
+        $normalizedCaseStudies = HomepageContent::normalizeCaseStudies($caseStudies);
+        $existingCaseStudies = HomepageContent::normalizeCaseStudies($content->case_studies);
+        $uploadedImages = $request->file('case_study_images', []);
+
+        foreach ($normalizedCaseStudies as $index => &$caseStudy) {
+            $existingImagePath = trim((string) ($existingCaseStudies[$index]['image_path'] ?? ''));
+            $caseStudy['image_path'] = $existingImagePath !== '' ? $existingImagePath : null;
+            $caseStudy['image_alt'] = trim((string) ($caseStudy['image_alt'] ?? '')) ?: $caseStudy['title'];
+
+            if (! isset($uploadedImages[$index])) {
+                continue;
+            }
+
+            if ($existingImagePath !== '' && Storage::disk('public')->exists($existingImagePath)) {
+                Storage::disk('public')->delete($existingImagePath);
+            }
+
+            $caseStudy['image_path'] = $uploadedImages[$index]->store('homepage/case-studies', 'public');
+        }
+        unset($caseStudy);
+
+        return $normalizedCaseStudies;
+    }
+
+    private function supportsCaseStudies(): bool
+    {
+        return Schema::hasColumn('homepage_contents', 'case_studies');
     }
 }
