@@ -31,13 +31,13 @@ class AdminSectionController extends Controller
         $supportsCaseStudies = false;
         $caseStudiesConfig = null;
 
-        if (in_array($section, ['homepage-content', 'menus'], true)) {
+        if (in_array($section, ['homepage-content', 'menus', 'testimonials'], true)) {
             $supportsYoutubeVideoUrl = $this->supportsYoutubeVideoUrl();
             $supportsCaseStudies = $this->supportsCaseStudies();
             $homepageContent = $this->homepageContentRecord();
         }
 
-        if ($section === 'homepage-content' && $homepageContent) {
+        if (in_array($section, ['homepage-content', 'testimonials'], true) && $homepageContent) {
             $caseStudiesConfig = HomepageContent::normalizeCaseStudies(
                 old('case_studies', $homepageContent->case_studies)
             );
@@ -148,6 +148,37 @@ class AdminSectionController extends Controller
             ->with('success', 'Homepage content saved successfully.');
     }
 
+    public function updateTestimonials(Request $request): RedirectResponse
+    {
+        if (! $this->supportsCaseStudies()) {
+            return redirect()
+                ->route('admin.section', ['section' => 'testimonials'])
+                ->withErrors(['case_studies' => 'Run the latest database migration to enable homepage case studies editing.'])
+                ->withInput();
+        }
+
+        $validated = $request->validate([
+            'case_studies' => ['required', 'array', 'size:4'],
+            'case_studies.*.label' => ['required', 'string', 'max:80'],
+            'case_studies.*.title' => ['required', 'string', 'max:255'],
+            'case_studies.*.excerpt' => ['required', 'string', 'max:600'],
+            'case_studies.*.href' => ['required', 'string', 'max:255'],
+            'case_studies.*.image_alt' => ['nullable', 'string', 'max:255'],
+            'case_study_images' => ['nullable', 'array', 'max:4'],
+            'case_study_images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
+        ]);
+
+        $content = $this->homepageContentRecord();
+
+        $content->update([
+            'case_studies' => $this->storeCaseStudies($request, $content, $validated['case_studies'] ?? []),
+        ]);
+
+        return redirect()
+            ->route('admin.section', ['section' => 'testimonials'])
+            ->with('success', 'Testimonials updated successfully.');
+    }
+
     public function updateMenus(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -207,7 +238,7 @@ class AdminSectionController extends Controller
             'sliders' => ['title' => 'Sliders', 'description' => 'Manage homepage and campaign slider items.'],
             'pages' => ['title' => 'Pages', 'description' => 'Create and update custom website pages.'],
             'services' => ['title' => 'Services', 'description' => 'Define installation and networking service offerings.'],
-            'testimonials' => ['title' => 'Testimonials', 'description' => 'Publish customer testimonials and success stories.'],
+            'testimonials' => ['title' => 'Testimonials', 'description' => 'Manage the four homepage case study and testimonial cards.'],
             'media' => ['title' => 'Media', 'description' => 'Upload and manage website images and files.'],
             'menus' => ['title' => 'Menus', 'description' => 'Configure website navigation menu items.'],
             'settings' => ['title' => 'Settings', 'description' => 'Update global system and website settings.'],

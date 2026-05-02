@@ -81,6 +81,8 @@ Route::middleware('auth')->group(function (): void {
         ->name('admin.section');
     Route::post('/admin/homepage-content', [AdminSectionController::class, 'updateHomepageContent'])
         ->name('admin.homepage-content.update');
+    Route::post('/admin/testimonials', [AdminSectionController::class, 'updateTestimonials'])
+        ->name('admin.testimonials.update');
     Route::post('/admin/menus', [AdminSectionController::class, 'updateMenus'])
         ->name('admin.menus.update');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -67,7 +67,49 @@ class HomepageCaseStudiesTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post(route('admin.homepage-content.update'), [
+        $response = $this->actingAs($user)->post(route('admin.homepage-content.update'), $this->homepageContentPayload());
+
+        $response->assertRedirect(route('admin.section', ['section' => 'homepage-content']));
+        $response->assertSessionHas('success', 'Homepage content saved successfully.');
+
+        $this->assertSame('University of Nairobi', HomepageContent::query()->first()?->case_studies[0]['title']);
+        $this->assertSame('/ocean-beach-hotel', HomepageContent::query()->first()?->case_studies[3]['href']);
+    }
+
+    public function test_testimonials_section_displays_case_studies_editor(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('admin.section', ['section' => 'testimonials']));
+
+        $response->assertOk();
+        $response->assertSeeText('Testimonials');
+        $response->assertSeeText('Homepage Case Studies');
+        $response->assertSeeText('Case Study 1');
+        $response->assertSee('name="case_studies[0][title]"', false);
+    }
+
+    public function test_admin_can_update_case_studies_from_testimonials_section(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('admin.testimonials.update'), [
+            'case_studies' => $this->homepageContentPayload()['case_studies'],
+        ]);
+
+        $response->assertRedirect(route('admin.section', ['section' => 'testimonials']));
+        $response->assertSessionHas('success', 'Testimonials updated successfully.');
+
+        $this->assertSame('University of Nairobi', HomepageContent::query()->first()?->case_studies[0]['title']);
+        $this->assertSame('/ocean-beach-hotel', HomepageContent::query()->first()?->case_studies[3]['href']);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function homepageContentPayload(): array
+    {
+        return [
             'hero_header_title' => 'Starlink Kenya',
             'hero_header_description' => 'Fast satellite internet.',
             'why_choose_title' => 'Why choose Starlink',
@@ -104,12 +146,6 @@ class HomepageCaseStudiesTest extends TestCase
                     'image_alt' => 'Ocean Beach Hotel deployment',
                 ],
             ],
-        ]);
-
-        $response->assertRedirect(route('admin.section', ['section' => 'homepage-content']));
-        $response->assertSessionHas('success', 'Homepage content saved successfully.');
-
-        $this->assertSame('University of Nairobi', HomepageContent::query()->first()?->case_studies[0]['title']);
-        $this->assertSame('/ocean-beach-hotel', HomepageContent::query()->first()?->case_studies[3]['href']);
+        ];
     }
 }
