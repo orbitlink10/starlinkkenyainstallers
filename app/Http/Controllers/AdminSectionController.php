@@ -56,11 +56,24 @@ class AdminSectionController extends Controller
             'hero_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:4096'],
             'why_choose_title' => ['nullable', 'string', 'max:255'],
             'why_choose_description' => ['nullable', 'string'],
+            'youtube_video_url' => [
+                'nullable',
+                'string',
+                'max:255',
+                static function (string $attribute, mixed $value, \Closure $fail): void {
+                    $youtubeVideoUrl = trim((string) $value);
+
+                    if ($youtubeVideoUrl !== '' && HomepageContent::extractYoutubeVideoId($youtubeVideoUrl) === null) {
+                        $fail('Enter a valid YouTube link or 11-character video ID.');
+                    }
+                },
+            ],
             'products_section_title' => ['nullable', 'string', 'max:255'],
             'home_page_content' => ['nullable', 'string'],
         ]);
 
         $content = $this->homepageContentRecord();
+        $validated['youtube_video_url'] = trim((string) ($validated['youtube_video_url'] ?? '')) ?: null;
 
         if ($request->hasFile('hero_image')) {
             if ($content->hero_image_path && Storage::disk('public')->exists($content->hero_image_path)) {
@@ -239,6 +252,7 @@ class AdminSectionController extends Controller
                 'hero_header_description' => 'Starlink Kenya offers high-speed satellite internet with affordable packages, hardware, and monthly plans.',
                 'why_choose_title' => 'Why Starlink Kenya Is Ideal for You',
                 'why_choose_description' => 'Tailored for the Kenyan market.',
+                'youtube_video_url' => HomepageContent::defaultYoutubeVideoUrl(),
                 'products_section_title' => 'Hot-Selling Products.',
                 'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore the complete guide to STARLINK KENYA.</p>',
                 'navigation_menu' => HomepageContent::defaultNavigationMenu(),

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Services\AnalyticsService;
+use App\Support\SeoData;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,8 +12,6 @@ use Illuminate\View\View;
 
 class ShopController extends Controller
 {
-    private const WHATSAPP_PHONE = '254700123456';
-
     public function show(Request $request, string $productSlug, AnalyticsService $analyticsService): View|RedirectResponse
     {
         $product = Product::query()
@@ -50,6 +49,26 @@ class ShopController extends Controller
             'cartCount' => $this->cartCount($request),
             'productSummary' => $productSummary,
             'productDetailsHtml' => $productDetailsHtml,
+            'seo' => [
+                'title' => $product->name.' | Starlink Kenya Installers',
+                'description' => $productSummary,
+                'canonical' => route('shop.product.show', ['productSlug' => $product->slug ?: $product->id]),
+                'type' => 'product',
+                'image' => $imageUrl,
+                'schema' => [
+                    SeoData::breadcrumbSchema([
+                        ['name' => 'Home', 'url' => route('home')],
+                        ['name' => 'Starlink Kits in Kenya', 'url' => route('home').'#packages'],
+                        ['name' => $product->name, 'url' => route('shop.product.show', ['productSlug' => $product->slug ?: $product->id])],
+                    ]),
+                    SeoData::productSchema(
+                        $product,
+                        route('shop.product.show', ['productSlug' => $product->slug ?: $product->id]),
+                        SeoData::trimDescription($productSummary),
+                        $imageUrl,
+                    ),
+                ],
+            ],
         ]);
     }
 
@@ -121,6 +140,12 @@ class ShopController extends Controller
             'total' => $total,
             'cartCount' => $this->cartCount($request),
             'checkoutWhatsappUrl' => route('shop.cart.whatsapp'),
+            'seo' => [
+                'title' => 'Your Cart | Starlink Kenya Installers',
+                'description' => 'Review your selected Starlink kits and accessories before checkout.',
+                'canonical' => route('shop.cart.index'),
+                'robots' => 'noindex,follow',
+            ],
         ]);
     }
 
@@ -183,13 +208,13 @@ class ShopController extends Controller
             number_format((float) $product->price, 2)
         );
 
-        return 'https://wa.me/'.self::WHATSAPP_PHONE.'?text='.urlencode($message);
+        return 'https://wa.me/'.$this->whatsappPhone().'?text='.urlencode($message);
     }
 
     private function whatsappUrlForCart($items, float $total): string
     {
         if ($items->isEmpty()) {
-            return 'https://wa.me/'.self::WHATSAPP_PHONE;
+            return 'https://wa.me/'.$this->whatsappPhone();
         }
 
         $lines = $items->map(
@@ -203,7 +228,7 @@ class ShopController extends Controller
 
         $message = "Hello, I want to order:\n".$lines."\nTotal: KES ".number_format($total, 2);
 
-        return 'https://wa.me/'.self::WHATSAPP_PHONE.'?text='.urlencode($message);
+        return 'https://wa.me/'.$this->whatsappPhone().'?text='.urlencode($message);
     }
 
     /**
@@ -244,5 +269,10 @@ class ShopController extends Controller
     private function plainText(string $value): string
     {
         return trim(preg_replace('/\s+/u', ' ', strip_tags(html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8'))) ?? '');
+    }
+
+    private function whatsappPhone(): string
+    {
+        return preg_replace('/\D+/', '', (string) config('seo.whatsapp_phone', '254700123456')) ?: '254700123456';
     }
 }

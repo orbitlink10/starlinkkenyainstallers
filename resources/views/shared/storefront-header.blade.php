@@ -4,6 +4,10 @@
     $loginEntryUrl = $rootBaseUrl.'/login.php';
     $dashboardEntryUrl = $rootBaseUrl.'/dashboard.php';
     $accountUrl = auth()->check() ? $dashboardEntryUrl : $loginEntryUrl;
+    $phoneNumber = (string) config('seo.phone', '+254701299299');
+    $phoneHref = 'tel:'.preg_replace('/\D+/', '', $phoneNumber);
+    $whatsappPhone = (string) config('seo.whatsapp_phone', '254700123456');
+    $whatsappHref = 'https://wa.me/'.preg_replace('/\D+/', '', $whatsappPhone);
     $cartCount = (int) collect(session('cart', []))
         ->sum(fn (array $item): int => (int) ($item['quantity'] ?? 0));
 @endphp
@@ -240,20 +244,20 @@
         </a>
 
         <form class="storefront-search" action="{{ route('home') }}#packages" method="GET" role="search">
-            <input type="search" name="q" value="{{ $searchValue }}" placeholder="Search for products..." aria-label="Search for products">
+            <input type="search" name="q" value="{{ $searchValue }}" placeholder="Search Starlink kits, mounts, and accessories" aria-label="Search Starlink products">
             <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
 
         <div class="storefront-actions">
-            <a class="storefront-icon" href="#" aria-label="Wishlist">
-                <i class="fa-solid fa-heart"></i>
+            <a class="storefront-icon" href="{{ $whatsappHref }}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
             </a>
             <a class="storefront-icon" href="{{ route('shop.cart.index') }}" aria-label="Cart">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span class="storefront-cart-badge">{{ $cartCount }}</span>
             </a>
-            <a class="storefront-icon" href="{{ $accountUrl }}" aria-label="Account">
-                <i class="fa-solid fa-user"></i>
+            <a class="storefront-icon" href="{{ $phoneHref }}" aria-label="Call {{ $phoneNumber }}">
+                <i class="fa-solid fa-phone"></i>
             </a>
             <a class="storefront-icon storefront-icon--chevron" href="{{ $accountUrl }}" aria-label="Account menu">
                 <i class="fa-solid fa-chevron-down"></i>

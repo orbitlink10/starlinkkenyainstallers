@@ -6,6 +6,7 @@ use App\Models\Enquiry;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\User;
+use App\Support\SeoData;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -23,6 +24,14 @@ class DashboardController extends Controller
             'activeUsers' => User::where('last_login_at', '>=', now()->subDay())->count(),
         ];
 
-        return view('dashboard.index', compact('stats'));
+        return view('dashboard.index', [
+            'stats' => $stats,
+            'seo' => [
+                'title' => 'Dashboard | '.SeoData::siteName(),
+                'description' => 'Internal dashboard for Starlink Kenya Installers.',
+                'canonical' => route('dashboard'),
+                'robots' => 'noindex,nofollow',
+            ],
+        ]);
     }
 }

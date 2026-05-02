@@ -12,7 +12,7 @@
     $imageAlt = $page->image_alt_text ?: $pageTitle;
     $pageDate = $page->created_at?->format('M d, Y') ?? now()->format('M d, Y');
     $shopUrl = route('home').'#packages';
-    $expertUrl = 'tel:+254700123456';
+    $expertUrl = 'tel:'.preg_replace('/\D+/', '', (string) config('seo.phone', '+254701299299'));
     $backUrl = $backUrl ?? route('home');
     $backLabel = $backLabel ?? 'Back';
     $pageLabel = trim((string) $page->heading_2);

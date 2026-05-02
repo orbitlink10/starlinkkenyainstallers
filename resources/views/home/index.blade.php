@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => 'Starlink Kenya Installers'])
+@extends('layouts.app', ['title' => 'Starlink Kenya | Official Reseller and Installer in Kenya'])
 
 @section('content')
     @php
@@ -9,6 +9,10 @@
         $productsTitle = $homepageContent?->products_section_title ?: 'Starlink Kits in Kenya';
         $homePageContentHtml = $homePageContentHtml ?? '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya.</p>';
         $heroImageUrl = $homepageContent?->hero_image_path ? route('media.show', ['path' => $homepageContent->hero_image_path]) : null;
+        $coverageVideoEmbedUrl = $homepageContent?->youtubeEmbedUrl() ?: \App\Models\HomepageContent::defaultYoutubeEmbedUrl();
+        $primaryPhone = (string) config('seo.phone', '+254701299299');
+        $primaryPhoneHref = 'tel:'.preg_replace('/\D+/', '', $primaryPhone);
+        $whatsappHref = 'https://wa.me/'.preg_replace('/\D+/', '', (string) config('seo.whatsapp_phone', '254700123456'));
 
         $kitImages = [
             'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=960&q=80',
@@ -17,17 +21,23 @@
             'https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=960&q=80',
         ];
 
-        $jobListings = [
-            ['title' => 'Satellite Installation Technician', 'desc' => 'Install and align satellite dishes for optimal connectivity.', 'icon' => 'fa-satellite-dish'],
-            ['title' => 'Customer Support Specialist', 'desc' => 'Provide 24/7 support to our Kenyan customer base.', 'icon' => 'fa-headset'],
-            ['title' => 'Digital Marketer', 'desc' => 'Drive our online presence across social and search channels.', 'icon' => 'fa-bullhorn'],
+        $packageHighlights = [
+            ['title' => 'Residential Lite', 'desc' => 'Entry-level Starlink connectivity from KES 1,300/month for light browsing, field teams, and remote sites.', 'icon' => 'fa-signal', 'cta' => 'See pricing', 'href' => '#prices'],
+            ['title' => 'Residential Unlimited', 'desc' => 'The core Starlink Kenya plan for homes and small offices that need stable all-day connectivity.', 'icon' => 'fa-house-signal', 'cta' => 'Compare kits', 'href' => '#packages'],
+            ['title' => 'Business & Installation', 'desc' => 'Higher-performance hardware, dish placement, and rollout support for schools, lodges, farms, and offices.', 'icon' => 'fa-building', 'cta' => 'Talk to us', 'href' => $primaryPhoneHref],
         ];
 
         $serviceCards = [
-            ['title' => 'Sell Starlink Kits in Kenya', 'desc' => 'We provide an easy and reliable way for you to purchase, sell, or install Starlink internet kits across the country.'],
-            ['title' => 'Starlink Installation Services in Kenya', 'desc' => 'Certified installers offering seamless setup and activation of Starlink satellite internet across Kenya.'],
-            ['title' => 'CCTV Installation Services in Kenya', 'desc' => 'Secure your home and business with professional CCTV planning, installation, and maintenance.'],
-            ['title' => 'Networking Solutions and Installation Services', 'desc' => 'LAN, Wi-Fi, and business networking design with practical deployment for Kenyan homes and offices.'],
+            ['title' => 'Buy Starlink Kits in Kenya', 'desc' => 'Compare genuine Starlink kits, mounts, and accessories for homes, offices, camps, and rural installations.', 'href' => '#packages', 'cta' => 'View kits'],
+            ['title' => 'Starlink Installation Services in Kenya', 'desc' => 'Certified installers offering dish alignment, mounting, cable runs, and activation support across Kenya.', 'href' => '#installation', 'cta' => 'Explore setup'],
+            ['title' => 'Starlink Prices and Packages', 'desc' => 'Review kit pricing, monthly plans, and the differences between Lite, Residential, and business-ready setups.', 'href' => '#prices', 'cta' => 'See pricing'],
+            ['title' => 'Network Expansion and Wi-Fi Coverage', 'desc' => 'Extend Starlink into offices, compounds, lodges, and farms with practical Wi-Fi and network rollout support.', 'href' => $primaryPhoneHref, 'cta' => 'Request advice'],
+        ];
+
+        $orderSteps = [
+            'Choose the right Starlink kit and monthly package for your home, office, lodge, farm, or remote site.',
+            'Confirm availability, delivery timeline, and installation requirements with our team by call or WhatsApp.',
+            'Book dispatch or professional installation anywhere in Kenya and get setup support after delivery.',
         ];
 
         $cartCount = (int) collect(session('cart', []))
@@ -857,6 +867,42 @@
             cursor: pointer;
         }
 
+        .guide-stack {
+            display: grid;
+            gap: 16px;
+        }
+
+        .guide-intro {
+            margin: 0;
+            color: var(--ink-500);
+            font-size: 17px;
+            line-height: 1.62;
+        }
+
+        .guide-list {
+            margin: 0;
+            padding-left: 22px;
+            color: var(--ink-700);
+            display: grid;
+            gap: 10px;
+            font-size: 16px;
+            line-height: 1.62;
+        }
+
+        .guide-actions {
+            display: grid;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .guide-actions .field-submit {
+            margin-top: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
         .article-wrap {
             position: relative;
             overflow: hidden;
@@ -1355,20 +1401,20 @@
                 <div class="container notice-inner">
                     <div class="notice-left">
                         <i class="fa-solid fa-bullhorn"></i>
-                        <span>top_notice</span>
+                        <span>Nationwide delivery and installation support</span>
                     </div>
                     <div class="notice-right">
-                        <a href="#" aria-label="Wishlist">
-                            <i class="fa-solid fa-heart"></i>
-                            Wishlist
+                        <a href="#prices" aria-label="View Starlink Kenya prices">
+                            <i class="fa-solid fa-tags"></i>
+                            Prices
                         </a>
-                        <a href="{{ $loginEntryUrl }}" aria-label="Sign in">
-                            <i class="fa-solid fa-user"></i>
-                            Sign in
-                        </a>
-                        <a href="tel:+254701299299" aria-label="Call 0701299299">
+                        <a href="{{ $primaryPhoneHref }}" aria-label="Call {{ $primaryPhone }}">
                             <i class="fa-solid fa-headset"></i>
-                            0701299299
+                            {{ $primaryPhone }}
+                        </a>
+                        <a href="{{ $whatsappHref }}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            WhatsApp
                         </a>
                     </div>
                 </div>
@@ -1383,19 +1429,19 @@
                         </span>
                     </a>
                     <form class="header-search" action="{{ route('home') }}#packages" method="GET" role="search">
-                        <input type="search" name="q" value="{{ $searchQuery ?? request('q') }}" placeholder="Search for products..." aria-label="Search for products">
+                        <input type="search" name="q" value="{{ $searchQuery ?? request('q') }}" placeholder="Search Starlink kits, mounts, and accessories" aria-label="Search Starlink products">
                         <button type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </form>
                     <div class="header-actions">
-                        <a class="header-icon" href="#" aria-label="Wishlist">
-                            <i class="fa-solid fa-heart"></i>
+                        <a class="header-icon" href="{{ $whatsappHref }}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
                         </a>
                         <a class="header-icon" href="{{ route('shop.cart.index') }}" aria-label="Cart">
                             <i class="fa-solid fa-cart-shopping"></i>
                             <span class="cart-badge">{{ $cartCount }}</span>
                         </a>
-                        <a class="header-icon" href="{{ auth()->check() ? $dashboardEntryUrl : $loginEntryUrl }}" aria-label="Account">
-                            <i class="fa-solid fa-user"></i>
+                        <a class="header-icon" href="{{ $primaryPhoneHref }}" aria-label="Call {{ $primaryPhone }}">
+                            <i class="fa-solid fa-phone"></i>
                         </a>
                         <a class="header-icon chevron-icon" href="{{ auth()->check() ? $dashboardEntryUrl : $loginEntryUrl }}" aria-label="Account menu">
                             <i class="fa-solid fa-chevron-down"></i>
@@ -1418,7 +1464,7 @@
                     <p>{{ $heroDescription }}</p>
                     <div class="hero-actions">
                         <a class="btn btn-orange" href="#packages">Shop Now</a>
-                        <a class="btn btn-outline" href="tel:+254700123456">Talk to an Expert</a>
+                        <a class="btn btn-outline" href="{{ $primaryPhoneHref }}">Talk to an Expert</a>
                     </div>
                 </div>
                 <div class="hero-banner {{ $heroImageUrl ? 'has-image' : '' }}" aria-hidden="true">
@@ -1432,7 +1478,6 @@
 
             <section id="packages" class="section">
                 <span id="kits" class="section-anchor" aria-hidden="true"></span>
-                <span id="prices" class="section-anchor" aria-hidden="true"></span>
                 <h2 class="section-title">{{ $productsTitle }}</h2>
                 <p class="section-intro">
                     @if (! empty($searchQuery))
@@ -1473,7 +1518,7 @@
             </section>
         </div>
 
-        <section class="section discover">
+        <section id="coverage" class="section discover">
             <div class="container">
                 <div class="discover-grid">
                     <div>
@@ -1490,8 +1535,8 @@
                     </div>
                     <div class="video-wrap">
                         <iframe
-                            src="https://www.youtube.com/embed/y4j-B6Vf8vo"
-                            title="Starlink Kenya Installers"
+                            src="{{ $coverageVideoEmbedUrl }}"
+                            title="{{ $whyChooseTitle }} video"
                             loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
@@ -1513,55 +1558,55 @@
                         <article class="service-card">
                             <h3>{{ $service['title'] }}</h3>
                             <p>{{ $service['desc'] }}</p>
-                            <a class="btn btn-orange" href="#">Learn More</a>
+                            <a class="btn btn-orange" href="{{ $service['href'] }}">{{ $service['cta'] }}</a>
                         </article>
                     @endforeach
                 </div>
             </div>
         </section>
 
-        <section id="order-now" class="section">
+        <section id="prices" class="section">
+            <span id="order-now" class="section-anchor" aria-hidden="true"></span>
             <div class="container">
                 <div class="career-grid">
                     <div>
-                        <h2 class="career-title">Join Our Team</h2>
+                        <h2 class="career-title">Starlink Kenya Packages Snapshot</h2>
                         <div class="job-list">
-                            @foreach ($jobListings as $job)
+                            @foreach ($packageHighlights as $highlight)
                                 <article class="job-item">
-                                    <i class="fa-solid {{ $job['icon'] }} job-icon"></i>
+                                    <i class="fa-solid {{ $highlight['icon'] }} job-icon"></i>
                                     <div>
-                                        <h3 class="job-title">{{ $job['title'] }}</h3>
-                                        <p class="job-desc">{{ $job['desc'] }}</p>
+                                        <h3 class="job-title">{{ $highlight['title'] }}</h3>
+                                        <p class="job-desc">{{ $highlight['desc'] }}</p>
                                     </div>
-                                    <button type="button" class="apply-btn">Apply</button>
+                                    <a class="apply-btn" href="{{ $highlight['href'] }}">{{ $highlight['cta'] }}</a>
                                 </article>
                             @endforeach
                         </div>
                     </div>
 
                     <div>
-                        <h2 class="career-title">Apply Now</h2>
+                        <h2 class="career-title">How to Order Starlink in Kenya</h2>
                         <div class="apply-panel">
-                            <form>
-                                <input class="field" type="text" placeholder="Full Name">
-                                <input class="field" type="email" placeholder="Email Address">
-                                <select class="field-select">
-                                    <option>Choose a position</option>
-                                    <option>Satellite Installation Technician</option>
-                                    <option>Customer Support Specialist</option>
-                                    <option>Digital Marketer</option>
-                                </select>
-                                <label class="resume-label">Upload Resume (PDF)</label>
-                                <input class="field-file" type="file" accept=".pdf">
-                                <button class="field-submit" type="button">Submit Application</button>
-                            </form>
+                            <div class="guide-stack">
+                                <p class="guide-intro">Get hardware, pricing, delivery, and installation support from one Kenya-based team.</p>
+                                <ol class="guide-list">
+                                    @foreach ($orderSteps as $step)
+                                        <li>{{ $step }}</li>
+                                    @endforeach
+                                </ol>
+                                <div class="guide-actions">
+                                    <a class="field-submit" href="{{ $whatsappHref }}" target="_blank" rel="noopener">Request Quote on WhatsApp</a>
+                                    <a class="btn btn-outline" href="{{ $primaryPhoneHref }}">Call {{ $primaryPhone }}</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section">
+        <section id="faqs" class="section">
             <div class="container">
                 <div class="article-wrap">
                     <article class="article-box">
@@ -1577,7 +1622,7 @@
 
         <div class="whatsapp-wrap">
             <div class="whatsapp-tip">Chat with us on WhatsApp</div>
-            <a class="whatsapp-btn" href="https://wa.me/254700123456" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+            <a class="whatsapp-btn" href="{{ $whatsappHref }}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
                 <i class="fa-brands fa-whatsapp"></i>
             </a>
         </div>

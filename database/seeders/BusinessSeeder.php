@@ -118,6 +118,7 @@ class BusinessSeeder extends Seeder
                 'hero_header_description' => 'Starlink Kenya: Get expert Starlink installation services designed to deliver the strongest signal and maximum performance, even in remote and hard-to-reach areas.',
                 'why_choose_title' => 'Why Starlink Kenya Is Ideal for You',
                 'why_choose_description' => 'Tailored for the Kenyan market with expert installation and dependable support.',
+                'youtube_video_url' => HomepageContent::defaultYoutubeVideoUrl(),
                 'products_section_title' => 'Starlink Kits in Kenya',
                 'home_page_content' => '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya. Learn about speeds, installation, costs, benefits, challenges, and how it compares to fiber and mobile networks.</p>',
             ]

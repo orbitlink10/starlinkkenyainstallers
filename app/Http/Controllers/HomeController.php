@@ -6,6 +6,7 @@ use App\Models\HomepageContent;
 use App\Models\Order;
 use App\Models\Product;
 use App\Services\AnalyticsService;
+use App\Support\SeoData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -42,7 +43,12 @@ class HomeController extends Controller
 
         $homepageContent = HomepageContent::query()->first();
         $defaultHomeContent = '<h2>Starlink Kenya: A Comprehensive Guide to Satellite Internet Connectivity</h2><p>Explore STARLINK KENYA, the satellite internet service transforming digital access across Kenya.</p>';
-        $homePageContentHtml = $this->formatHomePageContent($homepageContent?->home_page_content ?: $defaultHomeContent);
+        $homePageContentHtml = SeoData::sanitizeCommercialLinks(
+            $this->formatHomePageContent($homepageContent?->home_page_content ?: $defaultHomeContent)
+        );
+        $heroImageUrl = SeoData::mediaUrl($homepageContent?->hero_image_path);
+        $heroTitle = $homepageContent?->hero_header_title ?: 'Starlink Kenya | Official Starlink Reseller and Installer in Kenya';
+        $heroDescription = $homepageContent?->hero_header_description ?: SeoData::defaultDescription();
 
         $analyticsService->trackPageView($request, 'Homepage', 'home', [
             'has_search' => $searchQuery !== '',
@@ -55,7 +61,21 @@ class HomeController extends Controller
             ], '/');
         }
 
-        return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery'));
+        $seo = [
+            'title' => $heroTitle,
+            'description' => $heroDescription,
+            'canonical' => route('home'),
+            'robots' => $searchQuery === '' ? 'index,follow' : 'noindex,follow',
+            'type' => 'website',
+            'image' => $heroImageUrl,
+            'schema' => [
+                SeoData::websiteSchema($heroImageUrl),
+                SeoData::organizationSchema($heroImageUrl),
+                SeoData::localBusinessSchema($heroImageUrl),
+            ],
+        ];
+
+        return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery', 'seo'));
     }
 
     private function formatHomePageContent(?string $content): string

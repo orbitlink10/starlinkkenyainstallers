@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Support\SeoData;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,14 @@ class AuthController extends Controller
             return redirect()->to($request->getSchemeAndHttpHost().'/dashboard.php');
         }
 
-        return view('auth.login');
+        return view('auth.login', [
+            'seo' => [
+                'title' => 'Login | '.SeoData::siteName(),
+                'description' => 'Secure admin login for Starlink Kenya Installers.',
+                'canonical' => route('login'),
+                'robots' => 'noindex,follow',
+            ],
+        ]);
     }
 
     public function login(Request $request): RedirectResponse

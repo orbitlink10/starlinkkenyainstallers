@@ -7,10 +7,13 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\SitePageController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/media/{path}', [MediaController::class, 'show'])->where('path', '.*')->name('media.show');
 Route::get('/product/{productSlug}', [ShopController::class, 'show'])->name('shop.product.show');
