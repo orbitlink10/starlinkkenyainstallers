@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HomepageContent;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\SitePage;
 use App\Services\AnalyticsService;
 use App\Support\SeoData;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,6 +34,22 @@ class HomeController extends Controller
             })
             ->orderBy('price')
             ->get();
+
+        $caseStudies = SitePage::query()
+            ->orderByRaw("CASE WHEN LOWER(COALESCE(type, '')) = 'post' THEN 0 ELSE 1 END")
+            ->latest('updated_at')
+            ->limit(4)
+            ->get()
+            ->map(function (SitePage $page): array {
+                return [
+                    'title' => trim((string) $page->page_title),
+                    'excerpt' => $this->caseStudyExcerpt($page),
+                    'href' => route('site-pages.show', ['page' => $page->slug]),
+                    'image_url' => SeoData::mediaUrl($page->image_path),
+                    'image_alt' => trim((string) ($page->image_alt_text ?: $page->page_title)) ?: 'Starlink case study',
+                    'label' => trim((string) $page->heading_2) ?: 'Successful installation',
+                ];
+            });
 
         $stats = [
             'activeProducts' => (clone $activeProductsQuery)->count(),
@@ -75,7 +92,22 @@ class HomeController extends Controller
             ],
         ];
 
-        return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery', 'seo'));
+        return view('home.index', compact('products', 'stats', 'homepageContent', 'homePageContentHtml', 'searchQuery', 'seo', 'caseStudies'));
+    }
+
+    private function caseStudyExcerpt(SitePage $page): string
+    {
+        $excerpt = trim((string) $page->meta_description);
+
+        if ($excerpt !== '') {
+            return SeoData::trimDescription($excerpt, 124);
+        }
+
+        $excerpt = SeoData::trimDescription((string) $page->page_description, 124);
+
+        return $excerpt !== ''
+            ? $excerpt
+            : 'Read how this Starlink rollout improved connectivity, uptime, and support for the client.';
     }
 
     private function formatHomePageContent(?string $content): string

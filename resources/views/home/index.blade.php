@@ -58,6 +58,9 @@
             ->filter(fn (array $item): bool => $item['label'] !== '' && $item['href'] !== '')
             ->values()
             ->all();
+        $caseStudies = collect($caseStudies ?? []);
+        $caseStudiesHeadline = "Where We've Delivered Connectivity: Trusted by Organizations Nationwide.";
+        $caseStudiesIntro = 'Browse a few of the installations, support rollouts, and connectivity deployments our team has delivered across Kenya.';
     @endphp
 
     <style>
@@ -571,6 +574,142 @@
             color: var(--ink-500);
             max-width: 62ch;
             line-height: 1.62;
+        }
+
+        .case-studies-section {
+            padding-top: 6px;
+        }
+
+        .case-studies-head {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .case-studies-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--orange-dark);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: .34em;
+            text-transform: uppercase;
+        }
+
+        .case-studies-kicker::before {
+            content: '';
+            width: 42px;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--orange) 0%, rgba(255, 155, 47, 0) 100%);
+        }
+
+        .case-studies-grid {
+            display: grid;
+            gap: 22px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .case-study-card {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 18px;
+            border-radius: 28px;
+            border: 1px solid var(--line);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 249, 255, 0.96) 100%);
+            box-shadow: 0 20px 46px rgba(14, 37, 79, 0.07);
+        }
+
+        .case-study-copy {
+            display: grid;
+            gap: 10px;
+        }
+
+        .case-study-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            max-width: 100%;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(217, 236, 255, 0.72);
+            color: var(--ink-700);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        .case-study-title {
+            margin: 0;
+            color: var(--ink-900);
+            font-size: clamp(22px, 1.6vw, 30px);
+            line-height: 1.12;
+            letter-spacing: -.045em;
+        }
+
+        .case-study-media {
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+            border: 1px solid rgba(199, 219, 238, 0.86);
+            aspect-ratio: 4 / 5;
+            background:
+                radial-gradient(circle at top right, rgba(140, 217, 255, 0.3) 0%, transparent 30%),
+                linear-gradient(160deg, rgba(234, 242, 255, 0.98) 0%, rgba(247, 250, 255, 0.98) 100%);
+        }
+
+        .case-study-media img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .case-study-placeholder {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 22% 18%, rgba(255, 162, 74, 0.24) 0%, transparent 26%),
+                radial-gradient(circle at 78% 82%, rgba(139, 217, 255, 0.28) 0%, transparent 26%),
+                linear-gradient(145deg, rgba(255, 255, 255, 0.78) 0%, rgba(227, 238, 253, 0.92) 100%);
+        }
+
+        .case-study-placeholder span {
+            width: 78%;
+            aspect-ratio: 1;
+            border-radius: 28px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, 0.82);
+            color: var(--ink-900);
+            box-shadow:
+                inset 0 0 0 1px rgba(255, 255, 255, 0.94),
+                0 22px 42px rgba(14, 37, 79, 0.08);
+            font-size: clamp(32px, 2.6vw, 48px);
+        }
+
+        .case-study-excerpt {
+            margin: 0;
+            color: var(--ink-500);
+            font-size: 15px;
+            line-height: 1.66;
+        }
+
+        .case-study-btn {
+            margin-top: auto;
+            align-self: flex-start;
+            min-width: 148px;
+            justify-content: center;
+            text-decoration: none;
         }
 
         .products-grid {
@@ -1152,6 +1291,10 @@
         }
 
         @media (max-width: 1200px) {
+            .case-studies-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .products-grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
@@ -1201,6 +1344,10 @@
         }
 
         @media (max-width: 900px) {
+            .case-studies-grid {
+                grid-template-columns: 1fr;
+            }
+
             .products-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -1323,6 +1470,19 @@
 
             .products-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .case-study-card {
+                padding: 16px;
+                border-radius: 24px;
+            }
+
+            .case-study-media {
+                border-radius: 20px;
+            }
+
+            .case-study-btn {
+                width: 100%;
             }
 
             .product-image {
@@ -1475,6 +1635,42 @@
                     @endif
                 </div>
             </section>
+
+            @if ($caseStudies->isNotEmpty())
+                <section id="case-studies" class="section case-studies-section">
+                    <div class="case-studies-head">
+                        <span class="case-studies-kicker">Case Studies</span>
+                        <div>
+                            <h2 class="section-title">{{ $caseStudiesHeadline }}</h2>
+                            <p class="section-intro">{{ $caseStudiesIntro }}</p>
+                        </div>
+                    </div>
+
+                    <div class="case-studies-grid">
+                        @foreach ($caseStudies as $caseStudy)
+                            <article class="case-study-card">
+                                <div class="case-study-copy">
+                                    <span class="case-study-label">{{ $caseStudy['label'] }}</span>
+                                    <h3 class="case-study-title">{{ $caseStudy['title'] }}</h3>
+                                </div>
+
+                                <div class="case-study-media">
+                                    <div class="case-study-placeholder" aria-hidden="true">
+                                        <span><i class="fa-solid fa-satellite-dish"></i></span>
+                                    </div>
+
+                                    @if (! empty($caseStudy['image_url']))
+                                        <img src="{{ $caseStudy['image_url'] }}" alt="{{ $caseStudy['image_alt'] }}" loading="lazy" decoding="async">
+                                    @endif
+                                </div>
+
+                                <p class="case-study-excerpt">{{ $caseStudy['excerpt'] }}</p>
+                                <a class="btn btn-orange case-study-btn" href="{{ $caseStudy['href'] }}">Read more</a>
+                            </article>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
 
             <section id="packages" class="section">
                 <span id="kits" class="section-anchor" aria-hidden="true"></span>
