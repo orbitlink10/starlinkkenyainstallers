@@ -66,6 +66,18 @@ class HomepageVideoLinkTest extends TestCase
         $response->assertSee('src="https://www.youtube.com/embed/dQw4w9WgXcQ"', false);
     }
 
+    public function test_homepage_uses_updated_default_video_when_no_custom_video_is_saved(): void
+    {
+        HomepageContent::query()->create([
+            'hero_header_title' => 'Starlink Kenya',
+        ]);
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('src="https://www.youtube.com/embed/ZBpsEnxmsG4"', false);
+    }
+
     public function test_homepage_editor_shows_migration_notice_when_youtube_column_is_missing(): void
     {
         Schema::table('homepage_contents', function (Blueprint $table): void {

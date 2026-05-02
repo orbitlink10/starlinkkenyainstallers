@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class HomepageContent extends Model
 {
-    private const DEFAULT_YOUTUBE_VIDEO_ID = 'y4j-B6Vf8vo';
+    private const DEFAULT_YOUTUBE_VIDEO_ID = 'ZBpsEnxmsG4';
 
     protected $fillable = [
         'hero_header_title',
