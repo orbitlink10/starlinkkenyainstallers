@@ -13,13 +13,7 @@
         $primaryPhone = (string) config('seo.phone', '+254701299299');
         $primaryPhoneHref = 'tel:'.preg_replace('/\D+/', '', $primaryPhone);
         $whatsappHref = 'https://wa.me/'.preg_replace('/\D+/', '', (string) config('seo.whatsapp_phone', '254700123456'));
-
-        $kitImages = [
-            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=960&q=80',
-            'https://images.unsplash.com/photo-1581092921461-39b9d08a9b2e?auto=format&fit=crop&w=960&q=80',
-            'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=960&q=80',
-            'https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=960&q=80',
-        ];
+        $productFallbackImage = asset('images/product-placeholder.svg');
 
         $packageHighlights = [
             ['title' => 'Residential Lite', 'desc' => 'Entry-level Starlink connectivity from KES 1,300/month for light browsing, field teams, and remote sites.', 'icon' => 'fa-signal', 'cta' => 'See pricing', 'href' => '#prices'],
@@ -1685,7 +1679,13 @@
                 <div class="products-grid">
                     @forelse ($products as $product)
                         <article class="product-card">
-                            <img class="product-image" src="{{ $kitImages[$loop->index % count($kitImages)] }}" alt="{{ $product->name }}">
+                            <img
+                                class="product-image"
+                                src="{{ $product->image_url ?: $productFallbackImage }}"
+                                alt="{{ $product->name }}"
+                                loading="lazy"
+                                decoding="async"
+                                onerror="this.onerror=null;this.src='{{ $productFallbackImage }}';">
                             <div class="product-body">
                                 <h3 class="product-name">{{ $product->name }}</h3>
                                 <p class="product-desc">

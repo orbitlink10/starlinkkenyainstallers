@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Starlink product placeholder</title>
+  <desc id="desc">Placeholder illustration for a Starlink product image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4f7fc" />
+      <stop offset="100%" stop-color="#dcecff" />
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#112447" />
+      <stop offset="100%" stop-color="#1f3a6d" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)" />
+  <circle cx="1040" cy="140" r="120" fill="#ffb14f" fill-opacity="0.18" />
+  <circle cx="180" cy="760" r="140" fill="#8bd9ff" fill-opacity="0.2" />
+  <rect x="170" y="170" width="860" height="560" rx="42" fill="#ffffff" stroke="#c7dbee" stroke-width="8" />
+  <rect x="235" y="235" width="730" height="430" rx="34" fill="url(#card)" />
+  <circle cx="600" cy="450" r="136" fill="none" stroke="#ffffff" stroke-opacity="0.92" stroke-width="20" />
+  <path d="M600 334c39 0 74 16 99 41" fill="none" stroke="#ffb14f" stroke-width="18" stroke-linecap="round" />
+  <path d="M600 566c39 0 74-16 99-41" fill="none" stroke="#8bd9ff" stroke-width="18" stroke-linecap="round" />
+  <circle cx="600" cy="450" r="18" fill="#ffffff" />
+  <path d="M600 468l0 72" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" />
+  <path d="M560 560h80" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" />
+  <text x="600" y="796" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#243b64">Starlink Product Image</text>
+</svg>

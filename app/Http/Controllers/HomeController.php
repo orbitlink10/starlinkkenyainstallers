@@ -9,6 +9,7 @@ use App\Services\AnalyticsService;
 use App\Support\SeoData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -32,7 +33,17 @@ class HomeController extends Controller
                 });
             })
             ->orderBy('price')
-            ->get();
+            ->get()
+            ->each(function (Product $product): void {
+                $imagePath = trim((string) $product->image_path, '/');
+                $imageUrl = null;
+
+                if ($imagePath !== '' && Storage::disk('public')->exists($imagePath)) {
+                    $imageUrl = SeoData::mediaUrl($imagePath);
+                }
+
+                $product->setAttribute('image_url', $imageUrl);
+            });
 
         $stats = [
             'activeProducts' => (clone $activeProductsQuery)->count(),
