@@ -23,7 +23,7 @@
                 id="email"
                 type="email"
                 name="email"
-                value="{{ old('email', 'admin@demo.com') }}"
+                value="{{ old('email') }}"
                 required
                 autofocus
             >
@@ -34,7 +34,6 @@
                 id="password"
                 type="password"
                 name="password"
-                value="admin123"
                 required
             >
 
