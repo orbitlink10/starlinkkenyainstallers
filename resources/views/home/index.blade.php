@@ -1138,10 +1138,8 @@
             font-size: clamp(40px, 3.5vw, 58px);
             line-height: 1.08;
             max-width: 20ch;
-        }
-
-        .article-box > h2:first-child {
-            margin-inline: 0;
+            margin-inline: auto;
+            text-align: center;
         }
 
         .article-box h1::after,
@@ -1160,6 +1158,12 @@
         .article-box h2::after {
             left: 0;
             transform: none;
+        }
+
+        .article-box > h1:first-child::after,
+        .article-box > h2:first-child::after {
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .article-box p {
@@ -1812,7 +1816,7 @@
             </div>
             <div class="main-bar">
                 <div class="container main-bar-inner">
-                    <a class="brand-block" href="{{ route('home') }}" aria-label="Starlink Kenya Installers home">
+                    <a class="brand-block" href="{{ route('home') }}" aria-label="Starlink Kenya home">
                         <span class="brand-mark"><i class="fa-solid fa-satellite-dish"></i></span>
                         <span class="brand-text">
                             <strong>STARLINK</strong>
@@ -1869,7 +1873,7 @@
 
             <section class="hero">
                 <div>
-                    <span class="hero-welcome-badge">Welcome to Starlink Kenya Installers</span>
+                    <span class="hero-welcome-badge">Welcome to Starlink Kenya</span>
                     <h1>{{ $heroTitle }}</h1>
                     <p>{{ $heroDescription }}</p>
                     <div class="hero-actions">
@@ -2069,7 +2073,7 @@
         </section>
 
         <footer class="footer">
-            Copyright {{ now()->year }} Starlink Kenya Installers. All rights reserved.
+            Copyright {{ now()->year }} Starlink Kenya. All rights reserved.
         </footer>
 
         <div class="whatsapp-wrap">
